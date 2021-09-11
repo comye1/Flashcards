@@ -356,9 +356,9 @@ fun CardItem() {
 
 @Composable
 fun CardItemField() {
-    Column(
+    Box(
         modifier = Modifier
-            .fillMaxWidth()
+            .fillMaxWidth(.8f)
             .padding(8.dp)
             .border(2.dp, Color.LightGray),
     ) {
@@ -428,8 +428,8 @@ fun CardItemField() {
             IconButton(
                 onClick = { /*TODO*/ },
                 modifier = Modifier.constrainAs(delete) {
-                    bottom.linkTo(parent.bottom)
-                    start.linkTo(parent.start)
+                    bottom.linkTo(parent.bottom, 10.dp)
+                    start.linkTo(parent.start, 8.dp)
                 }
             ) {
                 Icon(imageVector = Icons.Outlined.Delete, contentDescription = "delete")
