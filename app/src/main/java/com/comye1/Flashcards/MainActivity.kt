@@ -46,6 +46,7 @@ class MainActivity : ComponentActivity() {
                         }
                         DeckTitleTextField()
                         CardItem()
+                        CardItemField()
                     }
                 }
             }
@@ -351,6 +352,74 @@ fun CardItem() {
     }
 }
 
+@Composable
+fun CardItemField() {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(8.dp)
+            .border(2.dp, Color.LightGray),
+    ) {
+
+        OutlinedTextField(
+            value = "",
+            onValueChange = {},
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(8.dp),
+            textStyle = MaterialTheme.typography.h6,
+            placeholder = {
+                Text(
+                    text = "Front",
+                    style = MaterialTheme.typography.h6,
+                    fontWeight = FontWeight.ExtraBold,
+                    color = Color.LightGray
+                )
+            },
+            colors = TextFieldDefaults.outlinedTextFieldColors(
+                focusedBorderColor = Color.Transparent,
+                unfocusedBorderColor = Color.Transparent,
+                cursorColor = DeepOrange,
+                backgroundColor = Color.Transparent
+            ),
+            maxLines = 2
+        )
+        Divider(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(2.dp),
+            color = Color.LightGray
+        )
+        OutlinedTextField(
+            value = "",
+            onValueChange = {},
+            modifier = Modifier
+                .fillMaxWidth()
+                .fillMaxHeight()
+                .padding(8.dp),
+            textStyle = MaterialTheme.typography.body1,
+            placeholder = {
+                Text(
+                    text = "Back",
+                    style = MaterialTheme.typography.body1,
+                    fontWeight = FontWeight.ExtraBold,
+                    color = Color.LightGray
+                )
+            },
+            colors = TextFieldDefaults.outlinedTextFieldColors(
+                focusedBorderColor = Color.Transparent,
+                unfocusedBorderColor = Color.Transparent,
+                cursorColor = DeepOrange,
+                backgroundColor = Color.Transparent
+            )
+        )
+        IconButton(onClick = { /*TODO*/ }) {
+            Icon(imageVector = Icons.Default.Delete, contentDescription ="delete")
+        }
+    }
+
+}
+
 @Preview(showBackground = true)
 @Composable
 fun DefaultPreview() {
@@ -363,5 +432,6 @@ fun DefaultPreview() {
 //        MyDeckItem()
 //        MakeMyDeck()
         CardItem()
+        CardItemField()
     }
 }
