@@ -12,6 +12,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
+import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -20,6 +21,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.constraintlayout.compose.ConstraintLayout
 import com.comye1.Flashcards.ui.theme.DeepOrange
 import com.comye1.Flashcards.ui.theme.FlashcardsTheme
 
@@ -360,62 +362,80 @@ fun CardItemField() {
             .padding(8.dp)
             .border(2.dp, Color.LightGray),
     ) {
-
-        OutlinedTextField(
-            value = "",
-            onValueChange = {},
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(8.dp),
-            textStyle = MaterialTheme.typography.h6,
-            placeholder = {
-                Text(
-                    text = "Front",
-                    style = MaterialTheme.typography.h6,
-                    fontWeight = FontWeight.ExtraBold,
-                    color = Color.LightGray
-                )
-            },
-            colors = TextFieldDefaults.outlinedTextFieldColors(
-                focusedBorderColor = Color.Transparent,
-                unfocusedBorderColor = Color.Transparent,
-                cursorColor = DeepOrange,
-                backgroundColor = Color.Transparent
-            ),
-            maxLines = 2
-        )
-        Divider(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(2.dp),
-            color = Color.LightGray
-        )
-        OutlinedTextField(
-            value = "",
-            onValueChange = {},
-            modifier = Modifier
-                .fillMaxWidth()
-                .fillMaxHeight()
-                .padding(8.dp),
-            textStyle = MaterialTheme.typography.body1,
-            placeholder = {
-                Text(
-                    text = "Back",
-                    style = MaterialTheme.typography.body1,
-                    fontWeight = FontWeight.ExtraBold,
-                    color = Color.LightGray
-                )
-            },
-            colors = TextFieldDefaults.outlinedTextFieldColors(
-                focusedBorderColor = Color.Transparent,
-                unfocusedBorderColor = Color.Transparent,
-                cursorColor = DeepOrange,
-                backgroundColor = Color.Transparent
+        ConstraintLayout {
+            val (front, back, delete, divider) = createRefs()
+            OutlinedTextField(
+                value = "",
+                onValueChange = {},
+                modifier = Modifier
+                    .constrainAs(front) {
+                        top.linkTo(parent.top)
+                    }
+                    .fillMaxWidth()
+                    .padding(8.dp),
+                textStyle = MaterialTheme.typography.h6,
+                placeholder = {
+                    Text(
+                        text = "Front",
+                        style = MaterialTheme.typography.h6,
+                        fontWeight = FontWeight.ExtraBold,
+                        color = Color.LightGray
+                    )
+                },
+                colors = TextFieldDefaults.outlinedTextFieldColors(
+                    focusedBorderColor = Color.Transparent,
+                    unfocusedBorderColor = Color.Transparent,
+                    cursorColor = DeepOrange,
+                    backgroundColor = Color.Transparent
+                ),
+                maxLines = 2
             )
-        )
-        IconButton(onClick = { /*TODO*/ }) {
-            Icon(imageVector = Icons.Default.Delete, contentDescription ="delete")
+            Divider(
+                modifier = Modifier
+                    .constrainAs(divider) {
+                        top.linkTo(front.bottom)
+                    }
+                    .fillMaxWidth()
+                    .height(2.dp),
+                color = Color.LightGray
+            )
+            OutlinedTextField(
+                value = "",
+                onValueChange = {},
+                modifier = Modifier
+                    .constrainAs(back) {
+                        top.linkTo(divider.bottom)
+                    }
+                    .fillMaxWidth()
+                    .fillMaxHeight()
+                    .padding(8.dp),
+                textStyle = MaterialTheme.typography.body1,
+                placeholder = {
+                    Text(
+                        text = "Back",
+                        style = MaterialTheme.typography.body1,
+                        fontWeight = FontWeight.ExtraBold,
+                        color = Color.LightGray
+                    )
+                },
+                colors = TextFieldDefaults.outlinedTextFieldColors(
+                    focusedBorderColor = Color.Transparent,
+                    unfocusedBorderColor = Color.Transparent,
+                    cursorColor = DeepOrange,
+                    backgroundColor = Color.Transparent
+                )
+            )
+            IconButton(
+                onClick = { /*TODO*/ },
+                modifier = Modifier.constrainAs(delete) {
+                    bottom.linkTo(parent.bottom)
+                    start.linkTo(parent.start)
+                }
+            ) {
+                Icon(imageVector = Icons.Outlined.Delete, contentDescription = "delete")
+            }
         }
+
     }
 
 }
