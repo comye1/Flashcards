@@ -1,9 +1,12 @@
 package com.comye1.Flashcards
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Divider
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
@@ -15,11 +18,13 @@ import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.comye1.Flashcards.ui.theme.DeepOrange
+import org.w3c.dom.Text
 
 @Preview
 @Composable
@@ -27,15 +32,19 @@ fun FirstWeekPreview() {
     Column() {
         DeckInSubject()
         StudyGuide()
-        MyDeckItem()
         DeckItem()
+        MyDeckItem()
         MakeMyDeck()
         SubjectItem()
+        CardItem()
+        FilterText()
     }
 
 }
 
-
+// Column, fillMaxWidth(), padding, border 적용
+// Text에 style, fontWeight 설정하면서..
+// Spacer로 간격 띄우기 (padding보다는??!!)
 @Composable
 fun DeckInSubject() {
     // 각 Subject 화면 내
@@ -64,6 +73,7 @@ fun DeckInSubject() {
     }
 }
 
+// 복붙, 실습하세요!
 @Composable
 fun StudyGuide() {
     // 각 Subject 화면 내
@@ -92,6 +102,10 @@ fun StudyGuide() {
     }
 }
 
+// 복붙, Row를 사용해보자!
+// Row내 요소들 배치 방법
+// IconButton 말고 Icon만 사용하기
+// Icon 추가 라이브러리
 @Composable
 fun DeckItem() {
     // Home 화면 내
@@ -130,6 +144,7 @@ fun DeckItem() {
     }
 }
 
+// 복붙하세요, 아이콘 찾아서 교체하기
 @Composable
 fun MyDeckItem() {
     // Home 화면 내
@@ -173,6 +188,8 @@ fun MyDeckItem() {
     }
 }
 
+// 일단 복붙하고 텍스트 추가, Row 배치를 약간 다르게
+// Start로 배치하면 되는데 이건 사실 디폴트
 @Composable
 fun MakeMyDeck() {
     Column(
@@ -199,8 +216,8 @@ fun MakeMyDeck() {
         Spacer(modifier = Modifier.height(4.dp))
         Row(
             modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically
-//            horizontalArrangement = Arrangement.SpaceBetween
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Start
         ) {
 //            IconButton(onClick = { /*TODO*/ }) {
             Icon(
@@ -220,6 +237,11 @@ fun MakeMyDeck() {
     }
 }
 
+// 간단하게 하나의 Row만 있으면 됨!
+// border에 shape 적용
+// clip도 있음!!
+// Row 자체에 모양을 적용하려면 clip
+// click할 수 있는 범위
 @Composable
 fun SubjectItem() {
     Row(
@@ -227,6 +249,7 @@ fun SubjectItem() {
             .fillMaxWidth()
             .padding(8.dp)
             .border(2.dp, Color.LightGray, shape = RoundedCornerShape(size = 8.dp))
+            .clip(shape = RoundedCornerShape(size = 8.dp))
             .clickable {
 
             }
@@ -245,5 +268,50 @@ fun SubjectItem() {
             style = MaterialTheme.typography.h5,
             fontWeight = FontWeight.ExtraBold
         )
+    }
+}
+
+// 일단 Column을 쓴걸로 예상됨!
+// Divider 소개
+// Text에 padding을 주는 수밖에..!
+@Composable
+fun CardItem() {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(8.dp)
+            .border(2.dp, Color.LightGray),
+    ) {
+        Text(
+            "Operating Systems",
+            modifier = Modifier.padding(16.dp),
+            fontWeight = FontWeight.ExtraBold
+        )
+        Divider(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(2.dp),
+            color = Color.LightGray
+        )
+        Text(
+            "A request to execute an OS service-layer function",
+            modifier = Modifier.padding(16.dp),
+            fontWeight = FontWeight.Bold,
+            color = Color.Gray
+        )
+    }
+}
+
+// click 동작은 가능하지만 효과는 없게 만들기 -> enabled 속성
+@Composable
+fun FilterText() {
+    Column(modifier = Modifier
+        .padding(4.dp)
+        .clip(shape = CircleShape)
+        .clickable(enabled = false) { }
+        .background(color = Color.LightGray)
+        .padding(horizontal = 20.dp, vertical = 4.dp)
+    ) {
+        Text("All", style = MaterialTheme.typography.body1, fontWeight = FontWeight.ExtraBold)
     }
 }

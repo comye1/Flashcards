@@ -34,20 +34,10 @@ class MainActivity : ComponentActivity() {
                 Surface(color = MaterialTheme.colors.background) {
                     Column {
                         FindFlashCards()
-                        DeckItem()
-                        DeckInSubject()
-                        StudyGuide()
                         SubjectItem()
-                        MyDeckItem()
-                        MakeMyDeck()
-                        Row() {
-                            FilterText()
-                            FilterText()
-                            FilterText()
-                            FilterText()
-                        }
                         DeckTitleTextField()
-                        CardItem()
+
+
                         CardItemField()
                     }
                 }
@@ -78,18 +68,6 @@ fun FindFlashCards() {
     }
 }
 
-@Composable
-fun FilterText() {
-    Column(modifier = Modifier
-        .padding(4.dp)
-        .clip(shape = CircleShape)
-        .clickable(enabled = false) { }
-        .background(color = Color.LightGray)
-        .padding(horizontal = 20.dp, vertical = 4.dp)
-    ) {
-        Text("All", style = MaterialTheme.typography.body1, fontWeight = FontWeight.ExtraBold)
-    }
-}
 
 @Composable
 fun DeckTitleTextField() {
@@ -117,33 +95,6 @@ fun DeckTitleTextField() {
     )
 }
 
-@Composable
-fun CardItem() {
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(8.dp)
-            .border(2.dp, Color.LightGray),
-    ) {
-        Text(
-            "Operating Systems",
-            modifier = Modifier.padding(16.dp),
-            fontWeight = FontWeight.ExtraBold
-        )
-        Divider(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(2.dp),
-            color = Color.LightGray
-        )
-        Text(
-            "A request to execute an OS service-layer function",
-            modifier = Modifier.padding(16.dp),
-            fontWeight = FontWeight.Bold,
-            color = Color.Gray
-        )
-    }
-}
 
 @Composable
 fun CardItemField() {
@@ -236,9 +187,8 @@ fun CardItemField() {
 fun DefaultPreview() {
     Column {
         FindFlashCards()
-
-
-        CardItem()
+        FilterText()
+        DeckTitleTextField()
         CardItemField()
     }
 }
