@@ -35,11 +35,11 @@ class MainActivity : ComponentActivity() {
                     Column {
                         FindFlashCards()
                         DeckItem()
-//                        DeckInSubject()
-//                        StudyGuide()
-//                        SubjectItem()
-//                        MyDeckItem()
-//                        MakeMyDeck()
+                        DeckInSubject()
+                        StudyGuide()
+                        SubjectItem()
+                        MyDeckItem()
+                        MakeMyDeck()
                         Row() {
                             FilterText()
                             FilterText()
@@ -56,218 +56,9 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-@Composable
-fun DeckItem() {
-    // Home 화면 내
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(8.dp)
-            .clickable {
-
-            }
-            .border(2.dp, Color.LightGray)
-            .padding(16.dp),
-    ) {
-        Text(
-            text = "recursion",
-            style = MaterialTheme.typography.h5,
-            fontWeight = FontWeight.ExtraBold
-        )
-        Spacer(modifier = Modifier.height(4.dp))
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            Text(
-                text = "11 Cards",
-                style = MaterialTheme.typography.subtitle1,
-                fontWeight = FontWeight.Bold,
-                color = Color.Gray
-            )
-            Icon(
-                imageVector = Icons.Default.TurnedIn,
-                contentDescription = "bookmarked",
-                tint = Color.Gray
-            )
-        }
-    }
-}
-
-@Composable
-fun MyDeckItem() {
-    // Home 화면 내
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(8.dp)
-            .clickable {
-
-            }
-            .border(2.dp, Color.LightGray)
-            .padding(16.dp),
-    ) {
-        Text(
-            text = "recursion",
-            style = MaterialTheme.typography.h5,
-            fontWeight = FontWeight.ExtraBold
-        )
-        Spacer(modifier = Modifier.height(4.dp))
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            Text(
-                text = "11 Cards",
-                style = MaterialTheme.typography.subtitle1,
-                fontWeight = FontWeight.Bold,
-                color = Color.Gray
-            )
-            Icon(
-                imageVector = Icons.Default.VisibilityOff,
-                contentDescription = "visibility_off",
-                tint = Color.Gray
-            )
-//            Icon(
-//                imageVector = Icons.Default.Visibility,
-//                contentDescription = "visibility_on",
-//                tint = Color.Gray
-//            )
-        }
-    }
-}
-
-@Composable
-fun MakeMyDeck() {
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(8.dp)
-            .clickable {
-
-            }
-            .border(2.dp, Color.LightGray)
-            .padding(20.dp),
-    ) {
-        Text(
-            text = "Make your own cards",
-            style = MaterialTheme.typography.h5,
-            fontWeight = FontWeight.ExtraBold
-        )
-        Spacer(modifier = Modifier.height(4.dp))
-        Text(
-            text = "It's easy to create your own flashcard deck -for free.",
-            style = MaterialTheme.typography.subtitle1,
-            fontWeight = FontWeight.Bold
-        )
-        Spacer(modifier = Modifier.height(4.dp))
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically
-//            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-//            IconButton(onClick = { /*TODO*/ }) {
-            Icon(
-                imageVector = Icons.Default.NoteAdd,
-                contentDescription = "add_deck",
-                tint = Color.Blue
-            )
-//            } IconButton 인 줄 알았더니 아무거나 클릭해도 되는거였어!!
-//            Spacer(modifier = Modifier.width(4.dp))
-            Text(
-                text = " Get started",
-                style = MaterialTheme.typography.subtitle1,
-                fontWeight = FontWeight.Bold,
-                color = Color.Blue
-            )
-        }
-    }
-}
 
 
-@Composable
-fun DeckInSubject() {
-    // 각 Subject 화면 내
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(8.dp)
-            .clickable {
 
-            }
-            .border(2.dp, Color.LightGray)
-            .padding(16.dp),
-    ) {
-        Text(
-            text = "recursion",
-            style = MaterialTheme.typography.h5,
-            fontWeight = FontWeight.ExtraBold
-        )
-        Spacer(modifier = Modifier.height(4.dp))
-        Text(
-            text = "8 Cards",
-            style = MaterialTheme.typography.subtitle1,
-            fontWeight = FontWeight.Bold,
-            color = Color.Gray
-        )
-    }
-}
-
-@Composable
-fun StudyGuide() {
-    // 각 Subject 화면 내
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(8.dp)
-            .clickable {
-
-            }
-            .border(2.dp, Color.LightGray)
-            .padding(16.dp),
-    ) {
-        Text(
-            text = "c-plus-plus",
-            style = MaterialTheme.typography.h5,
-            fontWeight = FontWeight.ExtraBold
-        )
-        Spacer(modifier = Modifier.height(4.dp))
-        Text(
-            text = "12 Decks · 207 Cards",
-            style = MaterialTheme.typography.subtitle1,
-            fontWeight = FontWeight.Bold,
-            color = Color.Gray
-        )
-    }
-}
-
-@Composable
-fun SubjectItem() {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(8.dp)
-            .border(2.dp, Color.LightGray, shape = RoundedCornerShape(size = 8.dp))
-            .clickable {
-
-            }
-            .padding(20.dp),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Icon(
-            imageVector = Icons.Default.Computer,
-            contentDescription = "computer science",
-            tint = DeepOrange,
-            modifier = Modifier.size(36.dp)
-        )
-        Spacer(modifier = Modifier.width(12.dp))
-        Text(
-            text = "Computer Science",
-            style = MaterialTheme.typography.h5,
-            fontWeight = FontWeight.ExtraBold
-        )
-    }
-}
 
 @Composable
 fun FindFlashCards() {
@@ -444,13 +235,9 @@ fun CardItemField() {
 @Composable
 fun DefaultPreview() {
     Column {
-//        FindFlashCards()
-//        DeckItem()
-//        DeckInSubject()
-//        StudyGuide()
-//        SubjectItem()
-//        MyDeckItem()
-//        MakeMyDeck()
+        FindFlashCards()
+
+
         CardItem()
         CardItemField()
     }
