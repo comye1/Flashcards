@@ -248,6 +248,7 @@ fun SubjectItem() {
             .fillMaxWidth()
             .padding(8.dp)
             .border(2.dp, Color.LightGray, shape = RoundedCornerShape(size = 8.dp))
+            .clip(shape = RoundedCornerShape(size = 8.dp))
             .clickable {
 
             }
