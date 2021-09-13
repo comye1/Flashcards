@@ -22,6 +22,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
+import com.comye1.Flashcards.screens.HomeScreen
 import com.comye1.Flashcards.ui.theme.DeepOrange
 import com.comye1.Flashcards.ui.theme.FlashcardsTheme
 
@@ -32,24 +33,7 @@ class MainActivity : ComponentActivity() {
             FlashcardsTheme {
                 // A surface container using the 'background' color from the theme
                 Surface(color = MaterialTheme.colors.background) {
-                    Column {
-                        FindFlashCards()
-                        DeckItem()
-//                        DeckInSubject()
-//                        StudyGuide()
-//                        SubjectItem()
-//                        MyDeckItem()
-//                        MakeMyDeck()
-                        Row() {
-                            FilterText()
-                            FilterText()
-                            FilterText()
-                            FilterText()
-                        }
-                        DeckTitleTextField()
-                        CardItem()
-                        CardItemField()
-                    }
+                    HomeScreen()
                 }
             }
         }
@@ -290,8 +274,8 @@ fun FindFlashCards() {
 
 @Composable
 fun FilterText() {
-    Column(modifier = Modifier
-        .padding(4.dp)
+    Row(modifier = Modifier
+//        .padding(4.dp)
         .clip(shape = CircleShape)
         .clickable(enabled = false) { }
         .background(color = Color.LightGray)
