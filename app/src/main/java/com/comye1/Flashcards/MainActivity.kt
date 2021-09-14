@@ -41,220 +41,6 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun DeckItem() {
-    // Home 화면 내
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(8.dp)
-            .clickable {
-
-            }
-            .border(2.dp, Color.LightGray)
-            .padding(16.dp),
-    ) {
-        Text(
-            text = "recursion",
-            style = MaterialTheme.typography.h5,
-            fontWeight = FontWeight.ExtraBold
-        )
-        Spacer(modifier = Modifier.height(4.dp))
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            Text(
-                text = "11 Cards",
-                style = MaterialTheme.typography.subtitle1,
-                fontWeight = FontWeight.Bold,
-                color = Color.Gray
-            )
-            Icon(
-                imageVector = Icons.Default.TurnedIn,
-                contentDescription = "bookmarked",
-                tint = Color.Gray
-            )
-        }
-    }
-}
-
-@Composable
-fun MyDeckItem() {
-    // Home 화면 내
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(8.dp)
-            .clickable {
-
-            }
-            .border(2.dp, Color.LightGray)
-            .padding(16.dp),
-    ) {
-        Text(
-            text = "recursion",
-            style = MaterialTheme.typography.h5,
-            fontWeight = FontWeight.ExtraBold
-        )
-        Spacer(modifier = Modifier.height(4.dp))
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            Text(
-                text = "11 Cards",
-                style = MaterialTheme.typography.subtitle1,
-                fontWeight = FontWeight.Bold,
-                color = Color.Gray
-            )
-            Icon(
-                imageVector = Icons.Default.VisibilityOff,
-                contentDescription = "visibility_off",
-                tint = Color.Gray
-            )
-//            Icon(
-//                imageVector = Icons.Default.Visibility,
-//                contentDescription = "visibility_on",
-//                tint = Color.Gray
-//            )
-        }
-    }
-}
-
-@Composable
-fun MakeMyDeck() {
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(8.dp)
-            .clickable {
-
-            }
-            .border(2.dp, Color.LightGray)
-            .padding(20.dp),
-    ) {
-        Text(
-            text = "Make your own cards",
-            style = MaterialTheme.typography.h5,
-            fontWeight = FontWeight.ExtraBold
-        )
-        Spacer(modifier = Modifier.height(4.dp))
-        Text(
-            text = "It's easy to create your own flashcard deck -for free.",
-            style = MaterialTheme.typography.subtitle1,
-            fontWeight = FontWeight.Bold
-        )
-        Spacer(modifier = Modifier.height(4.dp))
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically
-//            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-//            IconButton(onClick = { /*TODO*/ }) {
-            Icon(
-                imageVector = Icons.Default.NoteAdd,
-                contentDescription = "add_deck",
-                tint = Color.Blue
-            )
-//            } IconButton 인 줄 알았더니 아무거나 클릭해도 되는거였어!!
-//            Spacer(modifier = Modifier.width(4.dp))
-            Text(
-                text = " Get started",
-                style = MaterialTheme.typography.subtitle1,
-                fontWeight = FontWeight.Bold,
-                color = Color.Blue
-            )
-        }
-    }
-}
-
-
-@Composable
-fun DeckInSubject() {
-    // 각 Subject 화면 내
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(8.dp)
-            .clickable {
-
-            }
-            .border(2.dp, Color.LightGray)
-            .padding(16.dp),
-    ) {
-        Text(
-            text = "recursion",
-            style = MaterialTheme.typography.h5,
-            fontWeight = FontWeight.ExtraBold
-        )
-        Spacer(modifier = Modifier.height(4.dp))
-        Text(
-            text = "8 Cards",
-            style = MaterialTheme.typography.subtitle1,
-            fontWeight = FontWeight.Bold,
-            color = Color.Gray
-        )
-    }
-}
-
-@Composable
-fun StudyGuide() {
-    // 각 Subject 화면 내
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(8.dp)
-            .clickable {
-
-            }
-            .border(2.dp, Color.LightGray)
-            .padding(16.dp),
-    ) {
-        Text(
-            text = "c-plus-plus",
-            style = MaterialTheme.typography.h5,
-            fontWeight = FontWeight.ExtraBold
-        )
-        Spacer(modifier = Modifier.height(4.dp))
-        Text(
-            text = "12 Decks · 207 Cards",
-            style = MaterialTheme.typography.subtitle1,
-            fontWeight = FontWeight.Bold,
-            color = Color.Gray
-        )
-    }
-}
-
-@Composable
-fun SubjectItem() {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(8.dp)
-            .border(2.dp, Color.LightGray, shape = RoundedCornerShape(size = 8.dp))
-            .clip(shape = RoundedCornerShape(size = 8.dp))
-            .clickable {
-
-            }
-            .padding(20.dp),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Icon(
-            imageVector = Icons.Default.Computer,
-            contentDescription = "computer science",
-            tint = DeepOrange,
-            modifier = Modifier.size(36.dp)
-        )
-        Spacer(modifier = Modifier.width(12.dp))
-        Text(
-            text = "Computer Science",
-            style = MaterialTheme.typography.h5,
-            fontWeight = FontWeight.ExtraBold
-        )
-    }
-}
-
-@Composable
 fun FindFlashCards() {
     Row(
         modifier = Modifier
@@ -309,34 +95,6 @@ fun DeckTitleTextField() {
         ),
         maxLines = 2
     )
-}
-
-@Composable
-fun CardItem() {
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(8.dp)
-            .border(2.dp, Color.LightGray),
-    ) {
-        Text(
-            "Operating Systems",
-            modifier = Modifier.padding(16.dp),
-            fontWeight = FontWeight.ExtraBold
-        )
-        Divider(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(2.dp),
-            color = Color.LightGray
-        )
-        Text(
-            "A request to execute an OS service-layer function",
-            modifier = Modifier.padding(16.dp),
-            fontWeight = FontWeight.Bold,
-            color = Color.Gray
-        )
-    }
 }
 
 @Composable
@@ -438,5 +196,232 @@ fun DefaultPreview() {
 //        MakeMyDeck()
         CardItem()
         CardItemField()
+    }
+}
+
+@Composable
+fun DeckInSubject() {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .border(
+                width = 2.dp,
+                color = Color.LightGray
+            )
+            .clickable {
+
+            }
+            .padding(16.dp)) {
+        Text(
+            text = "recursion",
+            style = MaterialTheme.typography.h5,
+            fontWeight = FontWeight.Bold
+        )
+        Spacer(modifier = Modifier.height(4.dp))
+        Text(
+            text = "8 Cards",
+            style = MaterialTheme.typography.subtitle1,
+            fontWeight = FontWeight.Bold,
+            color = Color.Gray
+        )
+    }
+}
+
+@Composable
+fun StudyGuide() {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .border(
+                width = 2.dp,
+                color = Color.LightGray
+            )
+            .clickable {
+
+            }
+            .padding(16.dp)) {
+        Text(
+            text = "c-plus-plus",
+            style = MaterialTheme.typography.h5,
+            fontWeight = FontWeight.Bold
+        )
+        Spacer(modifier = Modifier.height(4.dp))
+        Text(
+            text = "12 Decks · 207 Cards",
+            style = MaterialTheme.typography.subtitle1,
+            fontWeight = FontWeight.Bold,
+            color = Color.Gray
+        )
+    }
+}
+
+@Composable
+fun DeckItem() {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .border(
+                width = 2.dp,
+                color = Color.LightGray
+            )
+            .clickable {
+
+            }
+            .padding(16.dp)
+    ) {
+        Text(
+            text = "recursion",
+            style = MaterialTheme.typography.h5,
+            fontWeight = FontWeight.Bold
+        )
+        Spacer(modifier = Modifier.height(4.dp))
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Text(
+                text = "8 Cards",
+                style = MaterialTheme.typography.subtitle1,
+                fontWeight = FontWeight.Bold,
+                color = Color.Gray
+            )
+            Icon(
+                imageVector = Icons.Default.Bookmark,
+                contentDescription = "bookmark",
+                tint = Color.Gray
+            )
+        }
+    }
+}
+
+@Composable
+fun MyDeckItem() {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .border(
+                width = 2.dp,
+                color = Color.LightGray
+            )
+            .clickable {
+
+            }
+            .padding(16.dp)) {
+        Text(
+            text = "recursion",
+            style = MaterialTheme.typography.h5,
+            fontWeight = FontWeight.Bold
+        )
+        Spacer(modifier = Modifier.height(4.dp))
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Text(
+                text = "11 Cards",
+                style = MaterialTheme.typography.subtitle1,
+                fontWeight = FontWeight.Bold,
+                color = Color.Gray
+            )
+            Icon(
+                imageVector = Icons.Default.VisibilityOff,
+                contentDescription = "visibility_off",
+                tint = Color.Gray
+            )
+        }
+
+    }
+}
+
+@Composable
+fun MakeMyDeck() {
+    Column(modifier = Modifier
+        .fillMaxWidth()
+        .border(
+            width = 2.dp,
+            color = Color.LightGray
+        )
+        .clickable {
+
+        }
+        .padding(20.dp)) {
+        Text(
+            text = "Make your own cards",
+            style = MaterialTheme.typography.h5,
+            fontWeight = FontWeight.Bold
+        )
+        Spacer(modifier = Modifier.height(4.dp))
+        Text(
+            text = "It's easy to create your own flashcard deck -for free.",
+            style = MaterialTheme.typography.subtitle1,
+            fontWeight = FontWeight.Bold,
+        )
+        Spacer(modifier = Modifier.height(4.dp))
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+        ) {
+            Icon(
+                imageVector = Icons.Default.NoteAdd,
+                contentDescription = "bookmark",
+                tint = Color.Blue
+            )
+            Text(
+                text = "Get started",
+                style = MaterialTheme.typography.subtitle1,
+                fontWeight = FontWeight.Bold,
+                color = Color.Blue
+            )
+        }
+    }
+}
+
+@Composable
+fun SubjectItem() {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .border(
+                shape = RoundedCornerShape(size = 8.dp),
+                width = 2.dp,
+                color = Color.LightGray
+            )
+            .padding(20.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Icon(
+            imageVector = Icons.Default.Computer,
+            contentDescription = "bookmark",
+            tint = DeepOrange,
+            modifier = Modifier.size(36.dp)
+        )
+        Text(
+            text = "  Computer Science",
+            style = MaterialTheme.typography.h5,
+            fontWeight = FontWeight.Bold
+        )
+    }
+}
+
+@Composable
+fun CardItem() {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .border(width = 2.dp, color = Color.LightGray)
+    ) {
+        Text(
+            text = "Operating Systems",
+            modifier = Modifier.padding(16.dp),
+            fontWeight = FontWeight.ExtraBold
+        )
+        Divider(modifier = Modifier
+            .fillMaxWidth()
+            .height(2.dp), color = Color.LightGray)
+        Text(
+            text = "A request to execute an OS service-layer function",
+            modifier = Modifier.padding(16.dp),
+            color = Color.Gray,
+            fontWeight = FontWeight.Bold
+        )
     }
 }
