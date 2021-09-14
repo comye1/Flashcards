@@ -30,14 +30,19 @@ import org.w3c.dom.Text
 @Composable
 fun FirstWeekPreview() {
     Column() {
-        DeckInSubject()
+//        DeckInSubject()
         StudyGuide()
         DeckItem()
         MyDeckItem()
         MakeMyDeck()
         SubjectItem()
         CardItem()
-        FilterText()
+        Row() {
+            FilterText(Color.Transparent)
+            FilterText(Color.LightGray)
+            FilterText(Color.Transparent)
+
+        }
     }
 
 }
@@ -45,26 +50,27 @@ fun FirstWeekPreview() {
 // Column, fillMaxWidth(), padding, border 적용
 // Text에 style, fontWeight 설정하면서..
 // Spacer로 간격 띄우기 (padding보다는??!!)
+// padding 없애고 복붙하기 ㅠㅠ
 @Composable
 fun DeckInSubject() {
     // 각 Subject 화면 내
     Column(
         modifier = Modifier
-            .fillMaxWidth()
-            .padding(8.dp)
-            .clickable {
+            .fillMaxWidth()// 1.
+            .padding(8.dp)//5. 그림 설명
+            .clickable {//8.
 
-            }
-            .border(2.dp, Color.LightGray)
-            .padding(16.dp),
+            } //나중에 => 클릭하고 싶은 부분!!
+            .border(2.dp, Color.LightGray)//6.
+            .padding(16.dp)//7.,
     ) {
-        Text(
+        Text( //2.
             text = "recursion",
             style = MaterialTheme.typography.h5,
             fontWeight = FontWeight.ExtraBold
         )
-        Spacer(modifier = Modifier.height(4.dp))
-        Text(
+        Spacer(modifier = Modifier.height(4.dp)) //4.
+        Text( //3.
             text = "8 Cards",
             style = MaterialTheme.typography.subtitle1,
             fontWeight = FontWeight.Bold,
@@ -73,7 +79,7 @@ fun DeckInSubject() {
     }
 }
 
-// 복붙, 실습하세요!
+// 복붙, 실습
 @Composable
 fun StudyGuide() {
     // 각 Subject 화면 내
@@ -103,7 +109,7 @@ fun StudyGuide() {
 }
 
 // 복붙, Row를 사용해보자!
-// Row내 요소들 배치 방법
+// Row내 요소들 배치 방법 -
 // IconButton 말고 Icon만 사용하기
 // Icon 추가 라이브러리
 @Composable
@@ -302,14 +308,15 @@ fun CardItem() {
     }
 }
 
-// click 동작은 가능하지만 효과는 없게 만들기 -> enabled 속성
+// click 못하게 만들기 -> enabled 속성 (이미 클릭된 아이템)
+// 바깥 padding 안 넣은 이유
 @Composable
-fun FilterText() {
-    Column(modifier = Modifier
-        .padding(4.dp)
+fun FilterText(backgroundColoc: Color) {
+    Box(modifier = Modifier
+        .padding(start = 0.dp, end = 8.dp, top = 4.dp, bottom = 4.dp)
         .clip(shape = CircleShape)
         .clickable(enabled = false) { }
-        .background(color = Color.LightGray)
+        .background(color = backgroundColoc)
         .padding(horizontal = 20.dp, vertical = 4.dp)
     ) {
         Text("All", style = MaterialTheme.typography.body1, fontWeight = FontWeight.ExtraBold)

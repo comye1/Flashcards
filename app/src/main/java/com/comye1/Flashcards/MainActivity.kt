@@ -3,9 +3,7 @@ package com.comye1.Flashcards
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -32,14 +30,15 @@ class MainActivity : ComponentActivity() {
             FlashcardsTheme {
                 // A surface container using the 'background' color from the theme
                 Surface(color = MaterialTheme.colors.background) {
-                    Column {
-                        FindFlashCards()
-                        SubjectItem()
-                        DeckTitleTextField()
-
-
-                        CardItemField()
-                    }
+//                    Column {
+//                        FindFlashCards()
+//                        SubjectItem()
+//                        DeckTitleTextField()
+//
+//
+//                        CardItemField()
+//                    }
+                    FirstWeekPreview()
                 }
             }
         }
@@ -187,7 +186,7 @@ fun CardItemField() {
 fun DefaultPreview() {
     Column {
         FindFlashCards()
-        FilterText()
+//        FilterText()
         DeckTitleTextField()
         CardItemField()
     }
