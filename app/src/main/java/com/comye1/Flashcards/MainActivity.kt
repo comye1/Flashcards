@@ -14,6 +14,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -22,6 +23,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
+import com.comye1.Flashcards.screens.CreateScreen
 import com.comye1.Flashcards.screens.HomeScreen
 import com.comye1.Flashcards.ui.theme.DeepOrange
 import com.comye1.Flashcards.ui.theme.FlashcardsTheme
@@ -33,7 +35,8 @@ class MainActivity : ComponentActivity() {
             FlashcardsTheme {
                 // A surface container using the 'background' color from the theme
                 Surface(color = MaterialTheme.colors.background) {
-                    HomeScreen()
+//                    HomeScreen()
+                    CreateScreen()
                 }
             }
         }
@@ -81,11 +84,10 @@ fun FindFlashCards() {
 @Composable
 fun FilterText() {
     Row(modifier = Modifier
-//        .padding(4.dp)
         .clip(shape = CircleShape)
         .clickable(enabled = false) { }
         .background(color = Color.LightGray)
-        .padding(horizontal = 20.dp, vertical = 4.dp)
+        .padding(horizontal = 20.dp, vertical = 2.dp)
     ) {
         Text("All", style = MaterialTheme.typography.body1, fontWeight = FontWeight.ExtraBold)
     }
@@ -93,9 +95,16 @@ fun FilterText() {
 
 @Composable
 fun DeckTitleTextField() {
+
+    var text by remember {
+        mutableStateOf("")
+    }
+
     OutlinedTextField(
-        value = "",
-        onValueChange = {},
+        value = text,
+        onValueChange = { newText ->
+            text = newText
+        },
         modifier = Modifier.fillMaxWidth(),
         textStyle = MaterialTheme.typography.h4,
         placeholder = {

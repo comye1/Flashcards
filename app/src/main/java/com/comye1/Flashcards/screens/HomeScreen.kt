@@ -26,7 +26,7 @@ fun HomeScreenPreview() {
 fun HomeScreen() {
     Scaffold(
         topBar = {
-            Column(modifier = Modifier.padding(16.dp)) {
+            Column(modifier = Modifier.padding(top = 8.dp, bottom = 4.dp, start = 16.dp, end = 16.dp)) {
                 Text(
                     "CheggPrep",
                     style = MaterialTheme.typography.h5,
@@ -44,20 +44,28 @@ fun HomeScreen() {
             }
         }
     ) {
-        Column(modifier = Modifier.padding(8.dp)) {
+        Column(modifier = Modifier.padding(16.dp)) {
             LazyColumn {
                 repeat (10) {
                     item {
                         DeckItem()
+                    }
+                    item {
+                        Spacer(modifier = Modifier.height(8.dp))
                     }
                 }
                 repeat (10) {
                     item {
                         MyDeckItem()
                     }
+                    item {
+                        Spacer(modifier = Modifier.height(8.dp))
+                    }
+                }
+                item {
+                    MakeMyDeck()
                 }
             }
-            MakeMyDeck()
         }
     }
 }
