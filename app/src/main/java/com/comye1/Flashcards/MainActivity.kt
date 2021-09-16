@@ -99,31 +99,33 @@ fun DeckTitleTextField() {
     var text by remember {
         mutableStateOf("")
     }
-
-    OutlinedTextField(
-        value = text,
-        onValueChange = { newText ->
-            text = newText
-        },
-        modifier = Modifier.fillMaxWidth(),
-        textStyle = MaterialTheme.typography.h4,
-        placeholder = {
-            Text(
-                text = "Untitled deck",
-                style = MaterialTheme.typography.h4,
-                fontWeight = FontWeight.ExtraBold,
-                color = Color.LightGray,
-                modifier = Modifier.padding(4.dp)
-            )
-        },
-        colors = TextFieldDefaults.outlinedTextFieldColors(
-            focusedBorderColor = Color.Transparent,
-            unfocusedBorderColor = Color.Transparent,
-            cursorColor = DeepOrange,
-            backgroundColor = Color.Transparent
-        ),
-        maxLines = 2
-    )
+    Column(modifier = Modifier.fillMaxWidth()) {
+        TextField(
+            value = text,
+            onValueChange = { newText ->
+                text = newText
+            },
+            modifier = Modifier.fillMaxWidth(),
+            textStyle = MaterialTheme.typography.h4,
+            placeholder = {
+                Text(
+                    text = " Untitled deck",
+                    style = MaterialTheme.typography.h4,
+                    fontWeight = FontWeight.ExtraBold,
+                    color = Color.LightGray,
+//                    modifier = Modifier.padding(4.dp)
+                )
+            },
+            colors = TextFieldDefaults.outlinedTextFieldColors(
+                focusedBorderColor = Color.LightGray,
+                unfocusedBorderColor = Color.LightGray,
+                cursorColor = DeepOrange,
+                backgroundColor = Color.Transparent
+            ),
+            maxLines = 2
+        )
+//        Divider(modifier = Modifier.fillMaxWidth().height(2.dp))
+    }
 }
 
 @Composable
