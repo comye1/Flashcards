@@ -35,8 +35,8 @@ class MainActivity : ComponentActivity() {
             FlashcardsTheme {
                 // A surface container using the 'background' color from the theme
                 Surface(color = MaterialTheme.colors.background) {
-//                    HomeScreen()
-                    CreateScreen()
+                    HomeScreen()
+//                    CreateScreen()
                 }
             }
         }
