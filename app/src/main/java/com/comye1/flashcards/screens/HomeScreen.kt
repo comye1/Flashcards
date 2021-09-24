@@ -13,6 +13,7 @@ import androidx.compose.ui.unit.dp
 import com.comye1.flashcards.DeckItem
 import com.comye1.flashcards.FilterText
 import com.comye1.flashcards.SampleDataSet
+import com.comye1.flashcards.models.DECK_CREATED
 import com.comye1.flashcards.ui.theme.DeepOrange
 
 @Preview
@@ -45,21 +46,32 @@ fun HomeScreen() {
                     fontWeight = FontWeight.Bold
                 )
                 Spacer(modifier = Modifier.height(24.dp))
-                FilterSection(selectedFilterIndex, {selectedFilterIndex = it})
+                FilterSection(selectedFilterIndex) { selectedFilterIndex = it }
             }
         }
     ) {
-        Column(modifier = Modifier.padding(16.dp)) {
-            LazyColumn {
+        LazyColumn(modifier = Modifier.padding(16.dp)) {
 
-                SampleDataSet.deckSample.forEach {
-                    item {
-                        DeckItem(deck = it, modifier = Modifier.padding(bottom = 8.dp))
+            when (selectedFilterIndex) {
+                0 ->
+                    SampleDataSet.deckSample.forEach {
+                        item {
+                            DeckItem(deck = it, modifier = Modifier.padding(bottom = 8.dp))
+                        }
                     }
-//                    item {
-//                        Spacer(modifier = Modifier.height(8.dp))
-//                    }
-                }
+                1 ->
+                    SampleDataSet.deckSample.filter { it.bookmarked }.forEach {
+                        item {
+                            DeckItem(deck = it, modifier = Modifier.padding(bottom = 8.dp))
+                        }
+                    }
+                2 ->
+                    SampleDataSet.deckSample.filter { it.deckType == DECK_CREATED }.forEach {
+                        item {
+                            DeckItem(deck = it, modifier = Modifier.padding(bottom = 8.dp))
+                        }
+                    }
+            }
 
 //                repeat (10) {
 //                    item {
@@ -80,9 +92,9 @@ fun HomeScreen() {
 //                item {
 //                    MakeMyDeck()
 //                }
-            }
         }
     }
+
 }
 
 @Composable

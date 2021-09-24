@@ -35,18 +35,24 @@ object SampleDataSet {
             shared = false,
             bookmarked = false,
             cardList = listOf(
-                Card("Iterations", "Repeated steps in an SDLC process"),
-                Card("System development life cycle", "The process for developing an information system"),
+                Card("modifier", "Repeated steps in an SDLC process"),
+                Card("side effects", "The process for developing an information system"),
+                Card("modifier", "Repeated steps in an SDLC process"),
+                Card("side effects", "The process for developing an information system"),
             )
         ),
         Deck(
             deckType = DECK_CREATED,
-            deckTitle = "jetpack compose",
+            deckTitle = "Room",
             shared = true,
             bookmarked = false,
             cardList = listOf(
-                Card("Iterations", "Repeated steps in an SDLC process"),
-                Card("System development life cycle", "The process for developing an information system"),
+                Card("DAO", "Repeated steps in an SDLC process"),
+                Card("suspend", "The process for developing an information system"),
+                Card("suspend", "The process for developing an information system"),
+                Card("suspend", "The process for developing an information system"),
+                Card("suspend", "The process for developing an information system"),
+                Card("suspend", "The process for developing an information system"),
             )
         )
     )
