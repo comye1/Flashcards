@@ -1,4 +1,4 @@
-package com.comye1.Flashcards
+package com.comye1.flashcards
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -7,13 +7,13 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material.icons.outlined.Delete
-import androidx.compose.runtime.Composable
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -23,10 +23,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
-import com.comye1.Flashcards.screens.CreateScreen
-import com.comye1.Flashcards.screens.HomeScreen
-import com.comye1.Flashcards.ui.theme.DeepOrange
-import com.comye1.Flashcards.ui.theme.FlashcardsTheme
+import com.comye1.flashcards.models.Deck
+import com.comye1.flashcards.screens.HomeScreen
+import com.comye1.flashcards.ui.theme.DeepOrange
+import com.comye1.flashcards.ui.theme.FlashcardsTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -43,23 +43,23 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-@Preview(showBackground = true)
+//@Preview(showBackground = true)
 @Composable
 fun FirstWeekPreview() {
-    Column(modifier = Modifier.padding(8.dp)) {
-        DeckInSubject()
-        Spacer(modifier = Modifier.height(8.dp))
-        StudyGuide()
-        Spacer(modifier = Modifier.height(8.dp))
-        DeckItem()
-        Spacer(modifier = Modifier.height(8.dp))
-        MyDeckItem()
-        Spacer(modifier = Modifier.height(8.dp))
-        MakeMyDeck()
-        Spacer(modifier = Modifier.height(8.dp))
-        SubjectItem()
-        Spacer(modifier = Modifier.height(8.dp))
-        CardItem()
+    LazyColumn(modifier = Modifier.padding(8.dp)) {
+//        DeckInSubject()
+//        Spacer(modifier = Modifier.height(8.dp))
+//        StudyGuide()
+//        Spacer(modifier = Modifier.height(8.dp))
+
+//        Spacer(modifier = Modifier.height(8.dp))
+//        MyDeckItem()
+//        Spacer(modifier = Modifier.height(8.dp))
+//        MakeMyDeck()
+//        Spacer(modifier = Modifier.height(8.dp))
+//        SubjectItem()
+//        Spacer(modifier = Modifier.height(8.dp))
+//        CardItem()
     }
 }
 
@@ -81,17 +81,31 @@ fun FindFlashCards() {
     }
 }
 
+//@Composable
+//fun FilterText() {
+//    Row(modifier = Modifier
+//        .clip(shape = CircleShape)
+//        .clickable(enabled = false) { }
+//        .background(color = Color.LightGray)
+//        .padding(horizontal = 20.dp, vertical = 2.dp)
+//    ) {
+//        Text("All", style = MaterialTheme.typography.body1, fontWeight = FontWeight.ExtraBold)
+//    }
+//}
+
 @Composable
-fun FilterText() {
+fun FilterText(text: String, selected: Boolean, onClick: () -> Unit) {
     Row(modifier = Modifier
         .clip(shape = CircleShape)
-        .clickable(enabled = false) { }
-        .background(color = Color.LightGray)
+        .clickable(enabled = !selected){ onClick() }
+        .background(color = if(selected) Color.LightGray else Color.Transparent)
         .padding(horizontal = 20.dp, vertical = 2.dp)
     ) {
-        Text("All", style = MaterialTheme.typography.body1, fontWeight = FontWeight.ExtraBold)
+        Text(text, style = MaterialTheme.typography.body1, fontWeight = FontWeight.ExtraBold)
     }
 }
+
+
 
 @Composable
 fun DeckTitleTextField() {
@@ -286,10 +300,52 @@ fun StudyGuide() {
     }
 }
 
+//@Composable
+//fun DeckItem() {
+//    Column(
+//        modifier = Modifier
+//            .fillMaxWidth()
+//            .border(
+//                width = 2.dp,
+//                color = Color.LightGray
+//            )
+//            .clickable {
+//
+//            }
+//            .padding(16.dp)
+//    ) {
+//        Text(
+//            text = "recursion",
+//            style = MaterialTheme.typography.h5,
+//            fontWeight = FontWeight.Bold
+//        )
+//        Spacer(modifier = Modifier.height(4.dp))
+//        Row(
+//            modifier = Modifier.fillMaxWidth(),
+//            horizontalArrangement = Arrangement.SpaceBetween
+//        ) {
+//            Text(
+//                text = "8 Cards",
+//                style = MaterialTheme.typography.subtitle1,
+//                fontWeight = FontWeight.Bold,
+//                color = Color.Gray
+//            )
+//            Icon(
+//                imageVector = Icons.Default.Bookmark,
+//                contentDescription = "bookmark",
+//                tint = Color.Gray
+//            )
+//        }
+//    }
+//}
+
 @Composable
-fun DeckItem() {
+fun DeckItem(
+    deck: Deck,
+    modifier: Modifier = Modifier
+) {
     Column(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .border(
                 width = 2.dp,
@@ -301,7 +357,7 @@ fun DeckItem() {
             .padding(16.dp)
     ) {
         Text(
-            text = "recursion",
+            text = deck.deckTitle,
             style = MaterialTheme.typography.h5,
             fontWeight = FontWeight.Bold
         )
@@ -311,19 +367,35 @@ fun DeckItem() {
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Text(
-                text = "8 Cards",
+                text = deck.cardList.size.toString() + if (deck.cardList.size > 1) " Cards" else "Card",
                 style = MaterialTheme.typography.subtitle1,
                 fontWeight = FontWeight.Bold,
                 color = Color.Gray
             )
-            Icon(
-                imageVector = Icons.Default.Bookmark,
-                contentDescription = "bookmark",
-                tint = Color.Gray
-            )
+            if (deck.bookmarked) {
+                Icon(
+                    imageVector = Icons.Default.Bookmark,
+                    contentDescription = "bookmark",
+                    tint = Color.Gray
+                )
+            }
+            else if(deck.shared) {
+                Icon(
+                    imageVector = Icons.Default.Visibility,
+                    contentDescription = "visible",
+                    tint = Color.Gray
+                )
+            } else {
+                Icon(
+                    imageVector = Icons.Default.VisibilityOff,
+                    contentDescription = "invisible ",
+                    tint = Color.Gray
+                )
+            }
         }
     }
 }
+
 
 @Composable
 fun MyDeckItem() {
