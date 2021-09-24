@@ -1,4 +1,4 @@
-package com.comye1.Flashcards
+package com.comye1.flashcards
 
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4

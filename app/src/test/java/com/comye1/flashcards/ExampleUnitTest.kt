@@ -1,4 +1,4 @@
-package com.comye1.Flashcards
+package com.comye1.flashcards
 
 import org.junit.Test
 
