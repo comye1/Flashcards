@@ -25,7 +25,7 @@ fun HomeScreenPreview() {
 @Composable
 fun HomeScreen() {
 
-    var selectedFilterIndex by remember {
+    var (selectedFilterIndex, setFilterIndex) = remember {
         mutableStateOf(0)
     }
 
@@ -46,7 +46,7 @@ fun HomeScreen() {
                     fontWeight = FontWeight.Bold
                 )
                 Spacer(modifier = Modifier.height(24.dp))
-                FilterSection(selectedFilterIndex) { selectedFilterIndex = it }
+                FilterSection(selectedFilterIndex, setFilterIndex)
             }
         }
     ) {
