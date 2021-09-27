@@ -3,6 +3,7 @@ package com.comye1.flashcards
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -13,8 +14,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
-import androidx.compose.material.icons.outlined.Delete
-import androidx.compose.material.icons.outlined.Home
+import androidx.compose.material.icons.outlined.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -27,6 +27,8 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.comye1.flashcards.MoreScreen
+import com.comye1.flashcards.SearchScreen
 import com.comye1.flashcards.models.Deck
 import com.comye1.flashcards.screens.CreateScreen
 import com.comye1.flashcards.screens.HomeScreen
@@ -38,34 +40,63 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             FlashcardsTheme {
-                // A surface container using the 'background' color from the theme
+
+                val navController = rememberNavController()
+
                 Scaffold(
                     bottomBar = {
-                        Row(modifier = Modifier.fillMaxWidth().padding(vertical = 12.dp),horizontalArrangement = Arrangement.SpaceAround) {
-                            IconButton(onClick = { /*TODO*/ }) {
-                                Icon(imageVector = Icons.Outlined.Home, contentDescription = "home", modifier = Modifier.size(60.dp))
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(vertical = 12.dp),
+                            horizontalArrangement = Arrangement.SpaceAround
+                        ) {
+                            IconButton(onClick = { navController.navigate("HomeScreen") }) {
+                                Icon(
+                                    imageVector = Icons.Outlined.Home,
+                                    contentDescription = "home",
+                                    modifier = Modifier.size(60.dp)
+                                )
                             }
-                            IconButton(onClick = { /*TODO*/ }) {
-                                Icon(imageVector = Icons.Outlined.Home, contentDescription = "home", modifier = Modifier.size(60.dp))
+                            IconButton(onClick = { navController.navigate("SearchScreen") }) {
+                                Icon(
+                                    imageVector = Icons.Outlined.Search,
+                                    contentDescription = "search",
+                                    modifier = Modifier.size(60.dp)
+                                )
                             }
-                            IconButton(onClick = { /*TODO*/ }) {
-                                Icon(imageVector = Icons.Outlined.Home, contentDescription = "home", modifier = Modifier.size(60.dp))
+                            IconButton(onClick = { navController.navigate("CreateScreen") }) {
+                                Icon(
+                                    imageVector = Icons.Outlined.AddBox,
+                                    contentDescription = "create",
+                                    modifier = Modifier.size(60.dp)
+                                )
                             }
-                            IconButton(onClick = { /*TODO*/ }) {
-                                Icon(imageVector = Icons.Outlined.Home, contentDescription = "home", modifier = Modifier.size(60.dp))
+                            IconButton(onClick = { navController.navigate("MoreScreen") }) {
+                                Icon(
+                                    imageVector = Icons.Outlined.Menu,
+                                    contentDescription = "more",
+                                    modifier = Modifier.size(60.dp)
+                                )
                             }
                         }
                     }
                 ) {
-                    val navController = rememberNavController()
 
                     NavHost(navController = navController, startDestination = "HomeScreen") {
                         composable("HomeScreen") {
                             HomeScreen()
                         }
+                        composable("SearchScreen") {
+                            SearchScreen()
+                        }
                         composable("CreateScreen") {
                             CreateScreen()
                         }
+                        composable("MoreScreen") {
+                            MoreScreen()
+                        }
+
                     }
 
                 }
