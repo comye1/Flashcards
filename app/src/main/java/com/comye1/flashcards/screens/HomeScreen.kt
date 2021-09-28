@@ -20,11 +20,6 @@ import com.comye1.flashcards.ui.theme.DeepOrange
 
 @Preview
 @Composable
-fun HomeScreenPreview() {
-    HomeScreen()
-}
-
-@Composable
 fun HomeScreen() {
 
     var (selectedFilterIndex, setFilterIndex) = remember {

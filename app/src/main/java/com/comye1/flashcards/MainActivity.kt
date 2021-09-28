@@ -3,7 +3,6 @@ package com.comye1.flashcards
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -27,8 +26,6 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.comye1.flashcards.MoreScreen
-import com.comye1.flashcards.SearchScreen
 import com.comye1.flashcards.models.Deck
 import com.comye1.flashcards.screens.CreateScreen
 import com.comye1.flashcards.screens.HomeScreen
@@ -48,6 +45,7 @@ class MainActivity : ComponentActivity() {
                         Row(
                             modifier = Modifier
                                 .fillMaxWidth()
+                                .background(Color.White)
                                 .padding(vertical = 12.dp),
                             horizontalArrangement = Arrangement.SpaceAround
                         ) {
@@ -169,6 +167,7 @@ fun FilterText(text: String, selected: Boolean, onClick: () -> Unit) {
 }
 
 
+@Preview
 @Composable
 fun DeckTitleTextField() {
 
@@ -188,25 +187,24 @@ fun DeckTitleTextField() {
                     text = " Untitled deck",
                     style = MaterialTheme.typography.h4,
                     fontWeight = FontWeight.ExtraBold,
-                    color = Color.LightGray,
-//                    modifier = Modifier.padding(4.dp)
+                    color = Color.LightGray
                 )
             },
-            colors = TextFieldDefaults.outlinedTextFieldColors(
-                focusedBorderColor = Color.LightGray,
-                unfocusedBorderColor = Color.LightGray,
+            colors = TextFieldDefaults.textFieldColors(
                 cursorColor = DeepOrange,
-                backgroundColor = Color.Transparent
+                backgroundColor = Color.Transparent,
+                focusedIndicatorColor = Color.LightGray,
+                unfocusedIndicatorColor = Color.LightGray
             ),
             maxLines = 2
         )
-//        Divider(modifier = Modifier.fillMaxWidth().height(2.dp))
     }
 }
 
 @Composable
 fun CardItemField() {
 
+    //나중에 밖으로 뺄 것
     val (frontText, setFrontText) = remember {
         mutableStateOf("")
     }
@@ -223,7 +221,7 @@ fun CardItemField() {
     ) {
         ConstraintLayout {
             val (front, back, delete, divider) = createRefs()
-            OutlinedTextField(
+            TextField(
                 value = frontText,
                 onValueChange = setFrontText,
                 modifier = Modifier
@@ -241,11 +239,11 @@ fun CardItemField() {
                         color = Color.LightGray
                     )
                 },
-                colors = TextFieldDefaults.outlinedTextFieldColors(
-                    focusedBorderColor = Color.Transparent,
-                    unfocusedBorderColor = Color.Transparent,
+                colors = TextFieldDefaults.textFieldColors(
                     cursorColor = DeepOrange,
-                    backgroundColor = Color.Transparent
+                    backgroundColor = Color.Transparent,
+                    focusedIndicatorColor = Color.Transparent,
+                    unfocusedIndicatorColor = Color.Transparent
                 ),
                 maxLines = 2
             )
@@ -258,7 +256,7 @@ fun CardItemField() {
                     .height(2.dp),
                 color = Color.LightGray
             )
-            OutlinedTextField(
+            TextField(
                 value = backText,
                 onValueChange = setBackText,
                 modifier = Modifier
@@ -277,11 +275,11 @@ fun CardItemField() {
                         color = Color.LightGray
                     )
                 },
-                colors = TextFieldDefaults.outlinedTextFieldColors(
-                    focusedBorderColor = Color.Transparent,
-                    unfocusedBorderColor = Color.Transparent,
+                colors = TextFieldDefaults.textFieldColors(
                     cursorColor = DeepOrange,
-                    backgroundColor = Color.Transparent
+                    backgroundColor = Color.Transparent,
+                    focusedIndicatorColor = Color.Transparent,
+                    unfocusedIndicatorColor = Color.Transparent
                 )
             )
             IconButton(
@@ -294,9 +292,7 @@ fun CardItemField() {
                 Icon(imageVector = Icons.Outlined.Delete, contentDescription = "delete")
             }
         }
-
     }
-
 }
 
 @Preview(showBackground = true)
