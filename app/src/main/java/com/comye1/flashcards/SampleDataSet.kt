@@ -23,7 +23,7 @@ object SampleDataSet {
             deckType = DECK_ADDED,
             deckTitle = "Information Systems",
             shared = false,
-            bookmarked = true,
+            bookmarked = false,
             cardList = listOf(
                 Card("Iterations", "Repeated steps in an SDLC process"),
                 Card("System development life cycle", "The process for developing an information system"),

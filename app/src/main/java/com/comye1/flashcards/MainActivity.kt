@@ -26,6 +26,8 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.comye1.flashcards.models.DECK_ADDED
+import com.comye1.flashcards.models.DECK_CREATED
 import com.comye1.flashcards.models.Deck
 import com.comye1.flashcards.screens.CreateScreen
 import com.comye1.flashcards.screens.HomeScreen
@@ -443,24 +445,32 @@ fun DeckItem(
                 fontWeight = FontWeight.Bold,
                 color = Color.Gray
             )
-            if (deck.bookmarked) {
-                Icon(
-                    imageVector = Icons.Default.Bookmark,
-                    contentDescription = "bookmark",
-                    tint = Color.Gray
-                )
-            } else if (deck.shared) {
-                Icon(
-                    imageVector = Icons.Default.Visibility,
-                    contentDescription = "visible",
-                    tint = Color.Gray
-                )
-            } else {
-                Icon(
-                    imageVector = Icons.Default.VisibilityOff,
-                    contentDescription = "invisible ",
-                    tint = Color.Gray
-                )
+            // 아이콘 부분
+            when(deck.deckType) {
+                DECK_CREATED -> {
+                    if(deck.shared) {
+                        Icon(
+                            imageVector = Icons.Default.Visibility,
+                            contentDescription = "shared",
+                            tint = Color.Gray
+                        )
+                    }else {
+                        Icon(
+                            imageVector = Icons.Default.VisibilityOff,
+                            contentDescription = "not shared",
+                            tint = Color.Gray
+                        )
+                    }
+                }
+                DECK_ADDED -> {
+                    if(deck.bookmarked){
+                        Icon(
+                            imageVector = Icons.Default.Bookmark,
+                            contentDescription = "bookmark",
+                            tint = Color.Gray
+                        )
+                    }
+                }
             }
         }
     }
