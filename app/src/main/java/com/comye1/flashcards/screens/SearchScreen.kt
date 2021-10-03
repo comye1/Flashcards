@@ -9,6 +9,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.comye1.flashcards.ui.theme.DeepOrange
 
+// 전체
 @Composable
 fun SearchScreen() {
     Scaffold(topBar = {

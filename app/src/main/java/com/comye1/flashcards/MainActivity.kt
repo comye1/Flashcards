@@ -32,6 +32,7 @@ import com.comye1.flashcards.models.Deck
 import com.comye1.flashcards.screens.CreateScreen
 import com.comye1.flashcards.screens.HomeScreen
 import com.comye1.flashcards.screens.MoreScreen
+import com.comye1.flashcards.screens.TestScreen
 import com.comye1.flashcards.ui.theme.DeepOrange
 import com.comye1.flashcards.ui.theme.FlashcardsTheme
 
@@ -95,7 +96,8 @@ class MainActivity : ComponentActivity() {
                             CreateScreen()
                         }
                         composable("MoreScreen") {
-                            MoreScreen()
+//                            MoreScreen()
+                            TestScreen()
                         }
                     }
                 }
@@ -104,6 +106,7 @@ class MainActivity : ComponentActivity() {
     }
 }
 
+// onClick 추가, text 수정
 @Composable
 fun FindFlashCards(onClick: () -> Unit) {
     Row(
@@ -123,6 +126,7 @@ fun FindFlashCards(onClick: () -> Unit) {
         Text(text = " Find flashcards", style = MaterialTheme.typography.body1, color = Color.Gray)
     }
 }
+// 여기까지
 
 //@Composable
 //fun FilterText() {
@@ -149,15 +153,15 @@ fun FilterText(text: String, selected: Boolean, onClick: () -> Unit) {
     }
 }
 
-
+// value, setValue 전달
 @Composable
-fun DeckTitleTextField(deckTitle: String, setDectTitle: (String) -> Unit) {
+fun DeckTitleTextField(deckTitle: String, setDeckTitle: (String) -> Unit) {
 
     Column(modifier = Modifier.fillMaxWidth()) {
         TextField(
             value = deckTitle,
             onValueChange = {
-                setDectTitle(it)
+                setDeckTitle(it)
             },
             modifier = Modifier.fillMaxWidth(),
             textStyle = MaterialTheme.typography.h4,
@@ -179,6 +183,7 @@ fun DeckTitleTextField(deckTitle: String, setDectTitle: (String) -> Unit) {
         )
     }
 }
+// 여기까지
 
 @Composable
 fun CardItemField() {
@@ -493,17 +498,17 @@ fun MyDeckItem() {
     }
 }
 
+
+// HomeScreen에 추가
 @Composable
-fun MakeMyDeck() {
+fun MakeMyDeck(onClick: () -> Unit) {
     Column(modifier = Modifier
         .fillMaxWidth()
         .border(
             width = 2.dp,
             color = Color.LightGray
         )
-        .clickable {
-
-        }
+        .clickable (onClick = onClick)
         .padding(20.dp)) {
         Text(
             text = "Make your own cards",
@@ -534,6 +539,7 @@ fun MakeMyDeck() {
         }
     }
 }
+//
 
 @Composable
 fun SubjectItem() {
@@ -546,7 +552,7 @@ fun SubjectItem() {
                 color = Color.LightGray
             )
             .clip(shape = RoundedCornerShape(size = 8.dp))
-            .clickable {
+            .clickable { // 추가됨
 
             }
             .padding(20.dp),

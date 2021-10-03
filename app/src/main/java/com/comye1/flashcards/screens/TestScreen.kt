@@ -16,6 +16,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.comye1.flashcards.ui.theme.DeepOrange
 
+// 전체
 @Preview
 @Composable
 fun TestScreen() {

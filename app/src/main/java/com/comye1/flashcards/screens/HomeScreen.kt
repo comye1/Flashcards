@@ -14,6 +14,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.comye1.flashcards.DeckItem
 import com.comye1.flashcards.FilterText
+import com.comye1.flashcards.MakeMyDeck
 import com.comye1.flashcards.SampleDataSet
 import com.comye1.flashcards.models.DECK_CREATED
 import com.comye1.flashcards.ui.theme.DeepOrange
@@ -69,6 +70,7 @@ fun HomeScreen() {
                         }
                     }
             }
+            item { MakeMyDeck { } } // 추가
 
 //                repeat (10) {
 //                    item {

@@ -18,6 +18,7 @@ import androidx.compose.ui.unit.dp
 import com.comye1.flashcards.ui.theme.DeepOrange
 import com.comye1.flashcards.ui.theme.LightOrange
 
+// 전체
 fun Modifier.moreModifier(onClick: () -> Unit) = this
     .fillMaxWidth()
     .clickable(onClick = onClick)
