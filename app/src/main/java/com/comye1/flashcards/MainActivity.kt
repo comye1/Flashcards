@@ -31,6 +31,7 @@ import com.comye1.flashcards.models.DECK_CREATED
 import com.comye1.flashcards.models.Deck
 import com.comye1.flashcards.screens.CreateScreen
 import com.comye1.flashcards.screens.HomeScreen
+import com.comye1.flashcards.screens.MoreScreen
 import com.comye1.flashcards.ui.theme.DeepOrange
 import com.comye1.flashcards.ui.theme.FlashcardsTheme
 
@@ -96,41 +97,21 @@ class MainActivity : ComponentActivity() {
                         composable("MoreScreen") {
                             MoreScreen()
                         }
-
                     }
-
                 }
             }
         }
     }
 }
 
-//@Preview(showBackground = true)
 @Composable
-fun FirstWeekPreview() {
-    LazyColumn(modifier = Modifier.padding(8.dp)) {
-//        DeckInSubject()
-//        Spacer(modifier = Modifier.height(8.dp))
-//        StudyGuide()
-//        Spacer(modifier = Modifier.height(8.dp))
-
-//        Spacer(modifier = Modifier.height(8.dp))
-//        MyDeckItem()
-//        Spacer(modifier = Modifier.height(8.dp))
-//        MakeMyDeck()
-//        Spacer(modifier = Modifier.height(8.dp))
-//        SubjectItem()
-//        Spacer(modifier = Modifier.height(8.dp))
-//        CardItem()
-    }
-}
-
-@Composable
-fun FindFlashCards() {
+fun FindFlashCards(onClick: () -> Unit) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .border(width = 1.dp, color = Color.LightGray, shape = CircleShape)
+            .clip(shape = CircleShape)
+            .clickable(onClick = onClick)
             .padding(horizontal = 8.dp, vertical = 14.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -169,24 +150,20 @@ fun FilterText(text: String, selected: Boolean, onClick: () -> Unit) {
 }
 
 
-@Preview
 @Composable
-fun DeckTitleTextField() {
+fun DeckTitleTextField(deckTitle: String, setDectTitle: (String) -> Unit) {
 
-    var text by remember {
-        mutableStateOf("")
-    }
     Column(modifier = Modifier.fillMaxWidth()) {
         TextField(
-            value = text,
-            onValueChange = { newText ->
-                text = newText
+            value = deckTitle,
+            onValueChange = {
+                setDectTitle(it)
             },
             modifier = Modifier.fillMaxWidth(),
             textStyle = MaterialTheme.typography.h4,
             placeholder = {
                 Text(
-                    text = " Untitled deck",
+                    text = "Untitled deck",
                     style = MaterialTheme.typography.h4,
                     fontWeight = FontWeight.ExtraBold,
                     color = Color.LightGray
@@ -302,9 +279,9 @@ fun CardItemField() {
 fun DefaultPreview() {
 
     Column() {
-        FindFlashCards()
+        FindFlashCards({})
         CardItemField()
-        DeckTitleTextField()
+//        DeckTitleTextField(deckTitle, setDectTitle)
 
 
         Row() {
