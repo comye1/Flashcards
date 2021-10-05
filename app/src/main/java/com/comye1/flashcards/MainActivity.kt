@@ -106,27 +106,6 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-// onClick 추가, text 수정
-@Composable
-fun FindFlashCards(onClick: () -> Unit) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .border(width = 1.dp, color = Color.LightGray, shape = CircleShape)
-            .clip(shape = CircleShape)
-            .clickable(onClick = onClick)
-            .padding(horizontal = 8.dp, vertical = 14.dp),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Icon(
-            imageVector = Icons.Default.Search,
-            contentDescription = "search flashcards",
-            tint = Color.Gray
-        )
-        Text(text = " Find flashcards", style = MaterialTheme.typography.body1, color = Color.Gray)
-    }
-}
-// 여기까지
 
 //@Composable
 //fun FilterText() {
@@ -140,144 +119,9 @@ fun FindFlashCards(onClick: () -> Unit) {
 //    }
 //}
 
-@Composable
-fun FilterText(text: String, selected: Boolean, onClick: () -> Unit) {
-    Row(
-        modifier = Modifier
-            .clip(shape = CircleShape)
-            .clickable(enabled = !selected, onClick = onClick)
-            .background(color = if (selected) Color.LightGray else Color.Transparent)
-            .padding(horizontal = 20.dp, vertical = 2.dp)
-    ) {
-        Text(text, style = MaterialTheme.typography.body1, fontWeight = FontWeight.ExtraBold)
-    }
-}
 
-// value, setValue 전달
-@Composable
-fun DeckTitleTextField(deckTitle: String, setDeckTitle: (String) -> Unit) {
 
-    Column(modifier = Modifier.fillMaxWidth()) {
-        TextField(
-            value = deckTitle,
-            onValueChange = {
-                setDeckTitle(it)
-            },
-            modifier = Modifier.fillMaxWidth(),
-            textStyle = MaterialTheme.typography.h4,
-            placeholder = {
-                Text(
-                    text = "Untitled deck",
-                    style = MaterialTheme.typography.h4,
-                    fontWeight = FontWeight.ExtraBold,
-                    color = Color.LightGray
-                )
-            },
-            colors = TextFieldDefaults.textFieldColors(
-                cursorColor = DeepOrange,
-                backgroundColor = Color.Transparent,
-                focusedIndicatorColor = Color.LightGray,
-                unfocusedIndicatorColor = Color.LightGray
-            ),
-            maxLines = 2
-        )
-    }
-}
-// 여기까지
 
-@Composable
-fun CardItemField() {
-
-    //나중에 밖으로 뺄 것
-    val (frontText, setFrontText) = remember {
-        mutableStateOf("")
-    }
-
-    val (backText, setBackText) = remember {
-        mutableStateOf("")
-    }
-
-    Box(
-        modifier = Modifier
-            .fillMaxWidth(.8f)
-            .padding(8.dp)
-            .border(2.dp, Color.LightGray),
-    ) {
-        ConstraintLayout {
-            val (front, back, delete, divider) = createRefs()
-            TextField(
-                value = frontText,
-                onValueChange = setFrontText,
-                modifier = Modifier
-                    .constrainAs(front) {
-                        top.linkTo(parent.top)
-                    }
-                    .fillMaxWidth()
-                    .padding(8.dp),
-                textStyle = MaterialTheme.typography.h6,
-                placeholder = {
-                    Text(
-                        text = "Front",
-                        style = MaterialTheme.typography.h6,
-                        fontWeight = FontWeight.ExtraBold,
-                        color = Color.LightGray
-                    )
-                },
-                colors = TextFieldDefaults.textFieldColors(
-                    cursorColor = DeepOrange,
-                    backgroundColor = Color.Transparent,
-                    focusedIndicatorColor = Color.Transparent,
-                    unfocusedIndicatorColor = Color.Transparent
-                ),
-                maxLines = 2
-            )
-            Divider(
-                modifier = Modifier
-                    .constrainAs(divider) {
-                        top.linkTo(front.bottom)
-                    }
-                    .fillMaxWidth()
-                    .height(2.dp),
-                color = Color.LightGray
-            )
-            TextField(
-                value = backText,
-                onValueChange = setBackText,
-                modifier = Modifier
-                    .constrainAs(back) {
-                        top.linkTo(divider.bottom)
-                    }
-                    .fillMaxWidth()
-                    .fillMaxHeight()
-                    .padding(8.dp),
-                textStyle = MaterialTheme.typography.body1,
-                placeholder = {
-                    Text(
-                        text = "Back",
-                        style = MaterialTheme.typography.body1,
-                        fontWeight = FontWeight.ExtraBold,
-                        color = Color.LightGray
-                    )
-                },
-                colors = TextFieldDefaults.textFieldColors(
-                    cursorColor = DeepOrange,
-                    backgroundColor = Color.Transparent,
-                    focusedIndicatorColor = Color.Transparent,
-                    unfocusedIndicatorColor = Color.Transparent
-                )
-            )
-            IconButton(
-                onClick = { /*TODO*/ },
-                modifier = Modifier.constrainAs(delete) {
-                    bottom.linkTo(parent.bottom, 10.dp)
-                    start.linkTo(parent.start, 8.dp)
-                }
-            ) {
-                Icon(imageVector = Icons.Outlined.Delete, contentDescription = "delete")
-            }
-        }
-    }
-}
 
 @Preview(showBackground = true)
 @Composable
@@ -285,16 +129,6 @@ fun DefaultPreview() {
 
     Column() {
         FindFlashCards({})
-        CardItemField()
-//        DeckTitleTextField(deckTitle, setDectTitle)
-
-
-        Row() {
-            FilterText(text = "All", selected = false) { }
-            FilterText(text = "Bookmarks", selected = true) { }
-            FilterText(text = "Created", selected = false) { }
-        }
-
     }
 
 }
@@ -394,69 +228,7 @@ fun StudyGuide() {
 //    }
 //}
 
-@Composable
-fun DeckItem(
-    deck: Deck,
-    modifier: Modifier = Modifier
-) {
-    Column(
-        modifier = modifier
-            .fillMaxWidth()
-            .border(
-                width = 2.dp,
-                color = Color.LightGray
-            )
-            .clickable {
 
-            }
-            .padding(16.dp)
-    ) {
-        Text(
-            text = deck.deckTitle,
-            style = MaterialTheme.typography.h5,
-            fontWeight = FontWeight.Bold
-        )
-        Spacer(modifier = Modifier.height(4.dp))
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            Text(
-                text = deck.cardList.size.toString() + if (deck.cardList.size > 1) " Cards" else "Card",
-                style = MaterialTheme.typography.subtitle1,
-                fontWeight = FontWeight.Bold,
-                color = Color.Gray
-            )
-            // 아이콘 부분
-            when(deck.deckType) {
-                DECK_CREATED -> {
-                    if(deck.shared) {
-                        Icon(
-                            imageVector = Icons.Default.Visibility,
-                            contentDescription = "shared",
-                            tint = Color.Gray
-                        )
-                    }else {
-                        Icon(
-                            imageVector = Icons.Default.VisibilityOff,
-                            contentDescription = "not shared",
-                            tint = Color.Gray
-                        )
-                    }
-                }
-                DECK_ADDED -> {
-                    if(deck.bookmarked){
-                        Icon(
-                            imageVector = Icons.Default.Bookmark,
-                            contentDescription = "bookmark",
-                            tint = Color.Gray
-                        )
-                    }
-                }
-            }
-        }
-    }
-}
 
 
 @Composable
@@ -499,78 +271,7 @@ fun MyDeckItem() {
 }
 
 
-// HomeScreen에 추가
-@Composable
-fun MakeMyDeck(onClick: () -> Unit) {
-    Column(modifier = Modifier
-        .fillMaxWidth()
-        .border(
-            width = 2.dp,
-            color = Color.LightGray
-        )
-        .clickable (onClick = onClick)
-        .padding(20.dp)) {
-        Text(
-            text = "Make your own cards",
-            style = MaterialTheme.typography.h5,
-            fontWeight = FontWeight.Bold
-        )
-        Spacer(modifier = Modifier.height(4.dp))
-        Text(
-            text = "It's easy to create your own flashcard deck -for free.",
-            style = MaterialTheme.typography.subtitle1,
-            fontWeight = FontWeight.Bold,
-        )
-        Spacer(modifier = Modifier.height(4.dp))
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-        ) {
-            Icon(
-                imageVector = Icons.Default.NoteAdd,
-                contentDescription = "bookmark",
-                tint = Color.Blue
-            )
-            Text(
-                text = "Get started",
-                style = MaterialTheme.typography.subtitle1,
-                fontWeight = FontWeight.Bold,
-                color = Color.Blue
-            )
-        }
-    }
-}
-//
 
-@Composable
-fun SubjectItem() {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .border(
-                shape = RoundedCornerShape(size = 8.dp),
-                width = 2.dp,
-                color = Color.LightGray
-            )
-            .clip(shape = RoundedCornerShape(size = 8.dp))
-            .clickable { // 추가됨
-
-            }
-            .padding(20.dp),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Icon(
-            imageVector = Icons.Default.Computer,
-            contentDescription = "bookmark",
-            tint = DeepOrange,
-            modifier = Modifier.size(36.dp)
-        )
-        Text(
-            text = "  Computer Science",
-            style = MaterialTheme.typography.h5,
-            fontWeight = FontWeight.Bold
-        )
-    }
-}
 
 @Composable
 fun CardItem() {
