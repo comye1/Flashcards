@@ -7,7 +7,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Close
 import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -15,11 +14,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.navigation.NavHostController
 import com.comye1.flashcards.ui.theme.DeepOrange
 import com.comye1.flashcards.ui.theme.LightOrange
 
 @Composable
-fun CreateScreen() {
+fun CreateScreen(navController: NavHostController) {
 
     val (deckTitle, setDectTitle) = remember {
         mutableStateOf("")
@@ -44,7 +44,7 @@ fun CreateScreen() {
                 }
             },
             navigationIcon = {
-                IconButton(onClick = { }) {
+                IconButton(onClick = { navController.popBackStack() }) {
                     Icon(
                         imageVector = Icons.Outlined.Close,
                         contentDescription = "close screen"

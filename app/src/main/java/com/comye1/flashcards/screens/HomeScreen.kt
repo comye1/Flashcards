@@ -24,15 +24,15 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
 import com.comye1.flashcards.SampleDataSet
 import com.comye1.flashcards.models.DECK_ADDED
 import com.comye1.flashcards.models.DECK_CREATED
 import com.comye1.flashcards.models.Deck
 import com.comye1.flashcards.ui.theme.DeepOrange
 
-@Preview
 @Composable
-fun HomeScreen() {
+fun HomeScreen(navController: NavHostController) {
 
     var (selectedFilterIndex, setFilterIndex) = remember {
         mutableStateOf(0)
@@ -81,7 +81,7 @@ fun HomeScreen() {
                         }
                     }
             }
-            item { MakeMyDeck { } } // 추가
+            item { MakeMyDeck { navController.navigate("CreateScreen") } } // 추가
         }
     }
 

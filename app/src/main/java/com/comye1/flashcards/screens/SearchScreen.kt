@@ -16,11 +16,12 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
 import com.comye1.flashcards.ui.theme.DeepOrange
 
 // 전체
 @Composable
-fun SearchScreen() {
+fun SearchScreen(navController: NavHostController) {
     Scaffold(topBar = {
         TopAppBar(
             title = {

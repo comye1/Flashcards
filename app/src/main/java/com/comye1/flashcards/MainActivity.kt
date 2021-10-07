@@ -7,33 +7,23 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material.icons.outlined.*
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.comye1.flashcards.models.DECK_ADDED
-import com.comye1.flashcards.models.DECK_CREATED
-import com.comye1.flashcards.models.Deck
 import com.comye1.flashcards.screens.CreateScreen
+import com.comye1.flashcards.screens.DeckScreen
 import com.comye1.flashcards.screens.HomeScreen
 import com.comye1.flashcards.screens.MoreScreen
-import com.comye1.flashcards.screens.TestScreen
-import com.comye1.flashcards.ui.theme.DeepOrange
 import com.comye1.flashcards.ui.theme.FlashcardsTheme
 
 class MainActivity : ComponentActivity() {
@@ -43,64 +33,65 @@ class MainActivity : ComponentActivity() {
             FlashcardsTheme {
 
                 val navController = rememberNavController()
+                DeckScreen(navController = navController)
 
-                Scaffold(
-                    bottomBar = {
-                        Row(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .background(Color.White)
-                                .padding(vertical = 12.dp),
-                            horizontalArrangement = Arrangement.SpaceAround
-                        ) {
-                            IconButton(onClick = { navController.navigate("HomeScreen") }) {
-                                Icon(
-                                    imageVector = Icons.Outlined.Home,
-                                    contentDescription = "home",
-                                    modifier = Modifier.size(60.dp)
-                                )
-                            }
-                            IconButton(onClick = { navController.navigate("SearchScreen") }) {
-                                Icon(
-                                    imageVector = Icons.Outlined.Search,
-                                    contentDescription = "search",
-                                    modifier = Modifier.size(60.dp)
-                                )
-                            }
-                            IconButton(onClick = { navController.navigate("CreateScreen") }) {
-                                Icon(
-                                    imageVector = Icons.Outlined.AddBox,
-                                    contentDescription = "create",
-                                    modifier = Modifier.size(60.dp)
-                                )
-                            }
-                            IconButton(onClick = { navController.navigate("MoreScreen") }) {
-                                Icon(
-                                    imageVector = Icons.Outlined.Menu,
-                                    contentDescription = "more",
-                                    modifier = Modifier.size(60.dp)
-                                )
-                            }
-                        }
-                    }
-                ) {
-
-                    NavHost(navController = navController, startDestination = "HomeScreen") {
-                        composable("HomeScreen") {
-                            HomeScreen()
-                        }
-                        composable("SearchScreen") {
-                            SearchScreen()
-                        }
-                        composable("CreateScreen") {
-                            CreateScreen()
-                        }
-                        composable("MoreScreen") {
-//                            MoreScreen()
-                            TestScreen()
-                        }
-                    }
-                }
+//                Scaffold(
+//                    bottomBar = {
+//                        Row(
+//                            modifier = Modifier
+//                                .fillMaxWidth()
+//                                .background(Color.White)
+//                                .padding(vertical = 12.dp),
+//                            horizontalArrangement = Arrangement.SpaceAround
+//                        ) {
+//                            IconButton(onClick = { navController.navigate("HomeScreen") }) {
+//                                Icon(
+//                                    imageVector = Icons.Outlined.Home,
+//                                    contentDescription = "home",
+//                                    modifier = Modifier.size(60.dp)
+//                                )
+//                            }
+//                            IconButton(onClick = { navController.navigate("SearchScreen") }) {
+//                                Icon(
+//                                    imageVector = Icons.Outlined.Search,
+//                                    contentDescription = "search",
+//                                    modifier = Modifier.size(60.dp)
+//                                )
+//                            }
+//                            IconButton(onClick = { navController.navigate("CreateScreen") }) {
+//                                Icon(
+//                                    imageVector = Icons.Outlined.AddBox,
+//                                    contentDescription = "create",
+//                                    modifier = Modifier.size(60.dp)
+//                                )
+//                            }
+//                            IconButton(onClick = { navController.navigate("MoreScreen") }) {
+//                                Icon(
+//                                    imageVector = Icons.Outlined.Menu,
+//                                    contentDescription = "more",
+//                                    modifier = Modifier.size(60.dp)
+//                                )
+//                            }
+//                        }
+//                    }
+//                ) {
+//
+//                    NavHost(navController = navController, startDestination = "HomeScreen") {
+//                        composable("HomeScreen") {
+//                            HomeScreen(navController)
+//                        }
+//                        composable("SearchScreen") {
+//                            SearchScreen(navController)
+//                        }
+//                        composable("CreateScreen") {
+//                            CreateScreen(navController)
+//                        }
+//                        composable("MoreScreen") {
+//                            MoreScreen(navController)
+////                            TestScreen()
+//                        }
+//                    }
+//                }
             }
         }
     }

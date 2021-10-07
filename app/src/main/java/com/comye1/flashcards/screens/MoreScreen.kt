@@ -15,6 +15,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
 import com.comye1.flashcards.ui.theme.DeepOrange
 import com.comye1.flashcards.ui.theme.LightOrange
 
@@ -24,10 +25,10 @@ fun Modifier.moreModifier(onClick: () -> Unit) = this
     .clickable(onClick = onClick)
     .padding(horizontal = 8.dp, vertical = 12.dp)
 
-@Preview
+
 @Composable
-fun MoreScreen() {
-    val (notified, setNotification) = remember {
+fun MoreScreen(navController: NavHostController) {
+    val (notified, setNotified) = remember {
         mutableStateOf(true)
     }
 
@@ -72,7 +73,7 @@ fun MoreScreen() {
                 )
                 Switch(
                     checked = notified,
-                    onCheckedChange = setNotification,
+                    onCheckedChange = setNotified,
                     colors = SwitchDefaults.colors(
                         checkedThumbColor = DeepOrange,
                         checkedTrackColor = LightOrange
