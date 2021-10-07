@@ -17,10 +17,19 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.comye1.flashcards.CardItem
 import com.comye1.flashcards.ui.theme.DeepOrange
 
 @Composable
-fun DeckScreen(navController: NavController) {
+fun DeckScreen(
+    navController: NavController,
+    deckTitle: String?,
+    cardsNum: Int?,
+    card1front: String?,
+    card1back: String?,
+    card2front: String?,
+    card2back: String?
+) {
     Scaffold(
         topBar = {
             TopAppBar(
@@ -48,7 +57,9 @@ fun DeckScreen(navController: NavController) {
                         )
                     }
                 },
-                title = {}
+                title = {
+                    Text(text = deckTitle!!, style = MaterialTheme.typography.h6)
+                }
             )
         },
         bottomBar = {
@@ -81,8 +92,13 @@ fun DeckScreen(navController: NavController) {
 
         }
     ) {
-
-
+        Column(Modifier.padding(16.dp)) {
+            Text(text = cardsNum!!.toString() + if (cardsNum!! > 1) " Cards" else "Card", color = Color.Gray)
+            Spacer(modifier = Modifier.height(16.dp))
+            CardItem(card1front!!, card1back!!)
+            Spacer(modifier = Modifier.height(8.dp))
+            CardItem(card2front!!, card2back!!)
+        }
     }
 }
 

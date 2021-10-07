@@ -17,8 +17,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.navArgument
 import androidx.navigation.compose.rememberNavController
 import com.comye1.flashcards.screens.CreateScreen
 import com.comye1.flashcards.screens.DeckScreen
@@ -33,65 +35,106 @@ class MainActivity : ComponentActivity() {
             FlashcardsTheme {
 
                 val navController = rememberNavController()
-                DeckScreen(navController = navController)
 
-//                Scaffold(
-//                    bottomBar = {
-//                        Row(
-//                            modifier = Modifier
-//                                .fillMaxWidth()
-//                                .background(Color.White)
-//                                .padding(vertical = 12.dp),
-//                            horizontalArrangement = Arrangement.SpaceAround
-//                        ) {
-//                            IconButton(onClick = { navController.navigate("HomeScreen") }) {
-//                                Icon(
-//                                    imageVector = Icons.Outlined.Home,
-//                                    contentDescription = "home",
-//                                    modifier = Modifier.size(60.dp)
-//                                )
-//                            }
-//                            IconButton(onClick = { navController.navigate("SearchScreen") }) {
-//                                Icon(
-//                                    imageVector = Icons.Outlined.Search,
-//                                    contentDescription = "search",
-//                                    modifier = Modifier.size(60.dp)
-//                                )
-//                            }
-//                            IconButton(onClick = { navController.navigate("CreateScreen") }) {
-//                                Icon(
-//                                    imageVector = Icons.Outlined.AddBox,
-//                                    contentDescription = "create",
-//                                    modifier = Modifier.size(60.dp)
-//                                )
-//                            }
-//                            IconButton(onClick = { navController.navigate("MoreScreen") }) {
-//                                Icon(
-//                                    imageVector = Icons.Outlined.Menu,
-//                                    contentDescription = "more",
-//                                    modifier = Modifier.size(60.dp)
-//                                )
-//                            }
+                Scaffold(
+                    bottomBar = {
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .background(Color.White)
+                                .padding(vertical = 12.dp),
+                            horizontalArrangement = Arrangement.SpaceAround
+                        ) {
+                            IconButton(onClick = { navController.navigate("HomeScreen") }) {
+                                Icon(
+                                    imageVector = Icons.Outlined.Home,
+                                    contentDescription = "home",
+                                    modifier = Modifier.size(60.dp)
+                                )
+                            }
+                            IconButton(onClick = { navController.navigate("SearchScreen") }) {
+                                Icon(
+                                    imageVector = Icons.Outlined.Search,
+                                    contentDescription = "search",
+                                    modifier = Modifier.size(60.dp)
+                                )
+                            }
+                            IconButton(onClick = { navController.navigate("CreateScreen") }) {
+                                Icon(
+                                    imageVector = Icons.Outlined.AddBox,
+                                    contentDescription = "create",
+                                    modifier = Modifier.size(60.dp)
+                                )
+                            }
+                            IconButton(onClick = { navController.navigate("MoreScreen") }) {
+                                Icon(
+                                    imageVector = Icons.Outlined.Menu,
+                                    contentDescription = "more",
+                                    modifier = Modifier.size(60.dp)
+                                )
+                            }
+                        }
+                    }
+                ) {
+
+                    NavHost(navController = navController, startDestination = "HomeScreen") {
+                        composable("HomeScreen") {
+                            HomeScreen(navController)
+                        }
+                        composable("SearchScreen") {
+                            SearchScreen(navController)
+                        }
+                        composable("CreateScreen") {
+                            CreateScreen(navController)
+                        }
+                        composable("MoreScreen") {
+                            MoreScreen(navController)
+//                            TestScreen()
+                        }
+//                        composable("DeckScreen"){
+//                            DeckScreen(navController = navController)
 //                        }
-//                    }
-//                ) {
-//
-//                    NavHost(navController = navController, startDestination = "HomeScreen") {
-//                        composable("HomeScreen") {
-//                            HomeScreen(navController)
-//                        }
-//                        composable("SearchScreen") {
-//                            SearchScreen(navController)
-//                        }
-//                        composable("CreateScreen") {
-//                            CreateScreen(navController)
-//                        }
-//                        composable("MoreScreen") {
-//                            MoreScreen(navController)
-////                            TestScreen()
-//                        }
-//                    }
-//                }
+                        composable(
+                            "DeckScreen/{deckTitle}/{cardsNum}/{card1front}/{card1back}/{card2front}/{card2back}",
+                            arguments = listOf(
+                                navArgument("deckTitle") {
+                                    type = NavType.StringType
+                                },
+                                navArgument("cardsNum") {
+                                    type = NavType.IntType
+                                },
+                                navArgument("card1front") {
+                                    type = NavType.StringType
+                                },
+                                navArgument("card1back") {
+                                    type = NavType.StringType
+                                },
+                                navArgument("card2front") {
+                                    type = NavType.StringType
+                                },
+                                navArgument("card2back") {
+                                    type = NavType.StringType
+                                },
+                            )
+                        ) { backStackEntry ->
+                            val deckTitle = backStackEntry.arguments?.getString("deckTitle")
+                            val cardsNum = backStackEntry.arguments?.getInt("cardsNum")
+                            val card1front = backStackEntry.arguments?.getString("card1front")
+                            val card1back = backStackEntry.arguments?.getString("card1back")
+                            val card2front = backStackEntry.arguments?.getString("card2front")
+                            val card2back = backStackEntry.arguments?.getString("card2back")
+                            DeckScreen(
+                                navController,
+                                deckTitle,
+                                cardsNum,
+                                card1front,
+                                card1back,
+                                card2front,
+                                card2back
+                            )
+                        }
+                    }
+                }
             }
         }
     }
@@ -109,9 +152,6 @@ class MainActivity : ComponentActivity() {
 //        Text("All", style = MaterialTheme.typography.body1, fontWeight = FontWeight.ExtraBold)
 //    }
 //}
-
-
-
 
 
 @Preview(showBackground = true)
@@ -220,8 +260,6 @@ fun StudyGuide() {
 //}
 
 
-
-
 @Composable
 fun MyDeckItem() {
     Column(
@@ -262,17 +300,15 @@ fun MyDeckItem() {
 }
 
 
-
-
 @Composable
-fun CardItem() {
+fun CardItem(front: String, back: String) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
             .border(width = 2.dp, color = Color.LightGray)
     ) {
         Text(
-            text = "Operating Systems",
+            text = front,
             modifier = Modifier.padding(16.dp),
             fontWeight = FontWeight.ExtraBold
         )
@@ -282,10 +318,37 @@ fun CardItem() {
                 .height(2.dp), color = Color.LightGray
         )
         Text(
-            text = "A request to execute an OS service-layer function",
+            text = back,
             modifier = Modifier.padding(16.dp),
             color = Color.Gray,
             fontWeight = FontWeight.Bold
         )
     }
 }
+
+
+//@Composable
+//fun CardItem(card: Card) {
+//    Column(
+//        modifier = Modifier
+//            .fillMaxWidth()
+//            .border(width = 2.dp, color = Color.LightGray)
+//    ) {
+//        Text(
+//            text = card.front,
+//            modifier = Modifier.padding(16.dp),
+//            fontWeight = FontWeight.ExtraBold
+//        )
+//        Divider(
+//            modifier = Modifier
+//                .fillMaxWidth()
+//                .height(2.dp), color = Color.LightGray
+//        )
+//        Text(
+//            text = card.back,
+//            modifier = Modifier.padding(16.dp),
+//            color = Color.Gray,
+//            fontWeight = FontWeight.Bold
+//        )
+//    }
+//}

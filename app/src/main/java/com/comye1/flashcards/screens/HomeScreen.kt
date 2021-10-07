@@ -22,7 +22,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.comye1.flashcards.SampleDataSet
@@ -65,19 +64,21 @@ fun HomeScreen(navController: NavHostController) {
                 0 ->
                     SampleDataSet.deckSample.forEach {
                         item {
-                            DeckItem(deck = it, modifier = Modifier.padding(bottom = 8.dp))
+                            DeckItem(deck = it, modifier = Modifier.padding(bottom = 8.dp), onClick = {navController.navigate("DeckScreen/${it.deckTitle}/${it.cardList.size}/${it.cardList[0].front}/${it.cardList[0].back}/${it.cardList[1].front}/${it.cardList[1].back}")})
                         }
                     }
                 1 ->
                     SampleDataSet.deckSample.filter { it.bookmarked }.forEach {
                         item {
-                            DeckItem(deck = it, modifier = Modifier.padding(bottom = 8.dp))
+//                            DeckItem(deck = it, modifier = Modifier.padding(bottom = 8.dp), onClick = {navController.navigate("DeckScreen")})
+                            DeckItem(deck = it, modifier = Modifier.padding(bottom = 8.dp), onClick = {navController.navigate("DeckScreen/${it.deckTitle}/${it.cardList.size}/${it.cardList[0].front}/${it.cardList[0].back}/${it.cardList[1].front}/${it.cardList[1].back}")})
                         }
                     }
                 2 ->
                     SampleDataSet.deckSample.filter { it.deckType == DECK_CREATED }.forEach {
                         item {
-                            DeckItem(deck = it, modifier = Modifier.padding(bottom = 8.dp))
+//                            DeckItem(deck = it, modifier = Modifier.padding(bottom = 8.dp), onClick = {navController.navigate("DeckScreen")})
+                            DeckItem(deck = it, modifier = Modifier.padding(bottom = 8.dp), onClick = {navController.navigate("DeckScreen/${it.deckTitle}/${it.cardList.size}/${it.cardList[0].front}/${it.cardList[0].back}/${it.cardList[1].front}/${it.cardList[1].back}")})
                         }
                     }
             }
@@ -114,7 +115,8 @@ fun FilterText(text: String, selected: Boolean, onClick: () -> Unit) {
 @Composable
 fun DeckItem(
     deck: Deck,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onClick: (Deck) -> Unit
 ) {
     Column(
         modifier = modifier
@@ -124,7 +126,7 @@ fun DeckItem(
                 color = Color.LightGray
             )
             .clickable {
-
+               onClick(deck)
             }
             .padding(16.dp)
     ) {
@@ -145,15 +147,15 @@ fun DeckItem(
                 color = Color.Gray
             )
             // 아이콘 부분
-            when(deck.deckType) {
+            when (deck.deckType) {
                 DECK_CREATED -> {
-                    if(deck.shared) {
+                    if (deck.shared) {
                         Icon(
                             imageVector = Icons.Default.Visibility,
                             contentDescription = "shared",
                             tint = Color.Gray
                         )
-                    }else {
+                    } else {
                         Icon(
                             imageVector = Icons.Default.VisibilityOff,
                             contentDescription = "not shared",
@@ -162,7 +164,7 @@ fun DeckItem(
                     }
                 }
                 DECK_ADDED -> {
-                    if(deck.bookmarked){
+                    if (deck.bookmarked) {
                         Icon(
                             imageVector = Icons.Default.Bookmark,
                             contentDescription = "bookmark",
@@ -178,14 +180,16 @@ fun DeckItem(
 // HomeScreen에 추가
 @Composable
 fun MakeMyDeck(onClick: () -> Unit) {
-    Column(modifier = Modifier
-        .fillMaxWidth()
-        .border(
-            width = 2.dp,
-            color = Color.LightGray
-        )
-        .clickable (onClick = onClick)
-        .padding(20.dp)) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .border(
+                width = 2.dp,
+                color = Color.LightGray
+            )
+            .clickable(onClick = onClick)
+            .padding(20.dp)
+    ) {
         Text(
             text = "Make your own cards",
             style = MaterialTheme.typography.h5,
