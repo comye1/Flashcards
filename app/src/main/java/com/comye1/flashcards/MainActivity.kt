@@ -22,6 +22,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navArgument
 import androidx.navigation.compose.rememberNavController
+import com.comye1.flashcards.navigation.BottomNavigationBar
+import com.comye1.flashcards.navigation.Screen
 import com.comye1.flashcards.screens.CreateScreen
 import com.comye1.flashcards.screens.DeckScreen
 import com.comye1.flashcards.screens.HomeScreen
@@ -38,56 +40,21 @@ class MainActivity : ComponentActivity() {
 
                 Scaffold(
                     bottomBar = {
-                        Row(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .background(Color.White)
-                                .padding(vertical = 12.dp),
-                            horizontalArrangement = Arrangement.SpaceAround
-                        ) {
-                            IconButton(onClick = { navController.navigate("HomeScreen") }) {
-                                Icon(
-                                    imageVector = Icons.Outlined.Home,
-                                    contentDescription = "home",
-                                    modifier = Modifier.size(60.dp)
-                                )
-                            }
-                            IconButton(onClick = { navController.navigate("SearchScreen") }) {
-                                Icon(
-                                    imageVector = Icons.Outlined.Search,
-                                    contentDescription = "search",
-                                    modifier = Modifier.size(60.dp)
-                                )
-                            }
-                            IconButton(onClick = { navController.navigate("CreateScreen") }) {
-                                Icon(
-                                    imageVector = Icons.Outlined.AddBox,
-                                    contentDescription = "create",
-                                    modifier = Modifier.size(60.dp)
-                                )
-                            }
-                            IconButton(onClick = { navController.navigate("MoreScreen") }) {
-                                Icon(
-                                    imageVector = Icons.Outlined.Menu,
-                                    contentDescription = "more",
-                                    modifier = Modifier.size(60.dp)
-                                )
-                            }
-                        }
+                        BottomNavigationBar(navController = navController)
                     }
                 ) {
 
-                    NavHost(navController = navController, startDestination = "HomeScreen") {
-                        composable("HomeScreen") {
+                    NavHost(navController = navController, startDestination = Screen.Home.route) {
+                        composable(Screen.Home.route) {
                             HomeScreen(navController)
                         }
-                        composable("SearchScreen") {
+                        composable(Screen.Search.route) {
                             SearchScreen(navController)
                         }
-                        composable("CreateScreen") {
+                        composable(Screen.Create.route) {
                             CreateScreen(navController)
                         }
-                        composable("MoreScreen") {
+                        composable(Screen.More.route) {
                             MoreScreen(navController)
 //                            TestScreen()
                         }
@@ -140,19 +107,44 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-
-//@Composable
-//fun FilterText() {
-//    Row(modifier = Modifier
-//        .clip(shape = CircleShape)
-//        .clickable(enabled = false) { }
-//        .background(color = Color.LightGray)
-//        .padding(horizontal = 20.dp, vertical = 2.dp)
-//    ) {
-//        Text("All", style = MaterialTheme.typography.body1, fontWeight = FontWeight.ExtraBold)
-//    }
-//}
-
+/*
+Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .background(Color.White)
+                                .padding(vertical = 12.dp),
+                            horizontalArrangement = Arrangement.SpaceAround
+                        ) {
+                            IconButton(onClick = { navController.navigate("HomeScreen") }) {
+                                Icon(
+                                    imageVector = Icons.Outlined.Home,
+                                    contentDescription = "home",
+                                    modifier = Modifier.size(60.dp)
+                                )
+                            }
+                            IconButton(onClick = { navController.navigate("SearchScreen") }) {
+                                Icon(
+                                    imageVector = Icons.Outlined.Search,
+                                    contentDescription = "search",
+                                    modifier = Modifier.size(60.dp)
+                                )
+                            }
+                            IconButton(onClick = { navController.navigate("CreateScreen") }) {
+                                Icon(
+                                    imageVector = Icons.Outlined.AddBox,
+                                    contentDescription = "create",
+                                    modifier = Modifier.size(60.dp)
+                                )
+                            }
+                            IconButton(onClick = { navController.navigate("MoreScreen") }) {
+                                Icon(
+                                    imageVector = Icons.Outlined.Menu,
+                                    contentDescription = "more",
+                                    modifier = Modifier.size(60.dp)
+                                )
+                            }
+                        }
+ */
 
 @Preview(showBackground = true)
 @Composable

@@ -28,6 +28,7 @@ import com.comye1.flashcards.SampleDataSet
 import com.comye1.flashcards.models.DECK_ADDED
 import com.comye1.flashcards.models.DECK_CREATED
 import com.comye1.flashcards.models.Deck
+import com.comye1.flashcards.navigation.Screen
 import com.comye1.flashcards.ui.theme.DeepOrange
 
 @Composable
@@ -82,7 +83,7 @@ fun HomeScreen(navController: NavHostController) {
                         }
                     }
             }
-            item { MakeMyDeck { navController.navigate("CreateScreen") } } // 추가
+            item { MakeMyDeck { navController.navigate(Screen.Create.route) } } // 추가
         }
     }
 
