@@ -24,7 +24,7 @@ fun TestScreen() {
         mutableStateOf(10)
     }
 
-    val (curNum, setcurNum) = remember {
+    val (curNum, setCurNum) = remember {
         mutableStateOf(0)
     }
 
@@ -50,7 +50,7 @@ fun TestScreen() {
             totNum = totCardNumber
         )
         Spacer(modifier = Modifier.height(16.dp))
-        Button(onClick = { setcurNum(curNum + 1) }) {
+        Button(onClick = { setCurNum(curNum + 1) }) {
             Text("다음 카드로 넘어가기")
         }
         Spacer(modifier = Modifier.height(16.dp))
