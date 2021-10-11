@@ -1,6 +1,7 @@
 package com.comye1.flashcards.screens
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
@@ -17,7 +18,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.comye1.flashcards.CardItem
 import com.comye1.flashcards.ui.theme.DeepOrange
 
 @Composable
@@ -25,10 +25,6 @@ fun DeckScreen(
     navController: NavController,
     deckTitle: String?,
     cardsNum: Int?,
-    card1front: String?,
-    card1back: String?,
-    card2front: String?,
-    card2back: String?
 ) {
     Scaffold(
         topBar = {
@@ -95,9 +91,10 @@ fun DeckScreen(
         Column(Modifier.padding(16.dp)) {
             Text(text = cardsNum!!.toString() + if (cardsNum!! > 1) " Cards" else "Card", color = Color.Gray)
             Spacer(modifier = Modifier.height(16.dp))
-            CardItem(card1front!!, card1back!!)
-            Spacer(modifier = Modifier.height(8.dp))
-            CardItem(card2front!!, card2back!!)
+            repeat(5) {
+                CardItem(front = "abcdefg", back = "hijklmnopqrstuvwxyz")
+                Spacer(modifier = Modifier.height(8.dp))
+            }
         }
     }
 }
@@ -107,3 +104,31 @@ fun BottomButton() {
 
 
 }
+
+
+@Composable
+fun CardItem(front: String, back: String) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .border(width = 2.dp, color = Color.LightGray)
+    ) {
+        Text(
+            text = front,
+            modifier = Modifier.padding(16.dp),
+            fontWeight = FontWeight.ExtraBold
+        )
+        Divider(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(2.dp), color = Color.LightGray
+        )
+        Text(
+            text = back,
+            modifier = Modifier.padding(16.dp),
+            color = Color.Gray,
+            fontWeight = FontWeight.Bold
+        )
+    }
+}
+

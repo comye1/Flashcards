@@ -65,21 +65,21 @@ fun HomeScreen(navController: NavHostController) {
                 0 ->
                     SampleDataSet.deckSample.forEach {
                         item {
-                            DeckItem(deck = it, modifier = Modifier.padding(bottom = 8.dp), onClick = {navController.navigate("DeckScreen/${it.deckTitle}/${it.cardList.size}/${it.cardList[0].front}/${it.cardList[0].back}/${it.cardList[1].front}/${it.cardList[1].back}")})
+                            DeckItem(deck = it, modifier = Modifier.padding(bottom = 8.dp), onClick = {navController.navigate("DeckScreen/${it.deckTitle}/${it.cardList.size}")})
                         }
                     }
                 1 ->
                     SampleDataSet.deckSample.filter { it.bookmarked }.forEach {
                         item {
 //                            DeckItem(deck = it, modifier = Modifier.padding(bottom = 8.dp), onClick = {navController.navigate("DeckScreen")})
-                            DeckItem(deck = it, modifier = Modifier.padding(bottom = 8.dp), onClick = {navController.navigate("DeckScreen/${it.deckTitle}/${it.cardList.size}/${it.cardList[0].front}/${it.cardList[0].back}/${it.cardList[1].front}/${it.cardList[1].back}")})
+                            DeckItem(deck = it, modifier = Modifier.padding(bottom = 8.dp), onClick = {navController.navigate("DeckScreen/${it.deckTitle}/${it.cardList.size}")})
                         }
                     }
                 2 ->
                     SampleDataSet.deckSample.filter { it.deckType == DECK_CREATED }.forEach {
                         item {
 //                            DeckItem(deck = it, modifier = Modifier.padding(bottom = 8.dp), onClick = {navController.navigate("DeckScreen")})
-                            DeckItem(deck = it, modifier = Modifier.padding(bottom = 8.dp), onClick = {navController.navigate("DeckScreen/${it.deckTitle}/${it.cardList.size}/${it.cardList[0].front}/${it.cardList[0].back}/${it.cardList[1].front}/${it.cardList[1].back}")})
+                            DeckItem(deck = it, modifier = Modifier.padding(bottom = 8.dp), onClick = {navController.navigate("DeckScreen/${it.deckTitle}/${it.cardList.size}")})
                         }
                     }
             }
