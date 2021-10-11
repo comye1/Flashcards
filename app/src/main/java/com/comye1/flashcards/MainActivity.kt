@@ -3,24 +3,25 @@ package com.comye1.flashcards
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.*
+import androidx.compose.material.Icon
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Scaffold
+import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.*
-import androidx.compose.material.icons.outlined.*
-import androidx.compose.runtime.*
+import androidx.compose.material.icons.filled.VisibilityOff
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.compose.navArgument
 import androidx.navigation.compose.rememberNavController
 import com.comye1.flashcards.navigation.BottomNavigationBar
 import com.comye1.flashcards.navigation.Screen
@@ -36,25 +37,36 @@ class MainActivity : ComponentActivity() {
         setContent {
             FlashcardsTheme {
 
+                var (showBottomBar, setShowBottomBar) = remember {
+                    mutableStateOf(true)
+                }
+
                 val navController = rememberNavController()
 
                 Scaffold(
                     bottomBar = {
-                        BottomNavigationBar(navController = navController)
+                        if (showBottomBar) {
+                            BottomNavigationBar(navController = navController)
+                        }
+
                     }
                 ) {
 
                     NavHost(navController = navController, startDestination = Screen.Home.route) {
                         composable(Screen.Home.route) {
+                            setShowBottomBar(true)
                             HomeScreen(navController)
                         }
                         composable(Screen.Search.route) {
+                            setShowBottomBar(true)
                             SearchScreen(navController)
                         }
                         composable(Screen.Create.route) {
+                            setShowBottomBar(false)
                             CreateScreen(navController)
                         }
                         composable(Screen.More.route) {
+                            setShowBottomBar(true)
                             MoreScreen(navController)
 //                            TestScreen()
                         }
@@ -62,43 +74,16 @@ class MainActivity : ComponentActivity() {
 //                            DeckScreen(navController = navController)
 //                        }
                         composable(
-                            "DeckScreen/{deckTitle}/{cardsNum}/{card1front}/{card1back}/{card2front}/{card2back}",
-                            arguments = listOf(
-                                navArgument("deckTitle") {
-                                    type = NavType.StringType
-                                },
-                                navArgument("cardsNum") {
-                                    type = NavType.IntType
-                                },
-                                navArgument("card1front") {
-                                    type = NavType.StringType
-                                },
-                                navArgument("card1back") {
-                                    type = NavType.StringType
-                                },
-                                navArgument("card2front") {
-                                    type = NavType.StringType
-                                },
-                                navArgument("card2back") {
-                                    type = NavType.StringType
-                                },
-                            )
+                            "DeckScreen/{deckTitle}/{cardsNum}",
                         ) { backStackEntry ->
                             val deckTitle = backStackEntry.arguments?.getString("deckTitle")
-                            val cardsNum = backStackEntry.arguments?.getInt("cardsNum")
-                            val card1front = backStackEntry.arguments?.getString("card1front")
-                            val card1back = backStackEntry.arguments?.getString("card1back")
-                            val card2front = backStackEntry.arguments?.getString("card2front")
-                            val card2back = backStackEntry.arguments?.getString("card2back")
+                            val cardsNum = backStackEntry.arguments?.getString("cardsNum")?.toInt()
                             DeckScreen(
                                 navController,
                                 deckTitle,
-                                cardsNum,
-                                card1front,
-                                card1back,
-                                card2front,
-                                card2back
+                                cardsNum
                             )
+                            setShowBottomBar(false)
                         }
                     }
                 }
@@ -106,6 +91,7 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
+
 
 /*
 Row(
@@ -288,33 +274,6 @@ fun MyDeckItem() {
             )
         }
 
-    }
-}
-
-
-@Composable
-fun CardItem(front: String, back: String) {
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .border(width = 2.dp, color = Color.LightGray)
-    ) {
-        Text(
-            text = front,
-            modifier = Modifier.padding(16.dp),
-            fontWeight = FontWeight.ExtraBold
-        )
-        Divider(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(2.dp), color = Color.LightGray
-        )
-        Text(
-            text = back,
-            modifier = Modifier.padding(16.dp),
-            color = Color.Gray,
-            fontWeight = FontWeight.Bold
-        )
     }
 }
 
