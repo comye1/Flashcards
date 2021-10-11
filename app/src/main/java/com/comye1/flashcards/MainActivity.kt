@@ -48,7 +48,6 @@ class MainActivity : ComponentActivity() {
                         if (showBottomBar) {
                             BottomNavigationBar(navController = navController)
                         }
-
                     }
                 ) {
 
@@ -68,7 +67,7 @@ class MainActivity : ComponentActivity() {
                         composable(Screen.More.route) {
                             setShowBottomBar(true)
                             MoreScreen(navController)
-//                            TestScreen()
+                            //                            TestScreen()
                         }
 //                        composable("DeckScreen"){
 //                            DeckScreen(navController = navController)

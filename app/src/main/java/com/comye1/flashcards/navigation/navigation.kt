@@ -43,6 +43,7 @@ fun BottomNavigationBar(navController: NavController) {
             BottomNavigationItem(
                 modifier = Modifier.scale(1.3f),
                 selected = currentRoute == item.route,
+                enabled = currentRoute != item.route,
                 onClick = {
                     navController.navigate(item.route)
                 },
