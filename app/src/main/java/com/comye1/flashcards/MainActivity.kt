@@ -34,35 +34,35 @@ class MainActivity : ComponentActivity() {
         setContent {
             FlashcardsTheme {
 
-                var (showBottomBar, setShowBottomBar) = remember {
+                var (bottomBarShown, showBottomBar) = remember {
                     mutableStateOf(true)
                 }
 
                 val navController = rememberNavController()
 
-                Scaffold(
-                    bottomBar = {
-                        if (showBottomBar) {
-                            BottomNavigationBar(navController = navController)
+                    Scaffold(
+                        bottomBar = {
+                            if (bottomBarShown) {
+                                BottomNavigationBar(navController = navController)
+                            }
                         }
-                    }
-                ) {
+                    ) {
 
                     NavHost(navController = navController, startDestination = Screen.Home.route) {
                         composable(Screen.Home.route) {
-                            setShowBottomBar(true)
+                            showBottomBar(true)
                             HomeScreen(navController)
                         }
                         composable(Screen.Search.route) {
-                            setShowBottomBar(true)
+                            showBottomBar(true)
                             SearchScreen(navController)
                         }
                         composable(Screen.Create.route) {
-                            setShowBottomBar(false)
+                            showBottomBar(false)
                             CreateScreen(navController)
                         }
                         composable(Screen.More.route) {
-                            setShowBottomBar(true)
+                            showBottomBar(true)
 //                            MoreScreen(navController)
                             TestScreen()
                         }
@@ -74,12 +74,12 @@ class MainActivity : ComponentActivity() {
                         ) { backStackEntry ->
                             val deckTitle = backStackEntry.arguments?.getString("deckTitle")
                             val cardsNum = backStackEntry.arguments?.getString("cardsNum")?.toInt()
+                            showBottomBar(false)
                             DeckScreen(
                                 navController,
                                 deckTitle,
                                 cardsNum
                             )
-                            setShowBottomBar(false)
                         }
                     }
                 }

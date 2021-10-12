@@ -18,6 +18,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.comye1.flashcards.models.Card
 import com.comye1.flashcards.ui.theme.DeepOrange
 
 @Composable
@@ -92,7 +93,7 @@ fun DeckScreen(
             Text(text = cardsNum!!.toString() + if (cardsNum!! > 1) " Cards" else "Card", color = Color.Gray)
             Spacer(modifier = Modifier.height(16.dp))
             repeat(5) {
-                CardItem(front = "abcdefg", back = "hijklmnopqrstuvwxyz")
+                CardItem(Card("aaaaaa", "bbbbbb"))
                 Spacer(modifier = Modifier.height(8.dp))
             }
         }
@@ -107,14 +108,14 @@ fun BottomButton() {
 
 
 @Composable
-fun CardItem(front: String, back: String) {
+fun CardItem(card: Card) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
             .border(width = 2.dp, color = Color.LightGray)
     ) {
         Text(
-            text = front,
+            text = card.front,
             modifier = Modifier.padding(16.dp),
             fontWeight = FontWeight.ExtraBold
         )
@@ -124,7 +125,7 @@ fun CardItem(front: String, back: String) {
                 .height(2.dp), color = Color.LightGray
         )
         Text(
-            text = back,
+            text = card.back,
             modifier = Modifier.padding(16.dp),
             color = Color.Gray,
             fontWeight = FontWeight.Bold

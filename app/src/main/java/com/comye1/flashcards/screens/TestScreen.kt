@@ -8,10 +8,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Button
 import androidx.compose.material.LinearProgressIndicator
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -25,9 +22,12 @@ import com.comye1.flashcards.ui.theme.DeepOrange
 @Composable
 fun TestScreen() {
     val (count, setCount) = remember { // 현재 카드 수
-        mutableStateOf(1f)
+        mutableStateOf(0f)
     }
     val totCount = 7 // 총 카드 수
+    LaunchedEffect(key1 = true) { // 시작 효과 : 0->1
+        setCount(1f)
+    }
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier.padding(16.dp)

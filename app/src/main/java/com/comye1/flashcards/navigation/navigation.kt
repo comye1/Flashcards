@@ -23,12 +23,7 @@ import com.comye1.flashcards.ui.theme.DeepOrange
 
 @Composable
 fun BottomNavigationBar(navController: NavController) {
-    val items = listOf(
-        BottomNavItem(Screen.Home.route, "Home", Icons.Outlined.Home),
-        BottomNavItem(Screen.Search.route, "Search", Icons.Outlined.Search),
-        BottomNavItem(Screen.Create.route, "Create", Icons.Outlined.AddBox),
-        BottomNavItem(Screen.More.route, "More", Icons.Outlined.Menu),
-    )
+
     // observe the backstack
     val navBackStackEntry by navController.currentBackStackEntryAsState()
 
@@ -39,7 +34,7 @@ fun BottomNavigationBar(navController: NavController) {
         elevation = 4.dp,
         modifier = Modifier.padding(vertical = 4.dp)
     ) {
-        items.forEach { item ->
+        BottomNav.items.forEach { item ->
             BottomNavigationItem(
                 modifier = Modifier.scale(1.3f),
                 selected = currentRoute == item.route,
@@ -55,6 +50,15 @@ fun BottomNavigationBar(navController: NavController) {
             )
         }
     }
+}
+
+object BottomNav {
+    val items = listOf(
+        BottomNavItem(Screen.Home.route, "Home", Icons.Outlined.Home),
+        BottomNavItem(Screen.Search.route, "Search", Icons.Outlined.Search),
+        BottomNavItem(Screen.Create.route, "Create", Icons.Outlined.AddBox),
+        BottomNavItem(Screen.More.route, "More", Icons.Outlined.Menu),
+    )
 }
 
 data class BottomNavItem(
