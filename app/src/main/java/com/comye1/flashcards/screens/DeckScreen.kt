@@ -31,7 +31,7 @@ fun DeckScreen(
         topBar = {
             TopAppBar(
                 elevation = 0.dp,
-                backgroundColor = Color.Transparent,
+                backgroundColor = Color.White,
                 navigationIcon = {
                     IconButton(onClick = { navController.popBackStack() }) {
                         Icon(
@@ -60,7 +60,7 @@ fun DeckScreen(
             )
         },
         bottomBar = {
-            Column {
+            Column(modifier = Modifier.background(color = Color.White)){
                 Divider(Modifier.height(2.dp), color = Color.LightGray)
                 Row(
                     modifier = Modifier
@@ -86,13 +86,15 @@ fun DeckScreen(
                     }
                 }
             }
-
         }
     ) {
         Column(Modifier.padding(16.dp)) {
-            Text(text = cardsNum!!.toString() + if (cardsNum!! > 1) " Cards" else "Card", color = Color.Gray)
+            Text(
+                text = cardsNum!!.toString() + if (cardsNum!! > 1) " Cards" else "Card",
+                color = Color.Gray
+            )
             Spacer(modifier = Modifier.height(16.dp))
-            repeat(5) {
+            repeat(8) {
                 CardItem(Card("aaaaaa", "bbbbbb"))
                 Spacer(modifier = Modifier.height(8.dp))
             }
