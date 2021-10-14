@@ -25,7 +25,10 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.comye1.flashcards.navigation.BottomNavigationBar
 import com.comye1.flashcards.navigation.Screen
-import com.comye1.flashcards.screens.*
+import com.comye1.flashcards.screens.CreateScreen
+import com.comye1.flashcards.screens.DeckScreen
+import com.comye1.flashcards.screens.HomeScreen
+import com.comye1.flashcards.screens.MoreScreen
 import com.comye1.flashcards.ui.theme.FlashcardsTheme
 
 class MainActivity : ComponentActivity() {
@@ -40,13 +43,13 @@ class MainActivity : ComponentActivity() {
 
                 val navController = rememberNavController()
 
-                    Scaffold(
-                        bottomBar = {
-                            if (bottomBarShown) {
-                                BottomNavigationBar(navController = navController)
-                            }
+                Scaffold(
+                    bottomBar = {
+                        if (bottomBarShown) {
+                            BottomNavigationBar(navController = navController)
                         }
-                    ) {
+                    }
+                ) {
 
                     NavHost(navController = navController, startDestination = Screen.Home.route) {
                         composable(Screen.Home.route) {
@@ -63,8 +66,8 @@ class MainActivity : ComponentActivity() {
                         }
                         composable(Screen.More.route) {
                             showBottomBar(true)
-//                            MoreScreen(navController)
-                            TestScreen()
+                            MoreScreen(navController)
+//                            TestScreen()
                         }
 //                        composable("DeckScreen"){
 //                            DeckScreen(navController = navController)

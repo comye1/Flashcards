@@ -40,7 +40,10 @@ fun BottomNavigationBar(navController: NavController) {
                 selected = currentRoute == item.route,
                 enabled = currentRoute != item.route,
                 onClick = {
-                    navController.navigate(item.route)
+                    navController.navigate(item.route){
+                        popUpTo(Screen.Home.route)
+                        launchSingleTop = true
+                    }
                 },
                 icon = { Icon(imageVector = item.icon, contentDescription = item.name) },
                 label = { Text(text = item.name) },
