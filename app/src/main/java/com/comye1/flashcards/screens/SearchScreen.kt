@@ -9,19 +9,48 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Computer
 import androidx.compose.material.icons.filled.Search
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.comye1.flashcards.ui.theme.DeepOrange
 
+enum class SearchState {
+    ButtonScreen,
+    QueryScreen,
+    ResultScreen
+}
+
 // 전체
 @Composable
 fun SearchScreen(navController: NavHostController) {
+
+    var screenState by remember {
+        mutableStateOf(SearchState.ButtonScreen)
+    }
+
+    when(screenState){
+        SearchState.ButtonScreen -> {
+            SearchButtonScreen { screenState = SearchState.QueryScreen }
+        }
+        SearchState.QueryScreen -> {
+            SearchQueryScreen()
+        }
+        SearchState.ResultScreen -> {
+
+        }
+    }
+
+
+}
+
+@Composable
+fun SearchButtonScreen(onButtonClick: () -> Unit) {
     Scaffold(topBar = {
         TopAppBar(
             title = {
@@ -46,7 +75,7 @@ fun SearchScreen(navController: NavHostController) {
                 .fillMaxSize()
                 .padding(vertical = 8.dp, horizontal = 16.dp) //column에서는 왼,오른쪽이 vertical
         ) {
-            FindFlashCards(onClick = {})
+            FindFlashCards(onClick = onButtonClick)
             Spacer(modifier = Modifier.height(24.dp))
             Divider(
                 Modifier
@@ -124,4 +153,10 @@ fun SubjectItem() {
             fontWeight = FontWeight.Bold
         )
     }
+}
+
+@Preview
+@Composable
+fun SearchQueryScreen() {
+    Text("Find flashcards")
 }

@@ -71,7 +71,7 @@ dependencies {
     implementation "androidx.constraintlayout:constraintlayout-compose:1.0.0-beta02"
 
     // Navigation
-    implementation "androidx.navigation:navigation-compose:2.4.0-alpha10"
+    implementation "androidx.navigation:navigation-compose:2.4.0-alpha09"
 
     // LiveData
     implementation "androidx.compose.runtime:runtime-livedata:1.0.0-alpha09"
