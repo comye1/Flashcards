@@ -5,18 +5,23 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Computer
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.outlined.ArrowBack
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.comye1.flashcards.ui.theme.DeepOrange
 
@@ -34,19 +39,110 @@ fun SearchScreen(navController: NavHostController) {
         mutableStateOf(SearchState.ButtonScreen)
     }
 
-    when(screenState){
+    var (queryString, setQueryString) = remember {
+        mutableStateOf("")
+    }
+
+    when (screenState) {
         SearchState.ButtonScreen -> {
             SearchButtonScreen { screenState = SearchState.QueryScreen }
         }
         SearchState.QueryScreen -> {
-            SearchQueryScreen()
+            SearchQueryScreen(
+                queryString,
+                setQueryString,
+                { screenState = SearchState.ButtonScreen },
+                { screenState = SearchState.ResultScreen }
+            )
         }
         SearchState.ResultScreen -> {
-
+            SearchResultScreen(
+                queryString,
+                setQueryString,
+                { screenState = SearchState.ButtonScreen },
+                {}
+            )
         }
     }
 
 
+}
+
+@Composable
+fun SearchResultScreen(
+    queryString: String,
+    setQueryString: (String) -> Unit,
+    toButtonScreen: () -> Unit,
+    function1: () -> Unit
+) {
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                elevation = 0.dp,
+                backgroundColor = Color.White,
+                navigationIcon = {
+                    IconButton(onClick = toButtonScreen) {
+                        Icon(
+                            imageVector = Icons.Outlined.ArrowBack,
+                            contentDescription = "navigate back"
+                        )
+                    }
+                },
+                title = {
+                    TextField(
+                        value = queryString,
+                        onValueChange = setQueryString,
+                        placeholder = {
+                            Text(
+                                text = "Find flashcards",
+                                style = MaterialTheme.typography.h6,
+                                fontWeight = FontWeight.Bold,
+                                color = Color.Gray
+                            )
+                        },
+                        colors = TextFieldDefaults.textFieldColors(
+                            backgroundColor = Color.Transparent,
+                            cursorColor = DeepOrange,
+                            focusedIndicatorColor = Color.Transparent,
+                            unfocusedIndicatorColor = Color.Transparent
+
+                        ),
+                        keyboardOptions = KeyboardOptions(
+                            imeAction = ImeAction.Done
+                        ),
+                        keyboardActions = KeyboardActions(
+                            onDone = {
+                                //Todo
+                            }
+                        ),
+                    )
+                },
+                actions = {
+                    if (queryString.isNotBlank()) {
+                        IconButton(onClick = { setQueryString("") }) {
+                            Icon(imageVector = Icons.Default.Close, contentDescription = "delete")
+                        }
+                    }
+                }
+            )
+        }
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .fillMaxHeight(.25f),
+            verticalAlignment = Alignment.Bottom,
+            horizontalArrangement = Arrangement.Center
+        ) {
+            Text(
+                text = "검색결과",
+                style = MaterialTheme.typography.body1,
+                fontSize = 20.sp,
+                color = Color.LightGray,
+                fontWeight = FontWeight.Bold
+            )
+        }
+    }
 }
 
 @Composable
@@ -154,9 +250,89 @@ fun SubjectItem() {
         )
     }
 }
+//
+//@Preview
+//@Composable
+//fun SearchQueryScreenPreview(){
+//    SearchQueryScreen(queryString = "", setQueryString = {}) {
+//
+//    }
+//}
 
-@Preview
 @Composable
-fun SearchQueryScreen() {
-    Text("Find flashcards")
+fun SearchQueryScreen(
+    queryString: String,
+    setQueryString: (String) -> Unit,
+    toButtonScreen: () -> Unit,
+    toResultScreen: () -> Unit
+) {
+
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                elevation = 0.dp,
+                backgroundColor = Color.White,
+                navigationIcon = {
+                    IconButton(onClick = toButtonScreen) {
+                        Icon(
+                            imageVector = Icons.Outlined.ArrowBack,
+                            contentDescription = "navigate back"
+                        )
+                    }
+                },
+                title = {
+                    TextField(
+                        value = queryString,
+                        onValueChange = setQueryString,
+                        placeholder = {
+                            Text(
+                                text = "Find flashcards",
+                                style = MaterialTheme.typography.h6,
+                                fontWeight = FontWeight.Bold,
+                                color = Color.Gray
+                            )
+                        },
+                        colors = TextFieldDefaults.textFieldColors(
+                            backgroundColor = Color.Transparent,
+                            cursorColor = DeepOrange,
+                            focusedIndicatorColor = Color.Transparent,
+                            unfocusedIndicatorColor = Color.Transparent
+
+                        ),
+                        keyboardOptions = KeyboardOptions(
+                            imeAction = ImeAction.Done
+                        ),
+                        keyboardActions = KeyboardActions(
+                            onDone = {
+                                toResultScreen()
+                            }
+                        ),
+                    )
+                },
+                actions = {
+                    if (queryString.isNotBlank()) {
+                        IconButton(onClick = { setQueryString("") }) {
+                            Icon(imageVector = Icons.Default.Close, contentDescription = "delete")
+                        }
+                    }
+                }
+            )
+        }
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .fillMaxHeight(.25f),
+            verticalAlignment = Alignment.Bottom,
+            horizontalArrangement = Arrangement.Center
+        ) {
+            Text(
+                text = "what are you learning today?",
+                style = MaterialTheme.typography.body1,
+                fontSize = 20.sp,
+                color = Color.LightGray,
+                fontWeight = FontWeight.Bold
+            )
+        }
+    }
 }
