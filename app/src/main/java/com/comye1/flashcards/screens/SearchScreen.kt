@@ -45,7 +45,13 @@ fun SearchScreen(navController: NavHostController) {
 
     when (screenState) {
         SearchState.ButtonScreen -> {
-            SearchButtonScreen { screenState = SearchState.QueryScreen }
+            SearchButtonScreen {
+                screenState = if (queryString.isNotBlank()) {
+                    SearchState.ResultScreen
+                } else {
+                    SearchState.QueryScreen
+                }
+            }
         }
         SearchState.QueryScreen -> {
             SearchQueryScreen(
@@ -77,53 +83,11 @@ fun SearchResultScreen(
 ) {
     Scaffold(
         topBar = {
-            TopAppBar(
-                elevation = 0.dp,
-                backgroundColor = Color.White,
-                navigationIcon = {
-                    IconButton(onClick = toButtonScreen) {
-                        Icon(
-                            imageVector = Icons.Outlined.ArrowBack,
-                            contentDescription = "navigate back"
-                        )
-                    }
-                },
-                title = {
-                    TextField(
-                        value = queryString,
-                        onValueChange = setQueryString,
-                        placeholder = {
-                            Text(
-                                text = "Find flashcards",
-                                style = MaterialTheme.typography.h6,
-                                fontWeight = FontWeight.Bold,
-                                color = Color.Gray
-                            )
-                        },
-                        colors = TextFieldDefaults.textFieldColors(
-                            backgroundColor = Color.Transparent,
-                            cursorColor = DeepOrange,
-                            focusedIndicatorColor = Color.Transparent,
-                            unfocusedIndicatorColor = Color.Transparent
-
-                        ),
-                        keyboardOptions = KeyboardOptions(
-                            imeAction = ImeAction.Done
-                        ),
-                        keyboardActions = KeyboardActions(
-                            onDone = {
-                                //Todo
-                            }
-                        ),
-                    )
-                },
-                actions = {
-                    if (queryString.isNotBlank()) {
-                        IconButton(onClick = { setQueryString("") }) {
-                            Icon(imageVector = Icons.Default.Close, contentDescription = "delete")
-                        }
-                    }
-                }
+            SearchTopBar(
+                queryString = queryString,
+                setQueryString = setQueryString,
+                onBackButtonClick = toButtonScreen,
+                onSearchKey = { } //TODO : onSearchKey
             )
         }
     ) {
@@ -147,24 +111,25 @@ fun SearchResultScreen(
 
 @Composable
 fun SearchButtonScreen(onButtonClick: () -> Unit) {
-    Scaffold(topBar = {
-        TopAppBar(
-            title = {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.Center
-                ) {
-                    Text(
-                        "Find flashcards",
-                        style = MaterialTheme.typography.h5,
-                        fontWeight = FontWeight.Bold
-                    )
-                }
-            },
-            backgroundColor = Color.Transparent,
-            elevation = 0.dp,
-        )
-    }
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.Center
+                    ) {
+                        Text(
+                            "Find flashcards",
+                            style = MaterialTheme.typography.h5,
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
+                },
+                backgroundColor = Color.Transparent,
+                elevation = 0.dp,
+            )
+        }
     ) {
         Column(
             Modifier
@@ -269,53 +234,11 @@ fun SearchQueryScreen(
 
     Scaffold(
         topBar = {
-            TopAppBar(
-                elevation = 0.dp,
-                backgroundColor = Color.White,
-                navigationIcon = {
-                    IconButton(onClick = toButtonScreen) {
-                        Icon(
-                            imageVector = Icons.Outlined.ArrowBack,
-                            contentDescription = "navigate back"
-                        )
-                    }
-                },
-                title = {
-                    TextField(
-                        value = queryString,
-                        onValueChange = setQueryString,
-                        placeholder = {
-                            Text(
-                                text = "Find flashcards",
-                                style = MaterialTheme.typography.h6,
-                                fontWeight = FontWeight.Bold,
-                                color = Color.Gray
-                            )
-                        },
-                        colors = TextFieldDefaults.textFieldColors(
-                            backgroundColor = Color.Transparent,
-                            cursorColor = DeepOrange,
-                            focusedIndicatorColor = Color.Transparent,
-                            unfocusedIndicatorColor = Color.Transparent
-
-                        ),
-                        keyboardOptions = KeyboardOptions(
-                            imeAction = ImeAction.Done
-                        ),
-                        keyboardActions = KeyboardActions(
-                            onDone = {
-                                toResultScreen()
-                            }
-                        ),
-                    )
-                },
-                actions = {
-                    if (queryString.isNotBlank()) {
-                        IconButton(onClick = { setQueryString("") }) {
-                            Icon(imageVector = Icons.Default.Close, contentDescription = "delete")
-                        }
-                    }
-                }
+            SearchTopBar(
+                queryString = queryString,
+                setQueryString = setQueryString,
+                onBackButtonClick = toButtonScreen,
+                onSearchKey = toResultScreen
             )
         }
     ) {
@@ -335,4 +258,61 @@ fun SearchQueryScreen(
             )
         }
     }
+}
+
+@Composable
+fun SearchTopBar(
+    queryString: String,
+    setQueryString: (String) -> Unit,
+    onBackButtonClick: () -> Unit,
+    onSearchKey: () -> Unit
+) {
+    TopAppBar(
+        elevation = 0.dp,
+        backgroundColor = Color.White,
+        navigationIcon = {
+            IconButton(onClick = onBackButtonClick) {
+                Icon(
+                    imageVector = Icons.Outlined.ArrowBack,
+                    contentDescription = "navigate back"
+                )
+            }
+        },
+        title = {
+            TextField(
+                value = queryString,
+                onValueChange = setQueryString,
+                placeholder = {
+                    Text(
+                        text = "Find flashcards",
+                        style = MaterialTheme.typography.h6,
+                        fontWeight = FontWeight.Bold,
+                        color = Color.Gray
+                    )
+                },
+                colors = TextFieldDefaults.textFieldColors(
+                    backgroundColor = Color.Transparent,
+                    cursorColor = DeepOrange,
+                    focusedIndicatorColor = Color.Transparent,
+                    unfocusedIndicatorColor = Color.Transparent
+
+                ),
+                keyboardOptions = KeyboardOptions(
+                    imeAction = ImeAction.Search
+                ),
+                keyboardActions = KeyboardActions(
+                    onSearch = {
+                        onSearchKey()
+                    }
+                ),
+            )
+        },
+        actions = {
+            if (queryString.isNotBlank()) {
+                IconButton(onClick = { setQueryString("") }) {
+                    Icon(imageVector = Icons.Default.Close, contentDescription = "delete")
+                }
+            }
+        }
+    )
 }
