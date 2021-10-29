@@ -35,7 +35,7 @@ enum class SearchState {
 @Composable
 fun SearchScreen(navController: NavHostController) {
 
-    var screenState by remember {
+    val (screenState, setScreenState)= remember {
         mutableStateOf(SearchState.ButtonScreen)
     }
 
@@ -46,10 +46,10 @@ fun SearchScreen(navController: NavHostController) {
     when (screenState) {
         SearchState.ButtonScreen -> {
             SearchButtonScreen {
-                screenState = if (queryString.isNotBlank()) {
-                    SearchState.ResultScreen
+                if (queryString.isNotBlank()) {
+                    setScreenState(SearchState.ResultScreen)
                 } else {
-                    SearchState.QueryScreen
+                    setScreenState(SearchState.QueryScreen)
                 }
             }
         }
@@ -57,15 +57,15 @@ fun SearchScreen(navController: NavHostController) {
             SearchQueryScreen(
                 queryString,
                 setQueryString,
-                { screenState = SearchState.ButtonScreen },
-                { screenState = SearchState.ResultScreen }
+                { setScreenState(SearchState.ButtonScreen) },
+                { setScreenState(SearchState.ResultScreen) }
             )
         }
         SearchState.ResultScreen -> {
             SearchResultScreen(
                 queryString,
                 setQueryString,
-                { screenState = SearchState.ButtonScreen },
+                { setScreenState(SearchState.ButtonScreen) },
                 {}
             )
         }
