@@ -9,6 +9,7 @@ import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
@@ -17,6 +18,11 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.navigation.NavHostController
 import com.comye1.flashcards.ui.theme.DeepOrange
 import com.comye1.flashcards.ui.theme.LightOrange
+
+enum class CreateScreen {
+    TitleScreen,
+    CardScreen
+}
 
 @Composable
 fun CreateScreen(navController: NavHostController) {
@@ -29,6 +35,37 @@ fun CreateScreen(navController: NavHostController) {
         mutableStateOf(true)
     }
 
+    val (screenState, setScreenState) = remember {
+        mutableStateOf(CreateScreen.TitleScreen)
+    }
+
+    when (screenState) {
+        CreateScreen.TitleScreen -> {
+            CreateTitleScreen(
+                deckTitle = deckTitle,
+                setDeckTitle = setDeckTitle,
+                visible = visible,
+                setVisibility = setVisibility,
+                navigateBack = { navController.popBackStack() },
+                toCardScreen = { setScreenState(CreateScreen.CardScreen)}
+            )
+        }
+        CreateScreen.CardScreen -> {
+            CreateCardScreen { navController.popBackStack() }
+        }
+    }
+
+}
+
+@Composable
+fun CreateTitleScreen(
+    deckTitle: String,
+    setDeckTitle: (String) -> Unit,
+    visible: Boolean,
+    setVisibility: (Boolean) -> Unit,
+    navigateBack: () -> Unit,
+    toCardScreen: () -> Unit
+) {
     Scaffold(topBar = {
         TopAppBar(
             title = {
@@ -44,7 +81,7 @@ fun CreateScreen(navController: NavHostController) {
                 }
             },
             navigationIcon = {
-                IconButton(onClick = { navController.popBackStack() }) {
+                IconButton(onClick = navigateBack) {
                     Icon(
                         imageVector = Icons.Outlined.Close,
                         contentDescription = "close screen"
@@ -55,8 +92,15 @@ fun CreateScreen(navController: NavHostController) {
             elevation = 0.dp,
             actions = {
                 // RowScope here, so these icons will be placed horizontally
-                TextButton(onClick = { /*TODO*/ }, enabled = !deckTitle.isNullOrEmpty()) {
-                    Text("Next", style = MaterialTheme.typography.h6, fontWeight = FontWeight.Bold)
+                TextButton(
+                    onClick = toCardScreen,
+                    enabled = !deckTitle.isNullOrEmpty()
+                ) {
+                    Text(
+                        "Next",
+                        style = MaterialTheme.typography.h6,
+                        fontWeight = FontWeight.Bold
+                    )
                 }
             }
         )
@@ -92,6 +136,51 @@ fun CreateScreen(navController: NavHostController) {
             Text(
                 "Other Students can find, view, and study\nthis deck"
             )
+        }
+    }
+}
+
+@Composable
+fun CreateCardScreen(navigateBack: () -> Unit) {
+    Scaffold(topBar = {
+        TopAppBar(
+            title = {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.Center
+                ) {
+                    Text(
+                        text = "1/1",
+                        style = MaterialTheme.typography.h5,
+                        fontWeight = FontWeight.Bold
+                    )
+                }
+            },
+            navigationIcon = {
+                IconButton(onClick = navigateBack) {
+                    Icon(
+                        imageVector = Icons.Outlined.Close,
+                        contentDescription = "close screen"
+                    )
+                }
+            },
+            backgroundColor = Color.Transparent,
+            elevation = 0.dp,
+            actions = {
+                // RowScope here, so these icons will be placed horizontally
+                TextButton(onClick = { /*TODO*/ }) {
+                    Text(
+                        text = "Done",
+                        style = MaterialTheme.typography.h6,
+                        fontWeight = FontWeight.Bold
+                    )
+                }
+            }
+        )
+    }
+    ){
+        Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+            CardItemField()
         }
     }
 }
