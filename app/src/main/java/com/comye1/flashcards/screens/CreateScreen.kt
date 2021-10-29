@@ -21,7 +21,7 @@ import com.comye1.flashcards.ui.theme.LightOrange
 @Composable
 fun CreateScreen(navController: NavHostController) {
 
-    val (deckTitle, setDectTitle) = remember {
+    val (deckTitle, setDeckTitle) = remember {
         mutableStateOf("")
     }
 
@@ -69,7 +69,7 @@ fun CreateScreen(navController: NavHostController) {
                 .padding(16.dp),
             verticalArrangement = Arrangement.Bottom
         ) {
-            DeckTitleTextField(deckTitle, setDectTitle)
+            DeckTitleTextField(deckTitle, setDeckTitle)
             Spacer(modifier = Modifier.height(16.dp))
             Row(
                 modifier = Modifier.fillMaxWidth(),

@@ -1,4 +1,4 @@
-package com.comye1.flashcards
+package com.comye1.flashcards.screens
 
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
