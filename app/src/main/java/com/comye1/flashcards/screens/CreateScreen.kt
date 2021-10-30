@@ -2,8 +2,10 @@ package com.comye1.flashcards.screens
 
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.outlined.Close
 import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.runtime.Composable
@@ -47,7 +49,7 @@ fun CreateScreen(navController: NavHostController) {
                 visible = visible,
                 setVisibility = setVisibility,
                 navigateBack = { navController.popBackStack() },
-                toCardScreen = { setScreenState(CreateScreen.CardScreen)}
+                toCardScreen = { setScreenState(CreateScreen.CardScreen) }
             )
         }
         CreateScreen.CardScreen -> {
@@ -142,43 +144,58 @@ fun CreateTitleScreen(
 
 @Composable
 fun CreateCardScreen(navigateBack: () -> Unit) {
-    Scaffold(topBar = {
-        TopAppBar(
-            title = {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.Center
-                ) {
-                    Text(
-                        text = "1/1",
-                        style = MaterialTheme.typography.h5,
-                        fontWeight = FontWeight.Bold
-                    )
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.Center
+                    ) {
+                        Text(
+                            text = "1/1",
+                            style = MaterialTheme.typography.h5,
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
+                },
+                navigationIcon = {
+                    IconButton(onClick = navigateBack) {
+                        Icon(
+                            imageVector = Icons.Outlined.Close,
+                            contentDescription = "close screen"
+                        )
+                    }
+                },
+                backgroundColor = Color.Transparent,
+                elevation = 0.dp,
+                actions = {
+                    // RowScope here, so these icons will be placed horizontally
+                    TextButton(onClick = { /*TODO*/ }) {
+                        Text(
+                            text = "Done",
+                            style = MaterialTheme.typography.h6,
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
                 }
-            },
-            navigationIcon = {
-                IconButton(onClick = navigateBack) {
-                    Icon(
-                        imageVector = Icons.Outlined.Close,
-                        contentDescription = "close screen"
-                    )
-                }
-            },
-            backgroundColor = Color.Transparent,
-            elevation = 0.dp,
-            actions = {
-                // RowScope here, so these icons will be placed horizontally
-                TextButton(onClick = { /*TODO*/ }) {
-                    Text(
-                        text = "Done",
-                        style = MaterialTheme.typography.h6,
-                        fontWeight = FontWeight.Bold
-                    )
-                }
+            )
+
+        },
+        floatingActionButton = {
+            FloatingActionButton(
+                onClick = { /*TODO*/ },
+                backgroundColor = Color.White,
+                modifier = Modifier.size(48.dp).border(width = 2.dp, color = DeepOrange, shape = CircleShape)
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Add,
+                    contentDescription = "add new card",
+                    modifier = Modifier.fillMaxSize(.8f)
+                )
             }
-        )
-    }
-    ){
+        }
+    ) {
         Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
             CardItemField()
         }
@@ -216,7 +233,7 @@ fun DeckTitleTextField(deckTitle: String, setDeckTitle: (String) -> Unit) {
                 focusedIndicatorColor = Color.LightGray,
                 unfocusedIndicatorColor = Color.LightGray
             ),
-            maxLines = 2
+            maxLines = 2,
         )
     }
 }

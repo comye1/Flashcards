@@ -99,7 +99,7 @@ fun SearchResultScreen(
             horizontalArrangement = Arrangement.Center
         ) {
             Text(
-                text = "검색결과",
+                text = "$queryString 검색결과",
                 style = MaterialTheme.typography.body1,
                 fontSize = 20.sp,
                 color = Color.LightGray,
