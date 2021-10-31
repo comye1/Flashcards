@@ -8,9 +8,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.outlined.Close
 import androidx.compose.material.icons.outlined.Delete
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -20,12 +18,18 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.navigation.NavHostController
 import com.comye1.flashcards.ui.theme.DeepOrange
 import com.comye1.flashcards.ui.theme.LightOrange
+import com.google.accompanist.pager.ExperimentalPagerApi
+import com.google.accompanist.pager.HorizontalPager
+import com.google.accompanist.pager.rememberPagerState
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 
 enum class CreateScreen {
     TitleScreen,
     CardScreen
 }
 
+@ExperimentalPagerApi
 @Composable
 fun CreateScreen(navController: NavHostController) {
 
@@ -40,6 +44,8 @@ fun CreateScreen(navController: NavHostController) {
     val (screenState, setScreenState) = remember {
         mutableStateOf(CreateScreen.TitleScreen)
     }
+//
+//    lazy var cardList: List<Card> = listOf()
 
     when (screenState) {
         CreateScreen.TitleScreen -> {
@@ -142,8 +148,16 @@ fun CreateTitleScreen(
     }
 }
 
+@ExperimentalPagerApi
 @Composable
 fun CreateCardScreen(navigateBack: () -> Unit) {
+
+    var pageCount by remember {
+        mutableStateOf(10)
+    }
+
+    val pagerState = rememberPagerState()
+
     Scaffold(
         topBar = {
             TopAppBar(
@@ -153,7 +167,7 @@ fun CreateCardScreen(navigateBack: () -> Unit) {
                         horizontalArrangement = Arrangement.Center
                     ) {
                         Text(
-                            text = "1/1",
+                            text = "${pagerState.currentPage + 1}/$pageCount",
                             style = MaterialTheme.typography.h5,
                             fontWeight = FontWeight.Bold
                         )
@@ -184,9 +198,13 @@ fun CreateCardScreen(navigateBack: () -> Unit) {
         },
         floatingActionButton = {
             FloatingActionButton(
-                onClick = { /*TODO*/ },
+                onClick = {
+                    pageCount++
+                },
                 backgroundColor = Color.White,
-                modifier = Modifier.size(48.dp).border(width = 2.dp, color = DeepOrange, shape = CircleShape)
+                modifier = Modifier
+                    .size(48.dp)
+                    .border(width = 2.dp, color = DeepOrange, shape = CircleShape)
             ) {
                 Icon(
                     imageVector = Icons.Default.Add,
@@ -196,8 +214,13 @@ fun CreateCardScreen(navigateBack: () -> Unit) {
             }
         }
     ) {
+
+
         Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-            CardItemField()
+//            CardItemField()
+            HorizontalPager(count = pageCount, state = pagerState) {
+                CardItemField()
+            }
         }
     }
 }
