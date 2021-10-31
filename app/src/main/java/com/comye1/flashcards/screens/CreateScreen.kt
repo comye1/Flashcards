@@ -13,20 +13,20 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.navigation.NavHostController
+import com.comye1.flashcards.models.Card
 import com.comye1.flashcards.ui.theme.DeepOrange
 import com.comye1.flashcards.ui.theme.LightOrange
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.launch
 
 enum class CreateScreen {
-    TitleScreen,
-    CardScreen
+    TitleScreen, // 0
+    CardScreen // 1
 }
 
 @ExperimentalPagerApi
@@ -46,6 +46,9 @@ fun CreateScreen(navController: NavHostController) {
     }
 //
 //    lazy var cardList: List<Card> = listOf()
+    val cardList: MutableList<Card> = remember {
+        mutableStateListOf(Card("", ""))
+    }
 
     when (screenState) {
         CreateScreen.TitleScreen -> {
@@ -59,7 +62,10 @@ fun CreateScreen(navController: NavHostController) {
             )
         }
         CreateScreen.CardScreen -> {
-            CreateCardScreen { navController.popBackStack() }
+            CreateCardScreen(
+                cardList,
+                { navController.popBackStack() }
+            ) {/*onDone*/ }
         }
     }
 
@@ -149,8 +155,29 @@ fun CreateTitleScreen(
 }
 
 @ExperimentalPagerApi
+@Preview
 @Composable
-fun CreateCardScreen(navigateBack: () -> Unit) {
+fun CreateCardScreenPreview() {
+    val cardList = mutableListOf<Card>(
+        Card("front", "back"),
+        Card("hi", "hello")
+    )
+    CreateCardScreen(cardList, navigateBack = { /*TODO*/ }) {
+
+    }
+}
+
+
+@ExperimentalPagerApi
+@Composable
+fun CreateCardScreen(
+    cardList: MutableList<Card>,
+    navigateBack: () -> Unit,
+    onDone: () -> Unit
+) {
+
+    // Todo: 카드 추가 로직
+    // 뷰모델에 빈 리스트 선언 -> 거기에 추가하는 방식으로.. 하나?
 
     var pageCount by remember {
         mutableStateOf(10)
@@ -167,7 +194,7 @@ fun CreateCardScreen(navigateBack: () -> Unit) {
                         horizontalArrangement = Arrangement.Center
                     ) {
                         Text(
-                            text = "${pagerState.currentPage + 1}/$pageCount",
+                            text = "${pagerState.currentPage + 1}/${cardList.size}",
                             style = MaterialTheme.typography.h5,
                             fontWeight = FontWeight.Bold
                         )
@@ -185,7 +212,7 @@ fun CreateCardScreen(navigateBack: () -> Unit) {
                 elevation = 0.dp,
                 actions = {
                     // RowScope here, so these icons will be placed horizontally
-                    TextButton(onClick = { /*TODO*/ }) {
+                    TextButton(onClick = onDone) {
                         Text(
                             text = "Done",
                             style = MaterialTheme.typography.h6,
@@ -199,7 +226,7 @@ fun CreateCardScreen(navigateBack: () -> Unit) {
         floatingActionButton = {
             FloatingActionButton(
                 onClick = {
-                    pageCount++
+                    cardList.add(Card("", ""))
                 },
                 backgroundColor = Color.White,
                 modifier = Modifier
@@ -218,8 +245,14 @@ fun CreateCardScreen(navigateBack: () -> Unit) {
 
         Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
 //            CardItemField()
-            HorizontalPager(count = pageCount, state = pagerState) {
-                CardItemField()
+            HorizontalPager(count = cardList.size, state = pagerState) { page ->
+                CardItemField(
+                    cardList[page].front,
+                    cardList[page].back,
+                    { cardList[page].front = it },
+                    { cardList[page].back = it },
+                    { cardList.removeAt(page)}
+                )
             }
         }
     }
@@ -263,16 +296,22 @@ fun DeckTitleTextField(deckTitle: String, setDeckTitle: (String) -> Unit) {
 // 여기까지
 
 @Composable
-fun CardItemField() {
+fun CardItemField(
+    frontText: String,
+    backText: String,
+    setFront: (String) -> Unit,
+    setBack: (String) -> Unit,
+    deleteCard: () -> Unit
+) {
 
-    //나중에 밖으로 뺄 것
-    val (frontText, setFrontText) = remember {
-        mutableStateOf("")
-    }
-
-    val (backText, setBackText) = remember {
-        mutableStateOf("")
-    }
+//    //나중에 밖으로 뺄 것
+//    val (frontText, setFrontText) = remember {
+//        mutableStateOf("")
+//    }
+//
+//    val (backText, setBackText) = remember {
+//        mutableStateOf("")
+//    }
 
     Box(
         modifier = Modifier
@@ -284,7 +323,7 @@ fun CardItemField() {
             val (front, back, delete, divider) = createRefs()
             TextField(
                 value = frontText,
-                onValueChange = setFrontText,
+                onValueChange = setFront,
                 modifier = Modifier
                     .constrainAs(front) {
                         top.linkTo(parent.top)
@@ -319,7 +358,7 @@ fun CardItemField() {
             )
             TextField(
                 value = backText,
-                onValueChange = setBackText,
+                onValueChange = setBack,
                 modifier = Modifier
                     .constrainAs(back) {
                         top.linkTo(divider.bottom)
