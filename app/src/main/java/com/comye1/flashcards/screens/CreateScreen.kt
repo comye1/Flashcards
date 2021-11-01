@@ -1,5 +1,6 @@
 package com.comye1.flashcards.screens
 
+import android.util.Log
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
@@ -23,6 +24,9 @@ import com.comye1.flashcards.ui.theme.LightOrange
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 
 enum class CreateScreen {
     TitleScreen, // 0
@@ -50,6 +54,8 @@ fun CreateScreen(navController: NavHostController) {
         mutableStateListOf(Card("", ""))
     }
 
+
+
     when (screenState) {
         CreateScreen.TitleScreen -> {
             CreateTitleScreen(
@@ -64,8 +70,11 @@ fun CreateScreen(navController: NavHostController) {
         CreateScreen.CardScreen -> {
             CreateCardScreen(
                 cardList,
+                { index, card -> cardList[index] = card },
+                { cardList.add(Card("", "")) },
+                { index -> cardList.removeAt(index) },
                 { navController.popBackStack() }
-            ) {/*onDone*/ }
+            ) { Log.d("cardList", cardList.joinToString(",")) }
         }
     }
 
@@ -162,7 +171,7 @@ fun CreateCardScreenPreview() {
         Card("front", "back"),
         Card("hi", "hello")
     )
-    CreateCardScreen(cardList, navigateBack = { /*TODO*/ }) {
+    CreateCardScreen(cardList, { index, card -> {} }, {}, {}, navigateBack = { /*TODO*/ }) {
 
     }
 }
@@ -171,7 +180,10 @@ fun CreateCardScreenPreview() {
 @ExperimentalPagerApi
 @Composable
 fun CreateCardScreen(
-    cardList: MutableList<Card>,
+    cardList: List<Card>,
+    setCard: (index: Int, card: Card) -> Unit,
+    addCard: () -> Unit,
+    removeCard: (index: Int) -> Unit,
     navigateBack: () -> Unit,
     onDone: () -> Unit
 ) {
@@ -183,7 +195,17 @@ fun CreateCardScreen(
         mutableStateOf(10)
     }
 
+    val scope = rememberCoroutineScope()
+
+    val mutex = Mutex()
+
     val pagerState = rememberPagerState()
+
+//    fun scrollToNextPage() {
+//        scope.launch {
+//            pagerState.scrollToPage(pagerState.pageCount - 1)
+//        }
+//    }
 
     Scaffold(
         topBar = {
@@ -226,7 +248,15 @@ fun CreateCardScreen(
         floatingActionButton = {
             FloatingActionButton(
                 onClick = {
-                    cardList.add(Card("", ""))
+                    scope.launch {
+                        mutex.withLock {
+                            addCard()
+                            Log.d("pageCount", pagerState.pageCount.toString())
+                        }
+                        mutex.withLock {
+                            pagerState.animateScrollToPage(pagerState.pageCount-1, pagerState.currentPageOffset)
+                        }
+                    }
                 },
                 backgroundColor = Color.White,
                 modifier = Modifier
@@ -247,11 +277,9 @@ fun CreateCardScreen(
 //            CardItemField()
             HorizontalPager(count = cardList.size, state = pagerState) { page ->
                 CardItemField(
-                    cardList[page].front,
-                    cardList[page].back,
-                    { cardList[page].front = it },
-                    { cardList[page].back = it },
-                    { cardList.removeAt(page)}
+                    cardList[page],
+                    { card -> setCard(page, card) },
+                    { removeCard(page) }
                 )
             }
         }
@@ -297,21 +325,19 @@ fun DeckTitleTextField(deckTitle: String, setDeckTitle: (String) -> Unit) {
 
 @Composable
 fun CardItemField(
-    frontText: String,
-    backText: String,
-    setFront: (String) -> Unit,
-    setBack: (String) -> Unit,
-    deleteCard: () -> Unit
+    card: Card,
+    setCard: (Card) -> Unit,
+    deleteCard: (Card) -> Unit
 ) {
 
-//    //나중에 밖으로 뺄 것
-//    val (frontText, setFrontText) = remember {
-//        mutableStateOf("")
-//    }
-//
-//    val (backText, setBackText) = remember {
-//        mutableStateOf("")
-//    }
+    //나중에 밖으로 뺄 것
+    val (frontText, setFrontText) = remember {
+        mutableStateOf(card.front)
+    }
+
+    val (backText, setBackText) = remember {
+        mutableStateOf(card.back)
+    }
 
     Box(
         modifier = Modifier
@@ -323,7 +349,10 @@ fun CardItemField(
             val (front, back, delete, divider) = createRefs()
             TextField(
                 value = frontText,
-                onValueChange = setFront,
+                onValueChange = {
+                    setCard(Card(it, backText))
+                    setFrontText(it)
+                },
                 modifier = Modifier
                     .constrainAs(front) {
                         top.linkTo(parent.top)
@@ -358,7 +387,10 @@ fun CardItemField(
             )
             TextField(
                 value = backText,
-                onValueChange = setBack,
+                onValueChange = {
+                    setBackText(it)
+                    setCard(Card(frontText, it))
+                },
                 modifier = Modifier
                     .constrainAs(back) {
                         top.linkTo(divider.bottom)
