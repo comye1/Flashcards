@@ -28,8 +28,10 @@ import com.comye1.flashcards.navigation.Screen
 import com.comye1.flashcards.screens.*
 import com.comye1.flashcards.ui.theme.FlashcardsTheme
 import com.google.accompanist.pager.ExperimentalPagerApi
+import kotlinx.coroutines.InternalCoroutinesApi
 
 class MainActivity : ComponentActivity() {
+    @InternalCoroutinesApi
     @ExperimentalPagerApi
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

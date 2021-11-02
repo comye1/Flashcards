@@ -24,15 +24,16 @@ import com.comye1.flashcards.ui.theme.LightOrange
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
+import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
-import kotlinx.coroutines.sync.withLock
 
 enum class CreateScreen {
     TitleScreen, // 0
     CardScreen // 1
 }
 
+@InternalCoroutinesApi
 @ExperimentalPagerApi
 @Composable
 fun CreateScreen(navController: NavHostController) {
@@ -74,7 +75,7 @@ fun CreateScreen(navController: NavHostController) {
                 { cardList.add(Card("", "")) },
                 { index -> cardList.removeAt(index) },
                 { navController.popBackStack() }
-            ) { Log.d("cardList", cardList.joinToString(",")) }
+            ) { Log.d("cardList", cardList.joinToString("\n")) }
         }
     }
 
@@ -163,6 +164,7 @@ fun CreateTitleScreen(
     }
 }
 
+@InternalCoroutinesApi
 @ExperimentalPagerApi
 @Preview
 @Composable
@@ -177,6 +179,7 @@ fun CreateCardScreenPreview() {
 }
 
 
+@InternalCoroutinesApi
 @ExperimentalPagerApi
 @Composable
 fun CreateCardScreen(
@@ -187,24 +190,16 @@ fun CreateCardScreen(
     navigateBack: () -> Unit,
     onDone: () -> Unit
 ) {
-
-    // Todo: 카드 추가 로직
-    // 뷰모델에 빈 리스트 선언 -> 거기에 추가하는 방식으로.. 하나?
-
-    var pageCount by remember {
-        mutableStateOf(10)
-    }
-
-    val scope = rememberCoroutineScope()
-
-    val mutex = Mutex()
-
     val pagerState = rememberPagerState()
 
-//    fun scrollToNextPage() {
-//        scope.launch {
-//            pagerState.scrollToPage(pagerState.pageCount - 1)
+//    LaunchedEffect(key1 = pagerState) {
+//        snapshotFlow { pagerState.currentPage }.collect{ page ->
+//
 //        }
+//    }
+
+//    LaunchedEffect(key1 = pagerState.pageCount) {
+//        pagerState.animateScrollToPage(pagerState.pageCount - 1, pagerState.currentPageOffset)
 //    }
 
     Scaffold(
@@ -247,17 +242,7 @@ fun CreateCardScreen(
         },
         floatingActionButton = {
             FloatingActionButton(
-                onClick = {
-                    scope.launch {
-                        mutex.withLock {
-                            addCard()
-                            Log.d("pageCount", pagerState.pageCount.toString())
-                        }
-                        mutex.withLock {
-                            pagerState.animateScrollToPage(pagerState.pageCount-1, pagerState.currentPageOffset)
-                        }
-                    }
-                },
+                onClick = addCard,
                 backgroundColor = Color.White,
                 modifier = Modifier
                     .size(48.dp)
@@ -279,7 +264,10 @@ fun CreateCardScreen(
                 CardItemField(
                     cardList[page],
                     { card -> setCard(page, card) },
-                    { removeCard(page) }
+                    { removeCard(page)
+                    Log.d("cardlist pagecount", pagerState.pageCount.toString())
+                    
+                    }
                 )
             }
         }
@@ -327,7 +315,7 @@ fun DeckTitleTextField(deckTitle: String, setDeckTitle: (String) -> Unit) {
 fun CardItemField(
     card: Card,
     setCard: (Card) -> Unit,
-    deleteCard: (Card) -> Unit
+    deleteCard: () -> Unit
 ) {
 
     //나중에 밖으로 뺄 것
@@ -415,7 +403,7 @@ fun CardItemField(
                 )
             )
             IconButton(
-                onClick = { /*TODO*/ },
+                onClick = deleteCard,
                 modifier = Modifier.constrainAs(delete) {
                     bottom.linkTo(parent.bottom, 10.dp)
                     start.linkTo(parent.start, 8.dp)
