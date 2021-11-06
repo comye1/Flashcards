@@ -25,8 +25,6 @@ import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
 import kotlinx.coroutines.InternalCoroutinesApi
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.sync.Mutex
 
 enum class CreateScreen {
     TitleScreen, // 0
@@ -51,10 +49,9 @@ fun CreateScreen(navController: NavHostController) {
     }
 //
 //    lazy var cardList: List<Card> = listOf()
-    val cardList: MutableList<Card> = remember {
+    val cardList = remember {
         mutableStateListOf(Card("", ""))
     }
-
 
 
     when (screenState) {
@@ -71,9 +68,22 @@ fun CreateScreen(navController: NavHostController) {
         CreateScreen.CardScreen -> {
             CreateCardScreen(
                 cardList,
-                { index, card -> cardList[index] = card },
-                { cardList.add(Card("", "")) },
-                { index -> cardList.removeAt(index) },
+                { index, card ->
+//                    val mutable = cardList.toMutableList()
+//                    mutable[index] = card
+//                    cardList = mutable
+                    cardList[index] = card
+                },
+                {
+                    cardList.add(Card("", ""))
+//                    cardList = cardList + Card("", "")
+                },
+                { index ->
+                    cardList.removeAt(index)
+//                    val mutable = cardList.toMutableList()
+//                    mutable.removeAt(index)
+//                    cardList = mutable
+                },
                 { navController.popBackStack() }
             ) { Log.d("cardList", cardList.joinToString("\n")) }
         }
@@ -190,17 +200,41 @@ fun CreateCardScreen(
     navigateBack: () -> Unit,
     onDone: () -> Unit
 ) {
+
     val pagerState = rememberPagerState()
 
-//    LaunchedEffect(key1 = pagerState) {
-//        snapshotFlow { pagerState.currentPage }.collect{ page ->
-//
-//        }
-//    }
+    /*
+    넘어가는 동작 개선
 
-//    LaunchedEffect(key1 = pagerState.pageCount) {
-//        pagerState.animateScrollToPage(pagerState.pageCount - 1, pagerState.currentPageOffset)
-//    }
+    카드 추가 -> 마지막 페이지??
+
+    카드 삭제 -> 이전 (다음 없고 이전 있을 때) or 다음 (존재할 때)
+
+    삭제된 인덱스와 페이지 수를 가지고 판단해야겠다.
+
+    실패
+
+    pageCount의 증감을 보고 판단해야겠다.
+
+     */
+    var prevPageCount by remember {
+        mutableStateOf(pagerState.pageCount)
+    }
+
+    LaunchedEffect(key1 = pagerState.pageCount) {
+
+        Log.d("page", "$prevPageCount -> ${pagerState.pageCount}")
+
+        if (prevPageCount > pagerState.pageCount) {
+            // 삭제했을 때
+//            pagerState.animateScrollToPage(prevPageCount - 2, pagerState.currentPageOffset)
+        } else if (prevPageCount < pagerState.pageCount) {
+            // 추가했을 때
+            pagerState.animateScrollToPage(pagerState.pageCount - 1, pagerState.currentPageOffset)
+        }
+
+        prevPageCount = pagerState.pageCount
+    }
 
     Scaffold(
         topBar = {
@@ -256,19 +290,30 @@ fun CreateCardScreen(
             }
         }
     ) {
-
-
-        Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+        Column() {
+            Text(text = cardList.joinToString(","))
+            Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
 //            CardItemField()
-            HorizontalPager(count = cardList.size, state = pagerState) { page ->
-                CardItemField(
-                    cardList[page],
-                    { card -> setCard(page, card) },
-                    { removeCard(page)
-                    Log.d("cardlist pagecount", pagerState.pageCount.toString())
-                    
-                    }
-                )
+
+                HorizontalPager(
+                    count = cardList.size,
+                    state = pagerState,
+                    contentPadding = PaddingValues(start = 64.dp, end = 64.dp)
+                ) { page ->
+
+                    val card = cardList.get(page)
+                    CardItemField(
+                        card,
+                        { card ->
+                            setCard(page, card)
+                        },
+                        {
+                            removeCard(page)
+                            Log.d("cardlist pagecount", pagerState.pageCount.toString())
+
+                        }
+                    )
+                }
             }
         }
     }
@@ -329,7 +374,7 @@ fun CardItemField(
 
     Box(
         modifier = Modifier
-            .fillMaxWidth(.8f)
+            .fillMaxWidth()
             .padding(8.dp)
             .border(2.dp, Color.LightGray),
     ) {
@@ -369,7 +414,7 @@ fun CardItemField(
                     .constrainAs(divider) {
                         top.linkTo(front.bottom)
                     }
-                    .fillMaxWidth()
+//                    .fillMaxWidth()
                     .height(2.dp),
                 color = Color.LightGray
             )
