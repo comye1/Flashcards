@@ -47,8 +47,7 @@ fun CreateScreen(navController: NavHostController) {
     val (screenState, setScreenState) = remember {
         mutableStateOf(CreateScreen.TitleScreen)
     }
-//
-//    lazy var cardList: List<Card> = listOf()
+
     val cardList = remember {
         mutableStateListOf(Card("", ""))
     }
@@ -69,20 +68,12 @@ fun CreateScreen(navController: NavHostController) {
             CreateCardScreen(
                 cardList,
                 { index, card ->
-//                    val mutable = cardList.toMutableList()
-//                    mutable[index] = card
-//                    cardList = mutable
                     cardList[index] = card
                 },
-                {
-                    cardList.add(Card("", ""))
-//                    cardList = cardList + Card("", "")
-                },
+                { cardList.add(Card("", "")) },
                 { index ->
                     cardList.removeAt(index)
-//                    val mutable = cardList.toMutableList()
-//                    mutable.removeAt(index)
-//                    cardList = mutable
+                    if (index == 0) cardList.add(Card("", ""))
                 },
                 { navController.popBackStack() }
             ) { Log.d("cardList", cardList.joinToString("\n")) }
@@ -203,33 +194,13 @@ fun CreateCardScreen(
 
     val pagerState = rememberPagerState()
 
-    /*
-    넘어가는 동작 개선
-
-    카드 추가 -> 마지막 페이지??
-
-    카드 삭제 -> 이전 (다음 없고 이전 있을 때) or 다음 (존재할 때)
-
-    삭제된 인덱스와 페이지 수를 가지고 판단해야겠다.
-
-    실패
-
-    pageCount의 증감을 보고 판단해야겠다.
-
-     */
     var prevPageCount by remember {
         mutableStateOf(pagerState.pageCount)
     }
 
     LaunchedEffect(key1 = pagerState.pageCount) {
-
-        Log.d("page", "$prevPageCount -> ${pagerState.pageCount}")
-
-        if (prevPageCount > pagerState.pageCount) {
-            // 삭제했을 때
-//            pagerState.animateScrollToPage(prevPageCount - 2, pagerState.currentPageOffset)
-        } else if (prevPageCount < pagerState.pageCount) {
-            // 추가했을 때
+        if (prevPageCount < pagerState.pageCount) {
+            // 추가된 경우
             pagerState.animateScrollToPage(pagerState.pageCount - 1, pagerState.currentPageOffset)
         }
 
@@ -290,28 +261,19 @@ fun CreateCardScreen(
             }
         }
     ) {
-        Column() {
-            Text(text = cardList.joinToString(","))
+        Column {
             Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-//            CardItemField()
-
                 HorizontalPager(
                     count = cardList.size,
                     state = pagerState,
                     contentPadding = PaddingValues(start = 64.dp, end = 64.dp)
                 ) { page ->
-
-                    val card = cardList.get(page)
                     CardItemField(
-                        card,
+                        cardList[page],
                         { card ->
                             setCard(page, card)
                         },
-                        {
-                            removeCard(page)
-                            Log.d("cardlist pagecount", pagerState.pageCount.toString())
-
-                        }
+                        { removeCard(page) }
                     )
                 }
             }
@@ -363,12 +325,11 @@ fun CardItemField(
     deleteCard: () -> Unit
 ) {
 
-    //나중에 밖으로 뺄 것
-    val (frontText, setFrontText) = remember {
+    val (frontText, setFrontText) = remember(card) {
         mutableStateOf(card.front)
     }
 
-    val (backText, setBackText) = remember {
+    val (backText, setBackText) = remember(card) {
         mutableStateOf(card.back)
     }
 
