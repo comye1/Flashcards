@@ -113,6 +113,7 @@ fun FilterText(text: String, selected: Boolean, onClick: () -> Unit) {
     }
 }
 
+// 얘를 복붙
 @Composable
 fun DeckItem(
     deck: Deck,

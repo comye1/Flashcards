@@ -3,15 +3,14 @@ package com.comye1.flashcards.screens
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.Computer
-import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.filled.*
 import androidx.compose.material.icons.outlined.ArrowBack
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -23,7 +22,12 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import com.comye1.flashcards.models.Card
+import com.comye1.flashcards.models.DECK_ADDED
+import com.comye1.flashcards.models.DECK_CREATED
+import com.comye1.flashcards.models.Deck
 import com.comye1.flashcards.ui.theme.DeepOrange
+import com.comye1.flashcards.viewmodels.CheggViewModel
 
 enum class SearchState {
     ButtonScreen,
@@ -33,7 +37,7 @@ enum class SearchState {
 
 // 전체
 @Composable
-fun SearchScreen(navController: NavHostController) {
+fun SearchScreen(navController: NavHostController, viewModel: CheggViewModel) {
 
     val (screenState, setScreenState)= remember {
         mutableStateOf(SearchState.ButtonScreen)
@@ -42,6 +46,10 @@ fun SearchScreen(navController: NavHostController) {
     var (queryString, setQueryString) = remember {
         mutableStateOf("")
     }
+
+    fun getQueryResult(queryString: String) : List<Deck> =
+        viewModel.totalDeckList
+
 
     when (screenState) {
         SearchState.ButtonScreen -> {
@@ -65,6 +73,7 @@ fun SearchScreen(navController: NavHostController) {
             SearchResultScreen(
                 queryString,
                 setQueryString,
+                getQueryResult(queryString),
                 { setScreenState(SearchState.ButtonScreen) },
                 {}
             )
@@ -78,6 +87,7 @@ fun SearchScreen(navController: NavHostController) {
 fun SearchResultScreen(
     queryString: String,
     setQueryString: (String) -> Unit,
+    queryResult: List<Deck>,
     toButtonScreen: () -> Unit,
     function1: () -> Unit
 ) {
@@ -91,24 +101,63 @@ fun SearchResultScreen(
             )
         }
     ) {
-        Row(
+        LazyColumn(//Row에서 LazyColumn으로
             modifier = Modifier
-                .fillMaxWidth()
-                .fillMaxHeight(.25f),
-            verticalAlignment = Alignment.Bottom,
-            horizontalArrangement = Arrangement.Center
+                .fillMaxSize()
+                .padding(16.dp),
         ) {
-            Text(
-                text = "$queryString 검색결과",
-                style = MaterialTheme.typography.body1,
-                fontSize = 20.sp,
-                color = Color.LightGray,
-                fontWeight = FontWeight.Bold
-            )
+            queryResult.forEach {
+                item {
+                    DeckInResult(deck = it, modifier = Modifier.padding(bottom = 8.dp), onClick = {})
+                }
+            }
+            item { 
+                Column(Modifier.height(50.dp)) {
+                    
+                }
+            }
         }
     }
 }
 
+@Composable
+fun DeckInResult(
+    deck: Deck,
+    modifier: Modifier = Modifier,
+    onClick: (Deck) -> Unit
+) {
+    Column(
+        modifier = modifier
+            .fillMaxWidth()
+            .border(
+                width = 2.dp,
+                color = Color.LightGray
+            )
+            .clickable {
+                onClick(deck)
+            }
+            .padding(16.dp)
+    ) {
+        Text(
+            text = deck.deckTitle,
+            style = MaterialTheme.typography.h5,
+            fontWeight = FontWeight.Bold
+        )
+        Spacer(modifier = Modifier.height(4.dp))
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Text(
+                text = deck.cardList.size.toString() + if (deck.cardList.size > 1) " Cards" else "Card",
+                style = MaterialTheme.typography.subtitle1,
+                fontWeight = FontWeight.Bold,
+                color = Color.Gray
+            )
+
+        }
+    }
+}
 @Composable
 fun SearchButtonScreen(onButtonClick: () -> Unit) {
     Scaffold(
