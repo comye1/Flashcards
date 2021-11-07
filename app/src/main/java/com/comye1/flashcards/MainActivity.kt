@@ -30,6 +30,7 @@ import com.comye1.flashcards.screens.*
 import com.comye1.flashcards.ui.theme.FlashcardsTheme
 import com.comye1.flashcards.viewmodels.CheggViewModel
 import com.google.accompanist.pager.ExperimentalPagerApi
+import dagger.hilt.android.HiltAndroidApp
 import kotlinx.coroutines.InternalCoroutinesApi
 
 class MainActivity : ComponentActivity() {
@@ -96,45 +97,6 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-
-/*
-Row(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .background(Color.White)
-                                .padding(vertical = 12.dp),
-                            horizontalArrangement = Arrangement.SpaceAround
-                        ) {
-                            IconButton(onClick = { navController.navigate("HomeScreen") }) {
-                                Icon(
-                                    imageVector = Icons.Outlined.Home,
-                                    contentDescription = "home",
-                                    modifier = Modifier.size(60.dp)
-                                )
-                            }
-                            IconButton(onClick = { navController.navigate("SearchScreen") }) {
-                                Icon(
-                                    imageVector = Icons.Outlined.Search,
-                                    contentDescription = "search",
-                                    modifier = Modifier.size(60.dp)
-                                )
-                            }
-                            IconButton(onClick = { navController.navigate("CreateScreen") }) {
-                                Icon(
-                                    imageVector = Icons.Outlined.AddBox,
-                                    contentDescription = "create",
-                                    modifier = Modifier.size(60.dp)
-                                )
-                            }
-                            IconButton(onClick = { navController.navigate("MoreScreen") }) {
-                                Icon(
-                                    imageVector = Icons.Outlined.Menu,
-                                    contentDescription = "more",
-                                    modifier = Modifier.size(60.dp)
-                                )
-                            }
-                        }
- */
 
 @Preview(showBackground = true)
 @Composable

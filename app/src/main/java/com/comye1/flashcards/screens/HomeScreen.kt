@@ -24,7 +24,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import com.comye1.flashcards.SampleDataSet
 import com.comye1.flashcards.models.DECK_ADDED
 import com.comye1.flashcards.models.DECK_CREATED
 import com.comye1.flashcards.models.Deck
