@@ -47,10 +47,6 @@ fun SearchScreen(navController: NavHostController, viewModel: CheggViewModel) {
         mutableStateOf("")
     }
 
-    fun getQueryResult(queryString: String) : List<Deck> =
-        viewModel.totalDeckList
-
-
     when (screenState) {
         SearchState.ButtonScreen -> {
             SearchButtonScreen {
@@ -63,19 +59,20 @@ fun SearchScreen(navController: NavHostController, viewModel: CheggViewModel) {
         }
         SearchState.QueryScreen -> {
             SearchQueryScreen(
-                queryString,
-                setQueryString,
-                { setScreenState(SearchState.ButtonScreen) },
-                { setScreenState(SearchState.ResultScreen) }
+                queryString = queryString,
+                setQueryString = setQueryString,
+                toButtonScreen = { setScreenState(SearchState.ButtonScreen) },
+                toResultScreen = { setScreenState(SearchState.ResultScreen) }
             )
         }
         SearchState.ResultScreen -> {
             SearchResultScreen(
-                queryString,
-                setQueryString,
-                getQueryResult(queryString),
-                { setScreenState(SearchState.ButtonScreen) },
-                {}
+                queryString = queryString,
+                setQueryString = setQueryString,
+                getQueryResult = { query -> viewModel.getQueryResult(query)},
+                // 뷰모델로부터 검색 결과 받아서 전달
+                toButtonScreen = { setScreenState(SearchState.ButtonScreen) },
+                function1 = {} //onSearchKey -> 삭제해야됨
             )
         }
     }
@@ -87,17 +84,24 @@ fun SearchScreen(navController: NavHostController, viewModel: CheggViewModel) {
 fun SearchResultScreen(
     queryString: String,
     setQueryString: (String) -> Unit,
-    queryResult: List<Deck>,
+    getQueryResult: (String) -> List<Deck>,
     toButtonScreen: () -> Unit,
     function1: () -> Unit
 ) {
+
+    val (queryResult, setQueryResult) = remember {
+        mutableStateOf(getQueryResult(queryString)) // 초기 검색 결과
+    }
+
     Scaffold(
         topBar = {
             SearchTopBar(
                 queryString = queryString,
                 setQueryString = setQueryString,
                 onBackButtonClick = toButtonScreen,
-                onSearchKey = { } //TODO : onSearchKey
+                onSearchKey = {
+                    setQueryResult(getQueryResult(queryString)) // 쿼리 결과 업데이트
+                } //TODO : onSearchKey
             )
         }
     ) {
@@ -113,7 +117,7 @@ fun SearchResultScreen(
             }
             item { 
                 Column(Modifier.height(50.dp)) {
-                    
+
                 }
             }
         }
