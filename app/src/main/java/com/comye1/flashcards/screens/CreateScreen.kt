@@ -24,14 +24,12 @@ import com.comye1.flashcards.ui.theme.LightOrange
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
-import kotlinx.coroutines.InternalCoroutinesApi
 
 enum class CreateScreen {
     TitleScreen, // 0
     CardScreen // 1
 }
 
-@InternalCoroutinesApi
 @ExperimentalPagerApi
 @Composable
 fun CreateScreen(navController: NavHostController) {
@@ -66,20 +64,21 @@ fun CreateScreen(navController: NavHostController) {
         }
         CreateScreen.CardScreen -> {
             CreateCardScreen(
-                cardList,
-                { index, card ->
-                    cardList[index] = card
+                cardList = cardList, //SnapshotStateList<Card>가 전달된다
+                setCard = { index, card ->
+                    cardList[index] = card // Card field 변경
                 },
-                { cardList.add(Card("", "")) },
-                { index ->
-                    cardList.removeAt(index)
+                addCard = { cardList.add(Card("", "")) }, // 새 Card 추가
+                removeCard = { index ->
+                    cardList.removeAt(index) // Card 삭제
                     if (cardList.size == 0) cardList.add(Card("", ""))
+                    // 삭제된 뒤에 cardList 사이즈가 0인 경우 새 Card 추가
                 },
-                { navController.popBackStack() }
-            ) { Log.d("cardList", cardList.joinToString("\n")) }
+                navigateBack = { navController.popBackStack() },
+                onDone = { Log.d("cardList", cardList.joinToString("\n")) }
+            )
         }
     }
-
 }
 
 @Composable
@@ -119,7 +118,7 @@ fun CreateTitleScreen(
                 // RowScope here, so these icons will be placed horizontally
                 TextButton(
                     onClick = toCardScreen,
-                    enabled = !deckTitle.isNullOrEmpty()
+                    enabled = deckTitle.isNotBlank()
                 ) {
                     Text(
                         "Next",
@@ -165,7 +164,6 @@ fun CreateTitleScreen(
     }
 }
 
-@InternalCoroutinesApi
 @ExperimentalPagerApi
 @Preview
 @Composable
@@ -180,7 +178,6 @@ fun CreateCardScreenPreview() {
 }
 
 
-@InternalCoroutinesApi
 @ExperimentalPagerApi
 @Composable
 fun CreateCardScreen(
@@ -192,19 +189,20 @@ fun CreateCardScreen(
     onDone: () -> Unit
 ) {
 
-    val pagerState = rememberPagerState()
+    val pagerState = rememberPagerState() // Pager의 상태 (페이지 수, 현재 페이지 등)
 
-    var prevPageCount by remember {
+    var prevPageCount by remember { // 이전 페이지 수를 기억
         mutableStateOf(pagerState.pageCount)
     }
 
-    LaunchedEffect(key1 = pagerState.pageCount) {
+    // 스크롤 애니메이션 처리
+    LaunchedEffect(key1 = pagerState.pageCount) { // 페이지 수가 변했을 때
         if (prevPageCount < pagerState.pageCount) {
-            // 추가된 경우
+            // 추가된 경우 - 마지막 페이지로 스크롤
             pagerState.animateScrollToPage(pagerState.pageCount - 1, pagerState.currentPageOffset)
         }
-
-        prevPageCount = pagerState.pageCount
+        Log.d("pagecount", (pagerState.pageCount - 1).toString())
+        prevPageCount = pagerState.pageCount // prevPageCount를 업데이트
     }
 
     Scaffold(
@@ -223,7 +221,7 @@ fun CreateCardScreen(
                     }
                 },
                 navigationIcon = {
-                    IconButton(onClick = navigateBack) {
+                    IconButton(onClick = navigateBack) { // 좌상단 X 버튼
                         Icon(
                             imageVector = Icons.Outlined.Close,
                             contentDescription = "close screen"
@@ -233,8 +231,7 @@ fun CreateCardScreen(
                 backgroundColor = Color.Transparent,
                 elevation = 0.dp,
                 actions = {
-                    // RowScope here, so these icons will be placed horizontally
-                    TextButton(onClick = onDone) {
+                    TextButton(onClick = onDone) { // 우상단 Done 버튼
                         Text(
                             text = "Done",
                             style = MaterialTheme.typography.h6,
@@ -247,7 +244,7 @@ fun CreateCardScreen(
         },
         floatingActionButton = {
             FloatingActionButton(
-                onClick = addCard,
+                onClick = addCard, // 카드 추가
                 backgroundColor = Color.White,
                 modifier = Modifier
                     .size(48.dp)
@@ -263,17 +260,19 @@ fun CreateCardScreen(
     ) {
         Column {
             Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                HorizontalPager(
+                HorizontalPager( // Pager
                     count = cardList.size,
-                    state = pagerState,
+                    state = pagerState, // 선언한 pagerState 사용 (선언하지 않으면 내부에서 자동으로 사용)
                     contentPadding = PaddingValues(start = 32.dp, end = 32.dp)
+                    // 양쪽에 이전, 다음 카드를 보여줌
                 ) { page ->
                     CardItemField(
-                        cardList[page],
-                        { card ->
+                        card = cardList[page], // page에 해당하는 card 전달
+                        setCard = { card ->
                             setCard(page, card)
+                            // CardItemField가 전달하는 card로 해당 page에 set
                         },
-                        { removeCard(page) }
+                        removeCard = { removeCard(page) } // page에 해당하는 card 삭제
                     )
                 }
             }
@@ -322,16 +321,8 @@ fun DeckTitleTextField(deckTitle: String, setDeckTitle: (String) -> Unit) {
 fun CardItemField(
     card: Card,
     setCard: (Card) -> Unit,
-    deleteCard: () -> Unit
+    removeCard: () -> Unit
 ) {
-
-    val (frontText, setFrontText) = remember(card) {
-        mutableStateOf(card.front)
-    }
-
-    val (backText, setBackText) = remember(card) {
-        mutableStateOf(card.back)
-    }
 
     Box(
         modifier = Modifier
@@ -342,10 +333,10 @@ fun CardItemField(
         ConstraintLayout {
             val (front, back, delete, divider) = createRefs()
             TextField(
-                value = frontText,
+                value = card.front, //frontText,
                 onValueChange = {
-                    setCard(Card(it, backText))
-                    setFrontText(it)
+                    setCard(Card(it, card.back))// cardList 안의 아이템을 변경
+
                 },
                 modifier = Modifier
                     .constrainAs(front) {
@@ -375,15 +366,13 @@ fun CardItemField(
                     .constrainAs(divider) {
                         top.linkTo(front.bottom)
                     }
-//                    .fillMaxWidth()
                     .height(2.dp),
                 color = Color.LightGray
             )
             TextField(
-                value = backText,
+                value = card.back, //backText,
                 onValueChange = {
-                    setBackText(it)
-                    setCard(Card(frontText, it))
+                    setCard(Card(card.front, it)) // cardList 안의 아이템 변경
                 },
                 modifier = Modifier
                     .constrainAs(back) {
@@ -409,7 +398,7 @@ fun CardItemField(
                 )
             )
             IconButton(
-                onClick = deleteCard,
+                onClick = removeCard, // card 삭제
                 modifier = Modifier.constrainAs(delete) {
                     bottom.linkTo(parent.bottom, 10.dp)
                     start.linkTo(parent.start, 8.dp)
