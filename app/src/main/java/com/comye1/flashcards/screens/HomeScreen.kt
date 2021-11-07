@@ -30,9 +30,10 @@ import com.comye1.flashcards.models.DECK_CREATED
 import com.comye1.flashcards.models.Deck
 import com.comye1.flashcards.navigation.Screen
 import com.comye1.flashcards.ui.theme.DeepOrange
+import com.comye1.flashcards.viewmodels.CheggViewModel
 
 @Composable
-fun HomeScreen(navController: NavHostController) {
+fun HomeScreen(navController: NavHostController, viewModel: CheggViewModel) {
 
     var (selectedFilterIndex, setFilterIndex) = remember {
         mutableStateOf(0)
@@ -63,20 +64,20 @@ fun HomeScreen(navController: NavHostController) {
 
             when (selectedFilterIndex) {
                 0 ->
-                    SampleDataSet.deckSample.forEach {
+                    viewModel.myDeckList.forEach {
                         item {
                             DeckItem(deck = it, modifier = Modifier.padding(bottom = 8.dp), onClick = {navController.navigate("DeckScreen/${it.deckTitle}/${it.cardList.size}")})
                         }
                     }
                 1 ->
-                    SampleDataSet.deckSample.filter { it.bookmarked }.forEach {
+                    viewModel.myDeckList.filter { it.bookmarked }.forEach {
                         item {
 //                            DeckItem(deck = it, modifier = Modifier.padding(bottom = 8.dp), onClick = {navController.navigate("DeckScreen")})
                             DeckItem(deck = it, modifier = Modifier.padding(bottom = 8.dp), onClick = {navController.navigate("DeckScreen/${it.deckTitle}/${it.cardList.size}")})
                         }
                     }
                 2 ->
-                    SampleDataSet.deckSample.filter { it.deckType == DECK_CREATED }.forEach {
+                    viewModel.myDeckList.filter { it.deckType == DECK_CREATED }.forEach {
                         item {
 //                            DeckItem(deck = it, modifier = Modifier.padding(bottom = 8.dp), onClick = {navController.navigate("DeckScreen")})
                             DeckItem(deck = it, modifier = Modifier.padding(bottom = 8.dp), onClick = {navController.navigate("DeckScreen/${it.deckTitle}/${it.cardList.size}")})
@@ -127,7 +128,7 @@ fun DeckItem(
                 color = Color.LightGray
             )
             .clickable {
-               onClick(deck)
+                onClick(deck)
             }
             .padding(16.dp)
     ) {

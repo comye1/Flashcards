@@ -20,6 +20,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -27,6 +28,7 @@ import com.comye1.flashcards.navigation.BottomNavigationBar
 import com.comye1.flashcards.navigation.Screen
 import com.comye1.flashcards.screens.*
 import com.comye1.flashcards.ui.theme.FlashcardsTheme
+import com.comye1.flashcards.viewmodels.CheggViewModel
 import com.google.accompanist.pager.ExperimentalPagerApi
 import kotlinx.coroutines.InternalCoroutinesApi
 
@@ -44,6 +46,8 @@ class MainActivity : ComponentActivity() {
 
                 val navController = rememberNavController()
 
+                val cheggViewModel: CheggViewModel = viewModel()
+
                 Scaffold(
                     bottomBar = {
                         if (bottomBarShown) {
@@ -55,7 +59,7 @@ class MainActivity : ComponentActivity() {
                     NavHost(navController = navController, startDestination = Screen.Home.route) {
                         composable(Screen.Home.route) {
                             showBottomBar(true)
-                            HomeScreen(navController)
+                            HomeScreen(navController, cheggViewModel)
                         }
                         composable(Screen.Search.route) {
                             showBottomBar(true)
