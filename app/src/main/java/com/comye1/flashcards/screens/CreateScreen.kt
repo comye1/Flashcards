@@ -73,7 +73,7 @@ fun CreateScreen(navController: NavHostController) {
                 { cardList.add(Card("", "")) },
                 { index ->
                     cardList.removeAt(index)
-                    if (index == 0) cardList.add(Card("", ""))
+                    if (cardList.size == 0) cardList.add(Card("", ""))
                 },
                 { navController.popBackStack() }
             ) { Log.d("cardList", cardList.joinToString("\n")) }
@@ -266,7 +266,7 @@ fun CreateCardScreen(
                 HorizontalPager(
                     count = cardList.size,
                     state = pagerState,
-                    contentPadding = PaddingValues(start = 64.dp, end = 64.dp)
+                    contentPadding = PaddingValues(start = 32.dp, end = 32.dp)
                 ) { page ->
                     CardItemField(
                         cardList[page],
