@@ -30,7 +30,6 @@ import com.comye1.flashcards.screens.*
 import com.comye1.flashcards.ui.theme.FlashcardsTheme
 import com.comye1.flashcards.viewmodels.CheggViewModel
 import com.google.accompanist.pager.ExperimentalPagerApi
-import dagger.hilt.android.HiltAndroidApp
 import kotlinx.coroutines.InternalCoroutinesApi
 
 class MainActivity : ComponentActivity() {

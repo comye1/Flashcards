@@ -1,6 +1,7 @@
 package com.comye1.flashcards.viewmodels
 
 import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.toMutableStateList
 import androidx.lifecycle.ViewModel
 import com.comye1.flashcards.SampleDataSet
@@ -8,10 +9,30 @@ import com.comye1.flashcards.models.Deck
 import java.util.*
 
 class CheggViewModel : ViewModel() {
+    // HomeScreen
+
 
     // 사용자가 만들거나 북마크한 Deck들
     var myDeckList = mutableStateListOf<Deck>()
         private set
+
+    //**************************************
+
+    // SearchScreen
+
+    var screenState = mutableStateOf(SearchState.ButtonScreen)
+        private set
+
+    fun setScreenState(state: SearchState) {
+        screenState.value = state
+    }
+
+    var queryString = mutableStateOf("")
+        private set
+
+    fun setQueryString(query: String) {
+        queryString.value = query
+    }
 
     // 전체 Deck
     var totalDeckList = mutableStateListOf<Deck>()
@@ -22,6 +43,8 @@ class CheggViewModel : ViewModel() {
         it.deckTitle.lowercase(Locale.getDefault())
             .contains(queryString)
     }.toMutableStateList()
+
+    //****************************************
 
     // 초기화 - 일단 샘플 데이터 활용
     init {

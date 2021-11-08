@@ -22,56 +22,41 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
-import com.comye1.flashcards.models.Card
-import com.comye1.flashcards.models.DECK_ADDED
-import com.comye1.flashcards.models.DECK_CREATED
 import com.comye1.flashcards.models.Deck
 import com.comye1.flashcards.ui.theme.DeepOrange
 import com.comye1.flashcards.viewmodels.CheggViewModel
+import com.comye1.flashcards.viewmodels.SearchState
 
-enum class SearchState {
-    ButtonScreen,
-    QueryScreen,
-    ResultScreen
-}
 
 // 전체
 @Composable
 fun SearchScreen(navController: NavHostController, viewModel: CheggViewModel) {
 
-    val (screenState, setScreenState)= remember {
-        mutableStateOf(SearchState.ButtonScreen)
-    }
-
-    var (queryString, setQueryString) = remember {
-        mutableStateOf("")
-    }
-
-    when (screenState) {
+    when (viewModel.screenState.value) {
         SearchState.ButtonScreen -> {
             SearchButtonScreen {
-                if (queryString.isNotBlank()) {
-                    setScreenState(SearchState.ResultScreen)
+                if (viewModel.queryString.value.isNotBlank()) {
+                    viewModel.setScreenState(SearchState.ResultScreen)
                 } else {
-                    setScreenState(SearchState.QueryScreen)
+                    viewModel.setScreenState(SearchState.QueryScreen)
                 }
             }
         }
         SearchState.QueryScreen -> {
             SearchQueryScreen(
-                queryString = queryString,
-                setQueryString = setQueryString,
-                toButtonScreen = { setScreenState(SearchState.ButtonScreen) },
-                toResultScreen = { setScreenState(SearchState.ResultScreen) }
+                queryString = viewModel.queryString.value,
+                setQueryString = viewModel::setQueryString,
+                toButtonScreen = { viewModel.setScreenState(SearchState.ButtonScreen) },
+                toResultScreen = { viewModel.setScreenState(SearchState.ResultScreen) }
             )
         }
         SearchState.ResultScreen -> {
             SearchResultScreen(
-                queryString = queryString,
-                setQueryString = setQueryString,
+                queryString = viewModel.queryString.value,
+                setQueryString = viewModel::setQueryString,
                 getQueryResult = { query -> viewModel.getQueryResult(query)},
                 // 뷰모델로부터 검색 결과 받아서 전달
-                toButtonScreen = { setScreenState(SearchState.ButtonScreen) },
+                toButtonScreen = { viewModel.setScreenState(SearchState.ButtonScreen) },
                 function1 = {} //onSearchKey -> 삭제해야됨
             )
         }
