@@ -57,7 +57,7 @@ fun SearchScreen(navController: NavHostController, viewModel: CheggViewModel) {
                 getQueryResult = { query -> viewModel.getQueryResult(query)},
                 // 뷰모델로부터 검색 결과 받아서 전달
                 toButtonScreen = { viewModel.setScreenState(SearchState.ButtonScreen) },
-                function1 = {} //onSearchKey -> 삭제해야됨
+                toDeckScreen = { navController.navigate("DeckScreen/${it.deckTitle}/${it.cardList.size}")} //onSearchKey -> 삭제해야됨
             )
         }
     }
@@ -71,7 +71,7 @@ fun SearchResultScreen(
     setQueryString: (String) -> Unit,
     getQueryResult: (String) -> List<Deck>,
     toButtonScreen: () -> Unit,
-    function1: () -> Unit
+    toDeckScreen: (Deck) -> Unit
 ) {
 
     val (queryResult, setQueryResult) = remember {
@@ -97,7 +97,7 @@ fun SearchResultScreen(
         ) {
             queryResult.forEach {
                 item {
-                    DeckInResult(deck = it, modifier = Modifier.padding(bottom = 8.dp), onClick = {})
+                    DeckInResult(deck = it, modifier = Modifier.padding(bottom = 8.dp), onClick = toDeckScreen)
                 }
             }
             item { 
