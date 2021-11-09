@@ -61,7 +61,7 @@ fun HomeScreen(navController: NavHostController, viewModel: CheggViewModel) {
     ) {
         LazyColumn(modifier = Modifier.padding(16.dp)) {
 
-            when (selectedFilterIndex) {
+            when (selectedFilterIndex) { // TODO 뷰모델에서 필터링 수행
                 0 ->
                     viewModel.myDeckList.forEach {
                         item {

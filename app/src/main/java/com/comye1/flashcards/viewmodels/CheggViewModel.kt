@@ -20,11 +20,19 @@ class CheggViewModel : ViewModel() {
 
     // SearchScreen
 
-    var screenState = mutableStateOf(SearchState.ButtonScreen)
+    var searchScreenState = mutableStateOf(SearchState.ButtonScreen)
         private set
 
-    fun setScreenState(state: SearchState) {
-        screenState.value = state
+    fun toButtonScreen() {
+        searchScreenState.value = SearchState.ButtonScreen
+    }
+
+    fun toQueryScreen() {
+        searchScreenState.value = SearchState.QueryScreen
+    }
+
+    fun toResultScreen() {
+        searchScreenState.value = SearchState.ResultScreen
     }
 
     var queryString = mutableStateOf("")
@@ -39,9 +47,9 @@ class CheggViewModel : ViewModel() {
         private set
 
     // Deck 검색 결과 반환
-    fun getQueryResult(queryString: String) = totalDeckList.filter {
+    fun getQueryResult() = totalDeckList.filter {
         it.deckTitle.lowercase(Locale.getDefault())
-            .contains(queryString)
+            .contains(queryString.value)
     }.toMutableStateList()
 
     //****************************************

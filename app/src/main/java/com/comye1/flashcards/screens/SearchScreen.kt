@@ -18,7 +18,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
@@ -27,18 +26,15 @@ import com.comye1.flashcards.ui.theme.DeepOrange
 import com.comye1.flashcards.viewmodels.CheggViewModel
 import com.comye1.flashcards.viewmodels.SearchState
 
-
-// 전체
 @Composable
 fun SearchScreen(navController: NavHostController, viewModel: CheggViewModel) {
-
-    when (viewModel.screenState.value) {
+    when (viewModel.searchScreenState.value) {
         SearchState.ButtonScreen -> {
             SearchButtonScreen {
                 if (viewModel.queryString.value.isNotBlank()) {
-                    viewModel.setScreenState(SearchState.ResultScreen)
+                    viewModel.toResultScreen()
                 } else {
-                    viewModel.setScreenState(SearchState.QueryScreen)
+                    viewModel.toQueryScreen()
                 }
             }
         }
@@ -46,36 +42,36 @@ fun SearchScreen(navController: NavHostController, viewModel: CheggViewModel) {
             SearchQueryScreen(
                 queryString = viewModel.queryString.value,
                 setQueryString = viewModel::setQueryString,
-                toButtonScreen = { viewModel.setScreenState(SearchState.ButtonScreen) },
-                toResultScreen = { viewModel.setScreenState(SearchState.ResultScreen) }
+                toButtonScreen = viewModel::toButtonScreen,
+                toResultScreen = viewModel::toResultScreen,
             )
         }
         SearchState.ResultScreen -> {
             SearchResultScreen(
                 queryString = viewModel.queryString.value,
                 setQueryString = viewModel::setQueryString,
-                getQueryResult = { query -> viewModel.getQueryResult(query)},
+                getQueryResult = viewModel::getQueryResult,
                 // 뷰모델로부터 검색 결과 받아서 전달
-                toButtonScreen = { viewModel.setScreenState(SearchState.ButtonScreen) },
-                toDeckScreen = { navController.navigate("DeckScreen/${it.deckTitle}/${it.cardList.size}")} //onSearchKey -> 삭제해야됨
+                toButtonScreen = viewModel::toButtonScreen,
+                toDeckScreen = {
+                    navController.navigate("DeckScreen/${it.deckTitle}/${it.cardList.size}")
+                } // Deck 클릭 시 이동하도록
             )
         }
     }
-
-
 }
 
 @Composable
 fun SearchResultScreen(
     queryString: String,
     setQueryString: (String) -> Unit,
-    getQueryResult: (String) -> List<Deck>,
+    getQueryResult: () -> List<Deck>,
     toButtonScreen: () -> Unit,
     toDeckScreen: (Deck) -> Unit
 ) {
 
     val (queryResult, setQueryResult) = remember {
-        mutableStateOf(getQueryResult(queryString)) // 초기 검색 결과
+        mutableStateOf(getQueryResult()) // 초기 검색 결과
     }
 
     Scaffold(
@@ -85,22 +81,26 @@ fun SearchResultScreen(
                 setQueryString = setQueryString,
                 onBackButtonClick = toButtonScreen,
                 onSearchKey = {
-                    setQueryResult(getQueryResult(queryString)) // 쿼리 결과 업데이트
+                    setQueryResult(getQueryResult()) // 쿼리 결과 업데이트
                 } //TODO : onSearchKey
             )
         }
     ) {
-        LazyColumn(//Row에서 LazyColumn으로
+        LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(16.dp),
         ) {
             queryResult.forEach {
                 item {
-                    DeckInResult(deck = it, modifier = Modifier.padding(bottom = 8.dp), onClick = toDeckScreen)
+                    DeckInResult(
+                        deck = it,
+                        modifier = Modifier.padding(bottom = 8.dp),
+                        onClick = toDeckScreen
+                    )
                 }
             }
-            item { 
+            item {
                 Column(Modifier.height(50.dp)) {
 
                 }
@@ -152,34 +152,35 @@ fun SearchButtonScreen(onButtonClick: () -> Unit) {
     Scaffold(
         topBar = {
             TopAppBar(
+                elevation = 0.dp,
+                backgroundColor = Color.Transparent,
                 title = {
                     Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.Center
+                        horizontalArrangement = Arrangement.Center,
+                        modifier = Modifier.fillMaxWidth()
                     ) {
                         Text(
-                            "Find flashcards",
+                            text = "Find flashcards",
                             style = MaterialTheme.typography.h5,
                             fontWeight = FontWeight.Bold
                         )
                     }
-                },
-                backgroundColor = Color.Transparent,
-                elevation = 0.dp,
+                }
             )
         }
     ) {
         Column(
             Modifier
                 .fillMaxSize()
-                .padding(vertical = 8.dp, horizontal = 16.dp) //column에서는 왼,오른쪽이 vertical
+                .padding(vertical = 8.dp, horizontal = 16.dp)
         ) {
             FindFlashCards(onClick = onButtonClick)
             Spacer(modifier = Modifier.height(24.dp))
             Divider(
                 Modifier
                     .fillMaxWidth(.15f)
-                    .height(4.dp), color = DeepOrange
+                    .height(4.dp),
+                color = DeepOrange
             )
             Spacer(modifier = Modifier.height(8.dp))
             Text(
@@ -197,103 +198,6 @@ fun SearchButtonScreen(onButtonClick: () -> Unit) {
                 SubjectItem()
                 Spacer(modifier = Modifier.height(8.dp))
             }
-        }
-    }
-}
-
-// onClick 추가, text 수정
-@Composable
-fun FindFlashCards(onClick: () -> Unit) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .border(width = 1.dp, color = Color.LightGray, shape = CircleShape)
-            .clip(shape = CircleShape)
-            .clickable(onClick = onClick)
-            .padding(horizontal = 8.dp, vertical = 14.dp),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Icon(
-            imageVector = Icons.Default.Search,
-            contentDescription = "search flashcards",
-            tint = Color.Gray
-        )
-        Text(text = " Find flashcards", style = MaterialTheme.typography.body1, color = Color.Gray)
-    }
-}
-// 여기까지
-
-@Composable
-fun SubjectItem() {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .border(
-                shape = RoundedCornerShape(size = 8.dp),
-                width = 2.dp,
-                color = Color.LightGray
-            )
-            .clip(shape = RoundedCornerShape(size = 8.dp))
-            .clickable { // 추가됨
-
-            }
-            .padding(20.dp),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Icon(
-            imageVector = Icons.Default.Computer,
-            contentDescription = "bookmark",
-            tint = DeepOrange,
-            modifier = Modifier.size(36.dp)
-        )
-        Text(
-            text = "  Computer Science",
-            style = MaterialTheme.typography.h5,
-            fontWeight = FontWeight.Bold
-        )
-    }
-}
-//
-//@Preview
-//@Composable
-//fun SearchQueryScreenPreview(){
-//    SearchQueryScreen(queryString = "", setQueryString = {}) {
-//
-//    }
-//}
-
-@Composable
-fun SearchQueryScreen(
-    queryString: String,
-    setQueryString: (String) -> Unit,
-    toButtonScreen: () -> Unit,
-    toResultScreen: () -> Unit
-) {
-
-    Scaffold(
-        topBar = {
-            SearchTopBar(
-                queryString = queryString,
-                setQueryString = setQueryString,
-                onBackButtonClick = toButtonScreen,
-                onSearchKey = toResultScreen
-            )
-        }
-    ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .fillMaxHeight(.25f),
-            verticalAlignment = Alignment.Bottom,
-            horizontalArrangement = Arrangement.Center
-        ) {
-            Text(
-                text = "what are you learning today?",
-                style = MaterialTheme.typography.body1,
-                fontSize = 20.sp,
-                color = Color.LightGray,
-                fontWeight = FontWeight.Bold
-            )
         }
     }
 }
@@ -336,12 +240,10 @@ fun SearchTopBar(
 
                 ),
                 keyboardOptions = KeyboardOptions(
-                    imeAction = ImeAction.Search
+                    imeAction = androidx.compose.ui.text.input.ImeAction.Search
                 ),
                 keyboardActions = KeyboardActions(
-                    onSearch = {
-                        onSearchKey()
-                    }
+                    onSearch = { onSearchKey() }
                 ),
             )
         },
@@ -353,4 +255,86 @@ fun SearchTopBar(
             }
         }
     )
+}
+
+@Composable
+fun SearchQueryScreen(
+    queryString: String,
+    setQueryString: (String) -> Unit,
+    toButtonScreen: () -> Unit,
+    toResultScreen: () -> Unit
+) {
+    Scaffold(
+        topBar = {
+            SearchTopBar(
+                queryString = queryString,
+                setQueryString = setQueryString,
+                onBackButtonClick = toButtonScreen,
+                onSearchKey = toResultScreen
+            )
+        }
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .fillMaxHeight(.25f),
+            verticalAlignment = Alignment.Bottom,
+            horizontalArrangement = Arrangement.Center
+        ) {
+            Text(
+                text = "what are you learning today?",
+                style = MaterialTheme.typography.body1,
+                fontSize = 20.sp,
+                color = Color.LightGray,
+                fontWeight = FontWeight.Bold
+            )
+        }
+    }
+}
+
+@Composable
+fun FindFlashCards(onClick: () -> Unit) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clip(shape = CircleShape)
+            .border(width = 1.dp, color = Color.LightGray, shape = CircleShape)
+            .clickable(onClick = onClick)
+            .padding(horizontal = 8.dp, vertical = 16.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Icon(
+            imageVector = Icons.Default.Search,
+            contentDescription = "search flashcards",
+            tint = Color.Gray
+        )
+        Text(text = " Find flashcards", style = MaterialTheme.typography.body1, color = Color.Gray)
+    }
+}
+
+@Composable
+fun SubjectItem() {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .border(
+                shape = RoundedCornerShape(size = 8.dp),
+                width = 2.dp,
+                color = Color.LightGray
+            )
+            .padding(20.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Icon(
+            imageVector = Icons.Default.Computer,
+            contentDescription = "bookmark",
+            tint = DeepOrange,
+            modifier = Modifier.size(36.dp)
+        )
+        Text(
+            text = "  Computer Science",
+            style = MaterialTheme.typography.h5,
+            fontWeight = FontWeight.Bold
+        )
+    }
 }
