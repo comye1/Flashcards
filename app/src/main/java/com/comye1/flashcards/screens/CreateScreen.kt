@@ -21,18 +21,15 @@ import androidx.navigation.NavHostController
 import com.comye1.flashcards.models.Card
 import com.comye1.flashcards.ui.theme.DeepOrange
 import com.comye1.flashcards.ui.theme.LightOrange
+import com.comye1.flashcards.viewmodels.*
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
 
-enum class CreateScreen {
-    TitleScreen, // 0
-    CardScreen // 1
-}
 
 @ExperimentalPagerApi
 @Composable
-fun CreateScreen(navController: NavHostController) {
+fun CreateScreen(navController: NavHostController, viewModel: CheggViewModel) {
 
     val (deckTitle, setDeckTitle) = remember {
         mutableStateOf("")
@@ -42,16 +39,12 @@ fun CreateScreen(navController: NavHostController) {
         mutableStateOf(true)
     }
 
-    val (screenState, setScreenState) = remember {
-        mutableStateOf(CreateScreen.TitleScreen)
-    }
-
     val cardList = remember {
         mutableStateListOf(Card("", ""))
     }
 
 
-    when (screenState) {
+    when (viewModel.createScreenState.value) {
         CreateScreen.TitleScreen -> {
             CreateTitleScreen(
                 deckTitle = deckTitle,
@@ -59,7 +52,7 @@ fun CreateScreen(navController: NavHostController) {
                 visible = visible,
                 setVisibility = setVisibility,
                 navigateBack = { navController.popBackStack() },
-                toCardScreen = { setScreenState(CreateScreen.CardScreen) }
+                toCardScreen = viewModel::toCardScreen
             )
         }
         CreateScreen.CardScreen -> {

@@ -67,7 +67,7 @@ class MainActivity : ComponentActivity() {
                         }
                         composable(Screen.Create.route) {
                             showBottomBar(false)
-                            CreateScreen(navController)
+                            CreateScreen(navController, cheggViewModel)
                         }
                         composable(Screen.More.route) {
                             showBottomBar(true)

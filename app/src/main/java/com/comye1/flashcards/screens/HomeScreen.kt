@@ -63,20 +63,20 @@ fun HomeScreen(navController: NavHostController, viewModel: CheggViewModel) {
 
             when (selectedFilterIndex) { // TODO 뷰모델에서 필터링 수행
                 0 ->
-                    viewModel.myDeckList.forEach {
+                    viewModel.getAllDeckList().forEach {
                         item {
                             DeckItem(deck = it, modifier = Modifier.padding(bottom = 8.dp), onClick = {navController.navigate("DeckScreen/${it.deckTitle}/${it.cardList.size}")})
                         }
                     }
                 1 ->
-                    viewModel.myDeckList.filter { it.bookmarked }.forEach {
+                    viewModel.getBookMarkedDeckList().filter { it.bookmarked }.forEach {
                         item {
 //                            DeckItem(deck = it, modifier = Modifier.padding(bottom = 8.dp), onClick = {navController.navigate("DeckScreen")})
                             DeckItem(deck = it, modifier = Modifier.padding(bottom = 8.dp), onClick = {navController.navigate("DeckScreen/${it.deckTitle}/${it.cardList.size}")})
                         }
                     }
                 2 ->
-                    viewModel.myDeckList.filter { it.deckType == DECK_CREATED }.forEach {
+                    viewModel.getCreatedDeckList().forEach {
                         item {
 //                            DeckItem(deck = it, modifier = Modifier.padding(bottom = 8.dp), onClick = {navController.navigate("DeckScreen")})
                             DeckItem(deck = it, modifier = Modifier.padding(bottom = 8.dp), onClick = {navController.navigate("DeckScreen/${it.deckTitle}/${it.cardList.size}")})

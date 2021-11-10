@@ -5,3 +5,8 @@ enum class SearchState {
     QueryScreen,
     ResultScreen
 }
+
+enum class CreateScreen {
+    TitleScreen, // 0
+    CardScreen // 1
+}

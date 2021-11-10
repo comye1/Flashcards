@@ -5,16 +5,26 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.toMutableStateList
 import androidx.lifecycle.ViewModel
 import com.comye1.flashcards.SampleDataSet
+import com.comye1.flashcards.models.DECK_CREATED
 import com.comye1.flashcards.models.Deck
 import java.util.*
 
 class CheggViewModel : ViewModel() {
     // HomeScreen
 
-
     // 사용자가 만들거나 북마크한 Deck들
     var myDeckList = mutableStateListOf<Deck>()
         private set
+
+    // filterIndex : 새로 로드할 때 초기화 되므로 HomeScreen 내에 둠
+    // BUT, 필터링한 결과는 뷰모델에서 반환하자
+
+    // 모든 Deck
+    fun getAllDeckList() = myDeckList
+    // Bookmark한 Deck
+    fun getBookMarkedDeckList() = myDeckList.filter { it.bookmarked }
+    // Create한 Deck
+    fun getCreatedDeckList() = myDeckList.filter { it.deckType == DECK_CREATED }
 
     //**************************************
 
@@ -53,6 +63,19 @@ class CheggViewModel : ViewModel() {
     }.toMutableStateList()
 
     //****************************************
+
+    // CreateScreen
+
+    var createScreenState = mutableStateOf(CreateScreen.TitleScreen)
+        private set
+
+    fun toTitleScreen() {
+        createScreenState.value = CreateScreen.TitleScreen
+    }
+
+    fun toCardScreen() {
+        createScreenState.value = CreateScreen.CardScreen
+    }
 
     // 초기화 - 일단 샘플 데이터 활용
     init {
