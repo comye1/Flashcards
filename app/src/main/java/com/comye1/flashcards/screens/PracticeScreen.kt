@@ -32,8 +32,11 @@ import com.google.accompanist.pager.rememberPagerState
 @Composable
 fun PracticeScreen() {
 
-    val sampleData = SampleDataSet.myDeckSample[0].cardList
+    val sampleData = SampleDataSet.myDeckSample[0].cardList // 샘플 데이터 가져옴
     //
+
+    val pagerState = rememberPagerState() // Pager의 상태 (페이지 수, 현재 페이지 등)
+
     val (count, setCount) = remember { // 현재 카드 수
         mutableStateOf(0f)
     }
@@ -42,8 +45,6 @@ fun PracticeScreen() {
     LaunchedEffect(key1 = true) { // 시작 효과 : 0 -> 1
         setCount(1f)
     }
-
-    val pagerState = rememberPagerState() // Pager의 상태 (페이지 수, 현재 페이지 등)
 
     LaunchedEffect(key1 = pagerState.currentPage) {
         setCount((pagerState.currentPage + 1).toFloat())
@@ -99,7 +100,6 @@ fun PracticeScreen() {
                 ) { page ->
 
                     FlipCard(
-                        axis = RotationAxis.AxisY,
                         back = {
                             CardBack(text = sampleData[page].back)
                         },
@@ -143,12 +143,12 @@ fun ProgressBar(
 }
 
 /////////////flip card////////////
-enum class CardFace(val angle: Float) {
-    Front(0f) {
+enum class CardFace(val angle: Float) { // 카드 앞, 뒷면 상태
+    Front(angle = 0f) { // Front -> angle = 0도
         override val next: CardFace
             get() = Back
     },
-    Back(180f) {
+    Back(angle = 180f) { // Back -> angle = 180도
         override val next: CardFace
             get() = Front
     };
@@ -171,7 +171,7 @@ fun CardPreview() {
 }
 
 @Composable
-fun CardFront(text: String) {
+fun CardFront(text: String) { // 카드 앞면
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -183,7 +183,7 @@ fun CardFront(text: String) {
 }
 
 @Composable
-fun CardBack(text: String) {
+fun CardBack(text: String) { // 카드 뒷면
     val scrollState = rememberScrollState()
     Box(
         modifier = Modifier
@@ -204,10 +204,12 @@ fun FlipCard(
     back: @Composable () -> Unit = {},
     front: @Composable () -> Unit = {},
 ) {
+    // 앞,뒷면 상태
     var cardFace by remember {
         mutableStateOf(CardFace.Front)
     }
 
+    // cardFace의 angle을 animation
     val rotation = animateFloatAsState(
         targetValue = cardFace.angle,
         animationSpec = tween(
@@ -217,9 +219,10 @@ fun FlipCard(
     )
     Box(modifier = Modifier.padding(8.dp)) {
         Card(
-            onClick = {  cardFace = cardFace.next  },
+            onClick = {  cardFace = cardFace.next  }, //클릭 시 카드 뒤집기
             modifier = modifier
                 .graphicsLayer {
+                    // 변화하는 rotation 값을 rotationX 또는 rotationY로 사용
                     if (axis == RotationAxis.AxisX) {
                         rotationX = rotation.value
                     } else {
@@ -228,13 +231,13 @@ fun FlipCard(
                     cameraDistance = 12f * density
                 },
         ) {
-            if (rotation.value <= 90f) {
+            if (rotation.value <= 90f) { // 90도 이하일 때 -> 앞면
                 Box(
                     Modifier.fillMaxSize()
                 ) {
                     front()
                 }
-            } else {
+            } else { // 90도보다 클 때
                 Box(
                     Modifier
                         .fillMaxSize()
@@ -246,7 +249,7 @@ fun FlipCard(
                             }
                         },
                 ) {
-                    back()
+                    back() // 뒷면
                 }
             }
         }
