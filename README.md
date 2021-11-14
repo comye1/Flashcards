@@ -24,3 +24,44 @@ GDSC Seoultech 안드로이드 파트 프로젝트 앞서가는 버전 (Chegg Pr
   
 - 6주차 : 뷰모델 적용, 검색 기능 구현
 
+## 관련 포스팅
+
+- [Chegg Prep 클론 어플] 첫 클론 시작
+
+  https://blog.naver.com/comye1/222501787397
+  
+- [Chegg Prep 클론 어플] UI 컴포넌트 진행상황
+
+  https://blog.naver.com/comye1/222503683454
+  
+- [Jetpack Compose] 버튼을 통한 리스트 필터링 구현 - remember, 코틀린 filter함수
+
+  https://blog.naver.com/comye1/222516888978
+  
+- [Jetpack Compose] Modifier 확장함수 만들어 써보기
+
+  https://blog.naver.com/comye1/222525450314
+  
+- [Jetpack Compose] composable을 인자로 받는 composable
+
+  https://blog.naver.com/comye1/222525471655
+  
+- [Jetpack Compose] TextField에 텍스트가 입력되었을 때만 Button을 활성화시키기
+
+  https://blog.naver.com/comye1/222528545279
+  
+- [Jetpack Compose] Navigation - BottomNavigationBar
+
+  https://blog.naver.com/comye1/222534036117
+  
+- [Jetpack Compose] BottomNavigationBar를 숨기거나 개별적으로 사용하기
+
+  https://blog.naver.com/comye1/222534701110
+  
+- [Jetpack Compose] navigation destination에서 화면 전환하기
+
+  https://blog.naver.com/comye1/222555753843
+  
+- [Jetpack Compose] Pager 사용, 그 안에 TextField
+
+  https://blog.naver.com/comye1/222560995518
