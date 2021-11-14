@@ -68,30 +68,3 @@ fun TestScreen() {
 
 }
 
-@Composable
-fun ProgressBar(
-    modifier: Modifier = Modifier,
-    color: Color = DeepOrange,
-    animDuration: Int = 300,
-    animDelay: Int = 0,
-    count: Float,
-    totCount: Int,
-) {
-    val curPercentage by animateFloatAsState(
-        targetValue = count / totCount,
-        animationSpec = tween(
-            durationMillis = animDuration,
-            delayMillis = animDelay,
-            easing = LinearOutSlowInEasing
-        )
-    )
-    LinearProgressIndicator(
-        modifier = modifier
-            .fillMaxWidth()
-            .height(12.dp)
-            .clip(CircleShape),
-        progress = curPercentage,
-        color = color,
-        backgroundColor = Color.LightGray
-    )
-}

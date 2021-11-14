@@ -6,10 +6,7 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Scaffold
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.runtime.Composable
@@ -33,65 +30,67 @@ import com.google.accompanist.pager.ExperimentalPagerApi
 import kotlinx.coroutines.InternalCoroutinesApi
 
 class MainActivity : ComponentActivity() {
+    @ExperimentalMaterialApi
     @InternalCoroutinesApi
     @ExperimentalPagerApi
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            FlashcardsTheme {
-
-                var (bottomBarShown, showBottomBar) = remember {
-                    mutableStateOf(true)
-                }
-
-                val navController = rememberNavController()
-
-                val cheggViewModel: CheggViewModel = viewModel()
-
-                Scaffold(
-                    bottomBar = {
-                        if (bottomBarShown) {
-                            BottomNavigationBar(navController = navController)
-                        }
-                    }
-                ) {
-
-                    NavHost(navController = navController, startDestination = Screen.Home.route) {
-                        composable(Screen.Home.route) {
-                            showBottomBar(true)
-                            HomeScreen(navController, cheggViewModel)
-                        }
-                        composable(Screen.Search.route) {
-                            showBottomBar(true)
-                            SearchScreen(navController, cheggViewModel)
-                        }
-                        composable(Screen.Create.route) {
-                            showBottomBar(false)
-                            CreateScreen(navController, cheggViewModel)
-                        }
-                        composable(Screen.More.route) {
-                            showBottomBar(true)
-                            MoreScreen(navController)
-//                            TestScreen()
-                        }
-//                        composable("DeckScreen"){
-//                            DeckScreen(navController = navController)
+            PracticeScreen()
+//            FlashcardsTheme {
+//
+//                var (bottomBarShown, showBottomBar) = remember {
+//                    mutableStateOf(true)
+//                }
+//
+//                val navController = rememberNavController()
+//
+//                val cheggViewModel: CheggViewModel = viewModel()
+//
+//                Scaffold(
+//                    bottomBar = {
+//                        if (bottomBarShown) {
+//                            BottomNavigationBar(navController = navController)
 //                        }
-                        composable(
-                            "DeckScreen/{deckTitle}/{cardsNum}",
-                        ) { backStackEntry ->
-                            val deckTitle = backStackEntry.arguments?.getString("deckTitle")
-                            val cardsNum = backStackEntry.arguments?.getString("cardsNum")?.toInt()
-                            showBottomBar(false)
-                            DeckScreen(
-                                navController,
-                                deckTitle,
-                                cardsNum
-                            )
-                        }
-                    }
-                }
-            }
+//                    }
+//                ) {
+//
+//                    NavHost(navController = navController, startDestination = Screen.Home.route) {
+//                        composable(Screen.Home.route) {
+//                            showBottomBar(true)
+//                            HomeScreen(navController, cheggViewModel)
+//                        }
+//                        composable(Screen.Search.route) {
+//                            showBottomBar(true)
+//                            SearchScreen(navController, cheggViewModel)
+//                        }
+//                        composable(Screen.Create.route) {
+//                            showBottomBar(false)
+//                            CreateScreen(navController, cheggViewModel)
+//                        }
+//                        composable(Screen.More.route) {
+//                            showBottomBar(true)
+//                            MoreScreen(navController)
+////                            TestScreen()
+//                        }
+////                        composable("DeckScreen"){
+////                            DeckScreen(navController = navController)
+////                        }
+//                        composable(
+//                            "DeckScreen/{deckTitle}/{cardsNum}",
+//                        ) { backStackEntry ->
+//                            val deckTitle = backStackEntry.arguments?.getString("deckTitle")
+//                            val cardsNum = backStackEntry.arguments?.getString("cardsNum")?.toInt()
+//                            showBottomBar(false)
+//                            DeckScreen(
+//                                navController,
+//                                deckTitle,
+//                                cardsNum
+//                            )
+//                        }
+//                    }
+//                }
+//            }
         }
     }
 }

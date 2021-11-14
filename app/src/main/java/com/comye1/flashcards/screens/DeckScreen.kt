@@ -7,9 +7,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.ArrowBack
-import androidx.compose.material.icons.outlined.MoreVert
-import androidx.compose.material.icons.outlined.Share
+import androidx.compose.material.icons.outlined.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -41,10 +39,17 @@ fun DeckScreen(
                     }
                 },
                 actions = {
+                    // TODO 북마크
                     IconButton(onClick = { /*TODO*/ }) {
                         Icon(
-                            imageVector = Icons.Outlined.Share,
-                            contentDescription = "share this deck"
+                            imageVector = Icons.Outlined.BookmarkBorder,
+                            contentDescription = "bookmark this deck"
+                        )
+                    }
+                    IconButton(onClick = { /*TODO*/ }) {
+                        Icon(
+                            imageVector = Icons.Outlined.Bookmark,
+                            contentDescription = "bookmark this deck"
                         )
                     }
                     IconButton(onClick = { /*TODO*/ }) {
