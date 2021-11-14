@@ -91,10 +91,6 @@ fun PracticeScreen() {
                 ProgressBar(count = count, totCount = sampleData.size)
             }
             Box {
-                var state by remember {
-                    mutableStateOf(CardFace.Front)
-                }
-
                 HorizontalPager( // Pager
                     count = sampleData.size,
                     state = pagerState, // 선언한 pagerState 사용 (선언하지 않으면 내부에서 자동으로 사용)
@@ -103,7 +99,7 @@ fun PracticeScreen() {
                 ) { page ->
 
                     FlipCard(
-                        cardFace = state, onClick = { state = it.next }, axis = RotationAxis.AxisY,
+                        axis = RotationAxis.AxisY,
                         back = {
                             CardBack(text = sampleData[page].back)
                         },
@@ -203,13 +199,15 @@ fun CardBack(text: String) {
 @ExperimentalMaterialApi
 @Composable
 fun FlipCard(
-    cardFace: CardFace,
-    onClick: (CardFace) -> Unit,
     modifier: Modifier = Modifier,
     axis: RotationAxis = RotationAxis.AxisY,
     back: @Composable () -> Unit = {},
     front: @Composable () -> Unit = {},
 ) {
+    var cardFace by remember {
+        mutableStateOf(CardFace.Front)
+    }
+
     val rotation = animateFloatAsState(
         targetValue = cardFace.angle,
         animationSpec = tween(
@@ -219,7 +217,7 @@ fun FlipCard(
     )
     Box(modifier = Modifier.padding(8.dp)) {
         Card(
-            onClick = { onClick(cardFace) },
+            onClick = {  cardFace = cardFace.next  },
             modifier = modifier
                 .graphicsLayer {
                     if (axis == RotationAxis.AxisX) {
