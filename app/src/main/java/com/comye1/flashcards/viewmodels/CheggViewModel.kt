@@ -7,7 +7,6 @@ import androidx.lifecycle.ViewModel
 import com.comye1.flashcards.SampleDataSet
 import com.comye1.flashcards.models.DECK_CREATED
 import com.comye1.flashcards.models.Deck
-import java.util.*
 
 class CheggViewModel : ViewModel() {
     // HomeScreen
@@ -58,8 +57,8 @@ class CheggViewModel : ViewModel() {
 
     // Deck 검색 결과 반환
     fun getQueryResult() = totalDeckList.filter {
-        it.deckTitle.lowercase(Locale.getDefault())
-            .contains(queryString.value)
+        it.deckTitle.lowercase()
+            .contains(queryString.value.lowercase())
     }.toMutableStateList()
 
     //****************************************
