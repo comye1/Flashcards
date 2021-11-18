@@ -7,8 +7,19 @@ import androidx.lifecycle.ViewModel
 import com.comye1.flashcards.SampleDataSet
 import com.comye1.flashcards.models.DECK_CREATED
 import com.comye1.flashcards.models.Deck
+import com.comye1.flashcards.models.User
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 
 class CheggViewModel : ViewModel() {
+    // SignIn
+    private val _user: MutableStateFlow<User?> = MutableStateFlow(null)
+    val user: StateFlow<User?> = _user
+
+    suspend fun signIn(email: String, displayName: String){
+        _user.value = User(email, displayName)
+    }
+
     // HomeScreen
 
     // 사용자가 만들거나 북마크한 Deck들

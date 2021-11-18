@@ -36,61 +36,61 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            PracticeScreen()
-//            FlashcardsTheme {
-//
-//                var (bottomBarShown, showBottomBar) = remember {
-//                    mutableStateOf(true)
-//                }
-//
-//                val navController = rememberNavController()
-//
-//                val cheggViewModel: CheggViewModel = viewModel()
-//
-//                Scaffold(
-//                    bottomBar = {
-//                        if (bottomBarShown) {
-//                            BottomNavigationBar(navController = navController)
+//            PracticeScreen()
+            FlashcardsTheme {
+
+                var (bottomBarShown, showBottomBar) = remember {
+                    mutableStateOf(true)
+                }
+
+                val navController = rememberNavController()
+
+                val cheggViewModel: CheggViewModel = viewModel()
+
+                Scaffold(
+                    bottomBar = {
+                        if (bottomBarShown) {
+                            BottomNavigationBar(navController = navController)
+                        }
+                    }
+                ) {
+
+                    NavHost(navController = navController, startDestination = Screen.Home.route) {
+                        composable(Screen.Home.route) {
+                            showBottomBar(true)
+                            HomeScreen(navController, cheggViewModel)
+                        }
+                        composable(Screen.Search.route) {
+                            showBottomBar(true)
+                            SearchScreen(navController, cheggViewModel)
+                        }
+                        composable(Screen.Create.route) {
+                            showBottomBar(false)
+                            CreateScreen(navController, cheggViewModel)
+                        }
+                        composable(Screen.More.route) {
+                            showBottomBar(true)
+                            MoreScreen(navController)
+//                            TestScreen()
+                        }
+//                        composable("DeckScreen"){
+//                            DeckScreen(navController = navController)
 //                        }
-//                    }
-//                ) {
-//
-//                    NavHost(navController = navController, startDestination = Screen.Home.route) {
-//                        composable(Screen.Home.route) {
-//                            showBottomBar(true)
-//                            HomeScreen(navController, cheggViewModel)
-//                        }
-//                        composable(Screen.Search.route) {
-//                            showBottomBar(true)
-//                            SearchScreen(navController, cheggViewModel)
-//                        }
-//                        composable(Screen.Create.route) {
-//                            showBottomBar(false)
-//                            CreateScreen(navController, cheggViewModel)
-//                        }
-//                        composable(Screen.More.route) {
-//                            showBottomBar(true)
-//                            MoreScreen(navController)
-////                            TestScreen()
-//                        }
-////                        composable("DeckScreen"){
-////                            DeckScreen(navController = navController)
-////                        }
-//                        composable(
-//                            "DeckScreen/{deckTitle}/{cardsNum}",
-//                        ) { backStackEntry ->
-//                            val deckTitle = backStackEntry.arguments?.getString("deckTitle")
-//                            val cardsNum = backStackEntry.arguments?.getString("cardsNum")?.toInt()
-//                            showBottomBar(false)
-//                            DeckScreen(
-//                                navController,
-//                                deckTitle,
-//                                cardsNum
-//                            )
-//                        }
-//                    }
-//                }
-//            }
+                        composable(
+                            "DeckScreen/{deckTitle}/{cardsNum}",
+                        ) { backStackEntry ->
+                            val deckTitle = backStackEntry.arguments?.getString("deckTitle")
+                            val cardsNum = backStackEntry.arguments?.getString("cardsNum")?.toInt()
+                            showBottomBar(false)
+                            DeckScreen(
+                                navController,
+                                deckTitle,
+                                cardsNum
+                            )
+                        }
+                    }
+                }
+            }
         }
     }
 }

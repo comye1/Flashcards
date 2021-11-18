@@ -207,7 +207,7 @@ fun CreateCardScreen(
                         horizontalArrangement = Arrangement.Center
                     ) {
                         Text(
-                            text = "${pagerState.currentPage + 1}/${cardList.size}",
+                            text = "${pagerState.currentPage + 1}/${pagerState.pageCount}",
                             style = MaterialTheme.typography.h5,
                             fontWeight = FontWeight.Bold
                         )
