@@ -27,9 +27,15 @@ import com.comye1.flashcards.screens.*
 import com.comye1.flashcards.ui.theme.FlashcardsTheme
 import com.comye1.flashcards.viewmodels.CheggViewModel
 import com.google.accompanist.pager.ExperimentalPagerApi
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.InternalCoroutinesApi
 
 class MainActivity : ComponentActivity() {
+
+    private lateinit var auth: FirebaseAuth
+
     @ExperimentalMaterialApi
     @InternalCoroutinesApi
     @ExperimentalPagerApi
@@ -46,6 +52,10 @@ class MainActivity : ComponentActivity() {
                 val navController = rememberNavController()
 
                 val cheggViewModel: CheggViewModel = viewModel()
+
+                auth = Firebase.auth
+
+                cheggViewModel.us
 
                 Scaffold(
                     bottomBar = {
@@ -70,7 +80,8 @@ class MainActivity : ComponentActivity() {
                         }
                         composable(Screen.More.route) {
                             showBottomBar(true)
-                            MoreScreen(navController)
+                            MoreScreen(navController, cheggViewModel)
+//                            SignInScreen(viewModel = cheggViewModel)
 //                            TestScreen()
                         }
 //                        composable("DeckScreen"){

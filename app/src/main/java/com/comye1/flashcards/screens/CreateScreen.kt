@@ -45,7 +45,7 @@ fun CreateScreen(navController: NavHostController, viewModel: CheggViewModel) {
 
 
     when (viewModel.createScreenState.value) {
-        CreateScreen.TitleScreen -> {
+        CreateState.TitleScreen -> {
             CreateTitleScreen(
                 deckTitle = deckTitle,
                 setDeckTitle = setDeckTitle,
@@ -55,7 +55,7 @@ fun CreateScreen(navController: NavHostController, viewModel: CheggViewModel) {
                 toCardScreen = viewModel::toCardScreen
             )
         }
-        CreateScreen.CardScreen -> {
+        CreateState.CardScreen -> {
             CreateCardScreen(
                 cardList = cardList, //SnapshotStateList<Card>가 전달된다
                 setCard = { index, card ->

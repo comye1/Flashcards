@@ -12,11 +12,24 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
 class CheggViewModel : ViewModel() {
+
+    // MoreScreen
+    var moreScreenState = mutableStateOf(MoreState.MainScreen)
+        private set
+
+    fun toLogInScreen() {
+        moreScreenState.value = MoreState.LogInScreen
+    }
+
+    fun toMainScreen() {
+        moreScreenState.value = MoreState.MainScreen
+    }
+
     // SignIn
     private val _user: MutableStateFlow<User?> = MutableStateFlow(null)
     val user: StateFlow<User?> = _user
 
-    suspend fun signIn(email: String, displayName: String){
+    fun signIn(email: String, displayName: String){
         _user.value = User(email, displayName)
     }
 
@@ -76,15 +89,15 @@ class CheggViewModel : ViewModel() {
 
     // CreateScreen
 
-    var createScreenState = mutableStateOf(CreateScreen.TitleScreen)
+    var createScreenState = mutableStateOf(CreateState.TitleScreen)
         private set
 
     fun toTitleScreen() {
-        createScreenState.value = CreateScreen.TitleScreen
+        createScreenState.value = CreateState.TitleScreen
     }
 
     fun toCardScreen() {
-        createScreenState.value = CreateScreen.CardScreen
+        createScreenState.value = CreateState.CardScreen
     }
 
     // 초기화 - 일단 샘플 데이터 활용

@@ -1,5 +1,6 @@
 package com.comye1.flashcards.screens
 
+import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.LinearOutSlowInEasing
@@ -61,6 +62,7 @@ fun SignInScreen(viewModel: CheggViewModel) {
                     text = "Google Sign In Failed"
                 } else {
                     coroutineScope.launch {
+                        firebaseAuthWithGoogle(account.idToken!!)
                         viewModel.signIn(
                             email = account.email,
                             displayName = account.displayName
@@ -75,6 +77,9 @@ fun SignInScreen(viewModel: CheggViewModel) {
         text = null
         authResultLauncher.launch(signInRequestCode)
     })
+    user?.let {
+        viewModel.toMainScreen()
+    }
 }
 
 @ExperimentalMaterialApi
