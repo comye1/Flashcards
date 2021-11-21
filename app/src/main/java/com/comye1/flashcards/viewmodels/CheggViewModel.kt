@@ -18,6 +18,8 @@ class CheggViewModel : ViewModel() {
 
     suspend fun signIn(email: String, displayName: String){
         _user.value = User(email, displayName)
+        //
+
     }
 
     // HomeScreen
