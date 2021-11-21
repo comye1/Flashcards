@@ -1,6 +1,7 @@
 package com.comye1.flashcards
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.border
@@ -9,9 +10,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.VisibilityOff
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
@@ -21,6 +20,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.comye1.flashcards.models.User
 import com.comye1.flashcards.navigation.BottomNavigationBar
 import com.comye1.flashcards.navigation.Screen
 import com.comye1.flashcards.screens.*
@@ -28,20 +28,27 @@ import com.comye1.flashcards.ui.theme.FlashcardsTheme
 import com.comye1.flashcards.viewmodels.CheggViewModel
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.InternalCoroutinesApi
+import kotlinx.coroutines.coroutineScope
 
+@ExperimentalMaterialApi
+@InternalCoroutinesApi
+@ExperimentalPagerApi
 class MainActivity : ComponentActivity() {
 
     private lateinit var auth: FirebaseAuth
 
-    @ExperimentalMaterialApi
-    @InternalCoroutinesApi
-    @ExperimentalPagerApi
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        auth = Firebase.auth
+
         setContent {
+//            Log.d("user", "user ${auth.currentUser?.uid}")
+
 //            PracticeScreen()
             FlashcardsTheme {
 
@@ -56,6 +63,15 @@ class MainActivity : ComponentActivity() {
                 auth = Firebase.auth
 
                 cheggViewModel.us
+
+                val user = cheggViewModel.user.collectAsState()
+
+                auth.currentUser?.let {
+                    LaunchedEffect(true){
+                         cheggViewModel.signIn(it.email!!, it.displayName!!)
+                    }
+                }
+                Text("user : $user")
 
                 Scaffold(
                     bottomBar = {
