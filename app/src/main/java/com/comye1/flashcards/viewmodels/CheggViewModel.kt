@@ -32,7 +32,27 @@ class CheggViewModel : ViewModel() {
     fun signIn(email: String, displayName: String){
         _user.value = User(email, displayName)
         //
+    }
 
+    // SignOut
+    fun signOut() {
+        _user.value = null
+    }
+
+    // MainActivity에서 firebaseAuth 호출하기
+    private val _firebaseAuth = MutableStateFlow(false)
+    val firebaseAuth = _firebaseAuth
+
+    private val _token = MutableStateFlow("")
+    val token = _token
+
+    fun triggerAuth(idToken: String) { // firebaseAuthWithGoogle을 호출하기 위함
+        _token.value = idToken
+        _firebaseAuth.value = true
+    }
+
+    fun completeAuth() { // firebaseAuthWithGoogle 실행 후
+        _firebaseAuth.value = false
     }
 
     // HomeScreen

@@ -20,7 +20,6 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.comye1.flashcards.models.User
 import com.comye1.flashcards.navigation.BottomNavigationBar
 import com.comye1.flashcards.navigation.Screen
 import com.comye1.flashcards.screens.*
@@ -28,11 +27,10 @@ import com.comye1.flashcards.ui.theme.FlashcardsTheme
 import com.comye1.flashcards.viewmodels.CheggViewModel
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.InternalCoroutinesApi
-import kotlinx.coroutines.coroutineScope
 
 @ExperimentalMaterialApi
 @InternalCoroutinesApi
@@ -47,9 +45,6 @@ class MainActivity : ComponentActivity() {
         auth = Firebase.auth
 
         setContent {
-//            Log.d("user", "user ${auth.currentUser?.uid}")
-
-//            PracticeScreen()
             FlashcardsTheme {
 
                 var (bottomBarShown, showBottomBar) = remember {
@@ -60,18 +55,17 @@ class MainActivity : ComponentActivity() {
 
                 val cheggViewModel: CheggViewModel = viewModel()
 
-                auth = Firebase.auth
-
-                cheggViewModel.us
-
-                val user = cheggViewModel.user.collectAsState()
-
                 auth.currentUser?.let {
-                    LaunchedEffect(true){
-                         cheggViewModel.signIn(it.email!!, it.displayName!!)
+                    LaunchedEffect(true) {
+                        cheggViewModel.signIn(it.email!!, it.displayName!!)
                     }
                 }
-                Text("user : $user")
+
+                val firebaseAuth = cheggViewModel.firebaseAuth.collectAsState()
+                if (firebaseAuth.value) {
+                    firebaseAuthWithGoogle(cheggViewModel.token.value, cheggViewModel::signIn)
+                    cheggViewModel.completeAuth()
+                }
 
                 Scaffold(
                     bottomBar = {
@@ -120,74 +114,94 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
-}
 
-
-@Preview(showBackground = true)
-@Composable
-fun DefaultPreview() {
-
-    Column() {
-        FindFlashCards({})
-    }
-
-}
-
-@Composable
-fun DeckInSubject() {
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .border(
-                width = 2.dp,
-                color = Color.LightGray
-            )
-            .clickable {
-
+    private fun firebaseAuthWithGoogle(
+        idToken: String,
+        signIn: (String, String) -> Unit
+    ) { // 로그인 할 때
+        val credential = GoogleAuthProvider.getCredential(idToken, null)
+        auth.signInWithCredential(credential)
+            .addOnCompleteListener(this) { task ->
+                if (task.isSuccessful) {
+                    // Sign in success, update UI with the signed-in user's information
+                    Log.d("Firebase", "signInWithCredential:success")
+                    signIn(auth!!.currentUser!!.email!!, auth!!.currentUser!!.displayName!!)
+                }
+//                updateUI(user)
+                else {
+                    // If sign in fails, display a message to the user.
+//                    Log.d("Firebase", "signInWithCredential:failure", task.exception)
+//                updateUI(null)
+                }
             }
-            .padding(16.dp)) {
-        Text(
-            text = "recursion",
-            style = MaterialTheme.typography.h5,
-            fontWeight = FontWeight.Bold
-        )
-        Spacer(modifier = Modifier.height(4.dp))
-        Text(
-            text = "8 Cards",
-            style = MaterialTheme.typography.subtitle1,
-            fontWeight = FontWeight.Bold,
-            color = Color.Gray
-        )
     }
-}
 
-@Composable
-fun StudyGuide() {
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .border(
-                width = 2.dp,
-                color = Color.LightGray
+
+    @Preview(showBackground = true)
+    @Composable
+    fun DefaultPreview() {
+
+        Column() {
+            FindFlashCards({})
+        }
+
+    }
+
+    @Composable
+    fun DeckInSubject() {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .border(
+                    width = 2.dp,
+                    color = Color.LightGray
+                )
+                .clickable {
+
+                }
+                .padding(16.dp)) {
+            Text(
+                text = "recursion",
+                style = MaterialTheme.typography.h5,
+                fontWeight = FontWeight.Bold
             )
-            .clickable {
-
-            }
-            .padding(16.dp)) {
-        Text(
-            text = "c-plus-plus",
-            style = MaterialTheme.typography.h5,
-            fontWeight = FontWeight.Bold
-        )
-        Spacer(modifier = Modifier.height(4.dp))
-        Text(
-            text = "12 Decks · 207 Cards",
-            style = MaterialTheme.typography.subtitle1,
-            fontWeight = FontWeight.Bold,
-            color = Color.Gray
-        )
+            Spacer(modifier = Modifier.height(4.dp))
+            Text(
+                text = "8 Cards",
+                style = MaterialTheme.typography.subtitle1,
+                fontWeight = FontWeight.Bold,
+                color = Color.Gray
+            )
+        }
     }
-}
+
+    @Composable
+    fun StudyGuide() {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .border(
+                    width = 2.dp,
+                    color = Color.LightGray
+                )
+                .clickable {
+
+                }
+                .padding(16.dp)) {
+            Text(
+                text = "c-plus-plus",
+                style = MaterialTheme.typography.h5,
+                fontWeight = FontWeight.Bold
+            )
+            Spacer(modifier = Modifier.height(4.dp))
+            Text(
+                text = "12 Decks · 207 Cards",
+                style = MaterialTheme.typography.subtitle1,
+                fontWeight = FontWeight.Bold,
+                color = Color.Gray
+            )
+        }
+    }
 
 //@Composable
 //fun DeckItem() {
@@ -229,42 +243,43 @@ fun StudyGuide() {
 //}
 
 
-@Composable
-fun MyDeckItem() {
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .border(
-                width = 2.dp,
-                color = Color.LightGray
-            )
-            .clickable {
+    @Composable
+    fun MyDeckItem() {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .border(
+                    width = 2.dp,
+                    color = Color.LightGray
+                )
+                .clickable {
 
-            }
-            .padding(16.dp)) {
-        Text(
-            text = "recursion",
-            style = MaterialTheme.typography.h5,
-            fontWeight = FontWeight.Bold
-        )
-        Spacer(modifier = Modifier.height(4.dp))
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
+                }
+                .padding(16.dp)) {
             Text(
-                text = "11 Cards",
-                style = MaterialTheme.typography.subtitle1,
-                fontWeight = FontWeight.Bold,
-                color = Color.Gray
+                text = "recursion",
+                style = MaterialTheme.typography.h5,
+                fontWeight = FontWeight.Bold
             )
-            Icon(
-                imageVector = Icons.Default.VisibilityOff,
-                contentDescription = "visibility_off",
-                tint = Color.Gray
-            )
-        }
+            Spacer(modifier = Modifier.height(4.dp))
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Text(
+                    text = "11 Cards",
+                    style = MaterialTheme.typography.subtitle1,
+                    fontWeight = FontWeight.Bold,
+                    color = Color.Gray
+                )
+                Icon(
+                    imageVector = Icons.Default.VisibilityOff,
+                    contentDescription = "visibility_off",
+                    tint = Color.Gray
+                )
+            }
 
+        }
     }
 }
 

@@ -62,11 +62,11 @@ fun SignInScreen(viewModel: CheggViewModel) {
                     text = "Google Sign In Failed"
                 } else {
                     coroutineScope.launch {
-                        firebaseAuthWithGoogle(account.idToken!!)
-                        viewModel.signIn(
-                            email = account.email,
-                            displayName = account.displayName
-                        )
+                        viewModel.triggerAuth(account.idToken!!)
+//                        viewModel.signIn(
+//                            email = account.email,
+//                            displayName = account.displayName
+//                        )
                     }
                 }
             } catch (e: ApiException) {
@@ -81,6 +81,7 @@ fun SignInScreen(viewModel: CheggViewModel) {
         viewModel.toMainScreen()
     }
 }
+
 
 @ExperimentalMaterialApi
 @Composable

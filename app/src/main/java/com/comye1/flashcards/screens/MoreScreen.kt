@@ -5,10 +5,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -20,6 +17,8 @@ import com.comye1.flashcards.ui.theme.DeepOrange
 import com.comye1.flashcards.ui.theme.LightOrange
 import com.comye1.flashcards.viewmodels.CheggViewModel
 import com.comye1.flashcards.viewmodels.MoreState
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 
 // 전체
 fun Modifier.moreModifier(onClick: () -> Unit) = this
@@ -46,6 +45,8 @@ fun MoreScreen(navController: NavHostController, viewModel: CheggViewModel) {
     val notClickableModifier = Modifier
         .fillMaxWidth()
         .padding(horizontal = 8.dp, vertical = 12.dp)
+
+    val coroutineScope = rememberCoroutineScope()
 
     when (viewModel.moreScreenState.value) {
         MoreState.MainScreen -> {
@@ -74,7 +75,10 @@ fun MoreScreen(navController: NavHostController, viewModel: CheggViewModel) {
                             name = user.value!!.displayName,
                             modifier = Modifier.padding(horizontal = 8.dp, vertical = 16.dp),
                             signText = "Sign out",
-                            signFunction = {}
+                            signFunction = {
+                                Firebase.auth.signOut()
+                                viewModel.signOut()
+                            }
                         )
                     } else {
                         AccountSection(

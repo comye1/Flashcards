@@ -16,6 +16,7 @@ import androidx.compose.material.icons.filled.NoteAdd
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -37,6 +38,9 @@ fun HomeScreen(navController: NavHostController, viewModel: CheggViewModel) {
     var (selectedFilterIndex, setFilterIndex) = remember {
         mutableStateOf(0)
     }
+
+    var user = viewModel.user.collectAsState()
+
 
     Scaffold(
         topBar = {
@@ -60,7 +64,9 @@ fun HomeScreen(navController: NavHostController, viewModel: CheggViewModel) {
         }
     ) {
         LazyColumn(modifier = Modifier.padding(16.dp)) {
-
+            item {
+                Text(text = "user : ${user.value?.email}")
+            }
             when (selectedFilterIndex) { // TODO 뷰모델에서 필터링 수행
                 0 ->
                     viewModel.getAllDeckList().forEach {
