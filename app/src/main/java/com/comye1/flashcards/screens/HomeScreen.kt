@@ -39,9 +39,6 @@ fun HomeScreen(navController: NavHostController, viewModel: CheggViewModel) {
         mutableStateOf(0)
     }
 
-    var user = viewModel.user.collectAsState()
-
-
     Scaffold(
         topBar = {
             Column(
@@ -64,9 +61,6 @@ fun HomeScreen(navController: NavHostController, viewModel: CheggViewModel) {
         }
     ) {
         LazyColumn(modifier = Modifier.padding(16.dp)) {
-            item {
-                Text(text = "user : ${user.value?.email}")
-            }
             when (selectedFilterIndex) { // TODO 뷰모델에서 필터링 수행
                 0 ->
                     viewModel.getAllDeckList().forEach {

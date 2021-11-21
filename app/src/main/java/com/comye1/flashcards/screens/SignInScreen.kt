@@ -1,6 +1,5 @@
 package com.comye1.flashcards.screens
 
-import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.LinearOutSlowInEasing
@@ -24,23 +23,23 @@ import kotlinx.coroutines.launch
 @ExperimentalMaterialApi
 @Composable
 fun SignInView(errorText: String?, onClick: () -> Unit) {
-    Scaffold {
-        Column(
-            modifier = Modifier.fillMaxSize(),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            GoogleSignInButtonUi(
-                text = "Sign Up With Google",
-                loadingText = "Signing In....",
-                onClick = onClick
-            )
-            errorText?.let {
-                Spacer(modifier = Modifier.height(30.dp))
-                Text(text = it)
-            }
+
+    Column(
+        modifier = Modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        GoogleSignInButtonUi(
+            text = "Sign Up With Google",
+            loadingText = "Signing In....",
+            onClick = onClick
+        )
+        errorText?.let {
+            Spacer(modifier = Modifier.height(30.dp))
+            Text(text = it)
         }
     }
+
 }
 
 @ExperimentalMaterialApi

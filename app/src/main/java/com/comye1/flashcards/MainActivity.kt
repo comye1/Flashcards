@@ -10,7 +10,10 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.VisibilityOff
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
@@ -56,9 +59,7 @@ class MainActivity : ComponentActivity() {
                 val cheggViewModel: CheggViewModel = viewModel()
 
                 auth.currentUser?.let {
-                    LaunchedEffect(true) {
-                        cheggViewModel.signIn(it.email!!, it.displayName!!)
-                    }
+                    cheggViewModel.signIn(it.email!!, it.displayName!!)
                 }
 
                 val firebaseAuth = cheggViewModel.firebaseAuth.collectAsState()

@@ -46,8 +46,6 @@ fun MoreScreen(navController: NavHostController, viewModel: CheggViewModel) {
         .fillMaxWidth()
         .padding(horizontal = 8.dp, vertical = 12.dp)
 
-    val coroutineScope = rememberCoroutineScope()
-
     when (viewModel.moreScreenState.value) {
         MoreState.MainScreen -> {
             Scaffold(
