@@ -25,6 +25,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.comye1.flashcards.navigation.BottomNavigationBar
 import com.comye1.flashcards.navigation.Screen
+import com.comye1.flashcards.repository.CheggRepository
 import com.comye1.flashcards.screens.*
 import com.comye1.flashcards.ui.theme.FlashcardsTheme
 import com.comye1.flashcards.viewmodels.CheggViewModel
@@ -44,6 +45,8 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        val repository = CheggRepository()
 
         auth = Firebase.auth
 

@@ -15,10 +15,7 @@ import androidx.compose.material.icons.filled.Bookmark
 import androidx.compose.material.icons.filled.NoteAdd
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -31,6 +28,7 @@ import com.comye1.flashcards.models.Deck
 import com.comye1.flashcards.navigation.Screen
 import com.comye1.flashcards.ui.theme.DeepOrange
 import com.comye1.flashcards.viewmodels.CheggViewModel
+import kotlinx.coroutines.launch
 
 @Composable
 fun HomeScreen(navController: NavHostController, viewModel: CheggViewModel) {
@@ -38,6 +36,8 @@ fun HomeScreen(navController: NavHostController, viewModel: CheggViewModel) {
     var (selectedFilterIndex, setFilterIndex) = remember {
         mutableStateOf(0)
     }
+
+    val coroutineScope = rememberCoroutineScope()
 
     Scaffold(
         topBar = {
@@ -63,9 +63,11 @@ fun HomeScreen(navController: NavHostController, viewModel: CheggViewModel) {
         LazyColumn(modifier = Modifier.padding(16.dp)) {
             when (selectedFilterIndex) { // TODO 뷰모델에서 필터링 수행
                 0 ->
-                    viewModel.getAllDeckList().forEach {
-                        item {
-                            DeckItem(deck = it, modifier = Modifier.padding(bottom = 8.dp), onClick = {navController.navigate("DeckScreen/${it.deckTitle}/${it.cardList.size}")})
+                    coroutineScope.launch {
+                        viewModel.getAllDeckList().forEach {
+                            item {
+                                DeckItem(deck = it, modifier = Modifier.padding(bottom = 8.dp), onClick = {navController.navigate("DeckScreen/${it.deckTitle}/${it.cardList.size}")})
+                            }
                         }
                     }
                 1 ->

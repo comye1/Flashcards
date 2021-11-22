@@ -1,12 +1,12 @@
 package com.comye1.flashcards.models
 
 data class Deck(
-//    val deckId: Long = 0L,
-    val deckType: Int,
+    val deckId: String,
+    val deckType: Int = DECK_ADDED,
     val deckTitle: String,
     val shared: Boolean,
     val bookmarked: Boolean,
-    val cardList: List<Card>
+    val cardList: List<Card> = listOf()
 )
 
 /*

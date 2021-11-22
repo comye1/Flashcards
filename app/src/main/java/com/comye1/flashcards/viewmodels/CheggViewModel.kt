@@ -8,10 +8,13 @@ import com.comye1.flashcards.SampleDataSet
 import com.comye1.flashcards.models.DECK_CREATED
 import com.comye1.flashcards.models.Deck
 import com.comye1.flashcards.models.User
+import com.comye1.flashcards.repository.CheggRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
 class CheggViewModel : ViewModel() {
+
+    val repository = CheggRepository()
 
     // MoreScreen
     var moreScreenState = mutableStateOf(MoreState.MainScreen)
@@ -65,7 +68,7 @@ class CheggViewModel : ViewModel() {
     // BUT, 필터링한 결과는 뷰모델에서 반환하자
 
     // 모든 Deck
-    fun getAllDeckList() = myDeckList
+    suspend fun getAllDeckList() = repository.getAllDeckList()
     // Bookmark한 Deck
     fun getBookMarkedDeckList() = myDeckList.filter { it.bookmarked }
     // Create한 Deck
