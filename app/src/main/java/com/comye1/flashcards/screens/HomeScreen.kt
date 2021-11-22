@@ -16,7 +16,10 @@ import androidx.compose.material.icons.filled.Bookmark
 import androidx.compose.material.icons.filled.NoteAdd
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -29,7 +32,6 @@ import com.comye1.flashcards.models.Deck
 import com.comye1.flashcards.navigation.Screen
 import com.comye1.flashcards.ui.theme.DeepOrange
 import com.comye1.flashcards.viewmodels.CheggViewModel
-import kotlinx.coroutines.launch
 
 @Composable
 fun HomeScreen(navController: NavHostController, viewModel: CheggViewModel) {
@@ -63,30 +65,38 @@ fun HomeScreen(navController: NavHostController, viewModel: CheggViewModel) {
     ) {
         LazyColumn(modifier = Modifier.padding(16.dp)) {
             when (selectedFilterIndex) { // TODO 뷰모델에서 필터링 수행
-                0 ->
-                    coroutineScope.launch {
-                        Log.d("deck", " all deck")
+                0 -> {
+                    Log.d("deck", " all deck")
 
-                        viewModel.getAllDeckList().forEach {
-                            item {
-                                DeckItem(deck = it, modifier = Modifier.padding(bottom = 8.dp), onClick = {navController.navigate("DeckScreen/${it.deckId}")})
-                            }
+                    viewModel.getAllDeckList().forEach {
+                        item {
+                            DeckItem(
+                                deck = it,
+                                modifier = Modifier.padding(bottom = 8.dp),
+                                onClick = { navController.navigate("DeckScreen/${it.deckId}") })
                         }
                     }
+                }
                 1 ->
-                    coroutineScope.launch {
-                        viewModel.getBookMarkedDeckList().filter { it.bookmarked }.forEach {
-                            item {
-                                DeckItem(deck = it, modifier = Modifier.padding(bottom = 8.dp), onClick = {navController.navigate("DeckScreen/${it.deckId}")})                            }
+                    viewModel.getBookMarkedDeckList().filter { it.bookmarked }.forEach {
+                        item {
+                            DeckItem(
+                                deck = it,
+                                modifier = Modifier.padding(bottom = 8.dp),
+                                onClick = { navController.navigate("DeckScreen/${it.deckId}") })
                         }
                     }
+
                 2 ->
-                    coroutineScope.launch {
-                        viewModel.getCreatedDeckList().forEach {
-                            item {
-                                DeckItem(deck = it, modifier = Modifier.padding(bottom = 8.dp), onClick = {navController.navigate("DeckScreen/${it.deckId}")})                            }
+                    viewModel.getCreatedDeckList().forEach {
+                        item {
+                            DeckItem(
+                                deck = it,
+                                modifier = Modifier.padding(bottom = 8.dp),
+                                onClick = { navController.navigate("DeckScreen/${it.deckId}") })
                         }
                     }
+
             }
             item { MakeMyDeck { navController.navigate(Screen.Create.route) } } // 추가
         }

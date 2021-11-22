@@ -68,13 +68,12 @@ class CheggViewModel : ViewModel() {
     // BUT, 필터링한 결과는 뷰모델에서 반환하자
 
     // 모든 Deck
-    suspend fun getAllDeckList() = repository.getAllDeckList()
+    fun getAllDeckList() = myDeckList
     // Bookmark한 Deck
-    suspend fun getBookMarkedDeckList() = repository.getAllDeckList()
-        // myDeckList.filter { it.bookmarked }
+    fun getBookMarkedDeckList() = myDeckList.filter { it.bookmarked }
+
     // Create한 Deck
-    suspend fun getCreatedDeckList() = repository.getAllDeckList()
-        //myDeckList.filter { it.deckType == DECK_CREATED }
+    fun getCreatedDeckList() = myDeckList.filter { it.deckType == DECK_CREATED }
 
     // id로 Deck 가져오기
     fun getDeckById(id: String) = repository.getDeck(id)
