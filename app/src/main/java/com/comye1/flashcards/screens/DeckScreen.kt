@@ -18,13 +18,18 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.comye1.flashcards.models.Card
 import com.comye1.flashcards.ui.theme.DeepOrange
+import com.comye1.flashcards.viewmodels.CheggViewModel
 
 @Composable
 fun DeckScreen(
     navController: NavController,
-    deckTitle: String?,
-    cardsNum: Int?,
+    viewModel: CheggViewModel,
+    deckId: String?,
 ) {
+    val deck = deckId?.let {
+        viewModel.getDeckById(it)
+    }?: null
+
     Scaffold(
         topBar = {
             TopAppBar(
@@ -60,7 +65,7 @@ fun DeckScreen(
                     }
                 },
                 title = {
-                    Text(text = deckTitle!!, style = MaterialTheme.typography.h6)
+                    Text(text = deck?.deckTitle?: "오류", style = MaterialTheme.typography.h6)
                 }
             )
         },
@@ -93,15 +98,17 @@ fun DeckScreen(
             }
         }
     ) {
-        Column(Modifier.padding(16.dp)) {
-            Text(
-                text = cardsNum!!.toString() + if (cardsNum!! > 1) " Cards" else "Card",
-                color = Color.Gray
-            )
-            Spacer(modifier = Modifier.height(16.dp))
-            repeat(8) {
-                CardItem(Card("aaaaaa", "bbbbbb"))
-                Spacer(modifier = Modifier.height(8.dp))
+        if(deck != null) {
+            Column(Modifier.padding(16.dp)) {
+                Text(
+                    text = deck.cardList.size.toString() + if (deck.cardList.size > 1) " Cards" else "Card",
+                    color = Color.Gray
+                )
+                Spacer(modifier = Modifier.height(16.dp))
+                deck.cardList.forEach {
+                    CardItem(it)
+                    Spacer(modifier = Modifier.height(8.dp))
+                }
             }
         }
     }

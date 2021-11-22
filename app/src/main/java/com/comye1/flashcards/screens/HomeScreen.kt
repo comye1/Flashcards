@@ -1,5 +1,6 @@
 package com.comye1.flashcards.screens
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -64,24 +65,26 @@ fun HomeScreen(navController: NavHostController, viewModel: CheggViewModel) {
             when (selectedFilterIndex) { // TODO 뷰모델에서 필터링 수행
                 0 ->
                     coroutineScope.launch {
+                        Log.d("deck", " all deck")
+
                         viewModel.getAllDeckList().forEach {
                             item {
-                                DeckItem(deck = it, modifier = Modifier.padding(bottom = 8.dp), onClick = {navController.navigate("DeckScreen/${it.deckTitle}/${it.cardList.size}")})
+                                DeckItem(deck = it, modifier = Modifier.padding(bottom = 8.dp), onClick = {navController.navigate("DeckScreen/${it.deckId}")})
                             }
                         }
                     }
                 1 ->
-                    viewModel.getBookMarkedDeckList().filter { it.bookmarked }.forEach {
-                        item {
-//                            DeckItem(deck = it, modifier = Modifier.padding(bottom = 8.dp), onClick = {navController.navigate("DeckScreen")})
-                            DeckItem(deck = it, modifier = Modifier.padding(bottom = 8.dp), onClick = {navController.navigate("DeckScreen/${it.deckTitle}/${it.cardList.size}")})
+                    coroutineScope.launch {
+                        viewModel.getBookMarkedDeckList().filter { it.bookmarked }.forEach {
+                            item {
+                                DeckItem(deck = it, modifier = Modifier.padding(bottom = 8.dp), onClick = {navController.navigate("DeckScreen/${it.deckId}")})                            }
                         }
                     }
                 2 ->
-                    viewModel.getCreatedDeckList().forEach {
-                        item {
-//                            DeckItem(deck = it, modifier = Modifier.padding(bottom = 8.dp), onClick = {navController.navigate("DeckScreen")})
-                            DeckItem(deck = it, modifier = Modifier.padding(bottom = 8.dp), onClick = {navController.navigate("DeckScreen/${it.deckTitle}/${it.cardList.size}")})
+                    coroutineScope.launch {
+                        viewModel.getCreatedDeckList().forEach {
+                            item {
+                                DeckItem(deck = it, modifier = Modifier.padding(bottom = 8.dp), onClick = {navController.navigate("DeckScreen/${it.deckId}")})                            }
                         }
                     }
             }

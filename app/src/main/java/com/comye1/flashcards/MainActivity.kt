@@ -102,15 +102,14 @@ class MainActivity : ComponentActivity() {
 //                            DeckScreen(navController = navController)
 //                        }
                         composable(
-                            "DeckScreen/{deckTitle}/{cardsNum}",
+                            "DeckScreen/{deckId}", // id전달해서 쿼리
                         ) { backStackEntry ->
-                            val deckTitle = backStackEntry.arguments?.getString("deckTitle")
-                            val cardsNum = backStackEntry.arguments?.getString("cardsNum")?.toInt()
+                            val deckId = backStackEntry.arguments?.getString("deckId")
                             showBottomBar(false)
                             DeckScreen(
                                 navController,
-                                deckTitle,
-                                cardsNum
+                                cheggViewModel,
+                                deckId
                             )
                         }
                     }

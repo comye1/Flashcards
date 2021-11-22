@@ -1,7 +1,7 @@
 package com.comye1.flashcards.models
 
 data class Deck(
-    val deckId: String,
+    val deckId: String = "",
     val deckType: Int = DECK_ADDED,
     val deckTitle: String,
     val shared: Boolean,

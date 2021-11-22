@@ -35,10 +35,13 @@ class CheggRepository {
         return deckList.toList()
     }
 
-    fun getDeck(deckId: String) =
-        db.collection("decks")
+    fun getDeck(deckId: String): Deck {
+
+        return db.collection("decks")
             .get()
-            .result.find { it.id == deckId }
+            .result.find { it.id == deckId } as Deck
+
+    }
 
 //    fun getUserDeckList(){
 //        db.collection("users")
