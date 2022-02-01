@@ -24,6 +24,12 @@ GDSC Seoultech 안드로이드 파트 프로젝트 앞서가는 버전 (Chegg Pr
   
 - 6주차 : 뷰모델 적용, 검색 기능 구현
 
+  https://blog.naver.com/comye1/222565413747
+
+- 7주차 : Pager 사용, Repository 패턴 및 Hilt 의존성 주입
+
+  https://blog.naver.com/comye1/222573217956
+
 ## 관련 포스팅
 
 - [Chegg Prep 클론 어플] 첫 클론 시작
@@ -65,3 +71,17 @@ GDSC Seoultech 안드로이드 파트 프로젝트 앞서가는 버전 (Chegg Pr
 - [Jetpack Compose] Pager 사용, 그 안에 TextField
 
   https://blog.naver.com/comye1/222560995518
+  
+- [Chegg Prep 클론] 뷰모델 분리하기
+
+  https://blog.naver.com/comye1/222628686227
+  
+- [Chegg Prep 클론] Firebase RDB
+
+  - 구조화 https://blog.naver.com/comye1/222630376978
+  
+  - Deck 추가하기 https://blog.naver.com/comye1/222633012796
+
+  - 사용자 Deck 불러오기, 북마크 기능 https://blog.naver.com/comye1/222634823174
+  
+    - 무한 불러오기 해결 https://blog.naver.com/comye1/222636578856  
